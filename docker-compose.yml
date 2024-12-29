@@ -1,0 +1,14 @@
+name: anaphy e-learning
+
+services:
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./server/.env
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    ports:
+      - "5001:5001"
