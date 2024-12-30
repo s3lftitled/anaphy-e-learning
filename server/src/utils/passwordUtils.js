@@ -12,6 +12,9 @@ class PasswordUtil {
   }
 
   async comparePassword(plainPassword, hashedPassword) {
+    if (!plainPassword || !hashedPassword) {
+      throw new Error('Missing arguments: plainPassword and hashedPassword are required')
+    }
     return await bcrypt.compare(plainPassword, hashedPassword)
   }
 }
