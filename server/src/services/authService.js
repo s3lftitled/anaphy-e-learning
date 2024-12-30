@@ -9,8 +9,8 @@ const { appAssert } = require('../utils/appAssert')
 
 const registerUser = async (email, password, passwordConfirmation) => {
   try {
-    const requireParams = { email, password, passwordConfirmation }
-    const missingParams = findMissingParams(requireParams)
+    const requiredParams = { email, password, passwordConfirmation }
+    const missingParams = findMissingParams(requiredParams)
     appAssert(!missingParams, 'Please fill in all the required fields', HTTP_STATUS.BAD_REQUEST)
 
     // Validate and sanitize email
@@ -47,6 +47,60 @@ const registerUser = async (email, password, passwordConfirmation) => {
   }
 }
 
+const verifyEmail = async(email, verificationCode) => {
+  try {
+    // Check all the required fields
+    const requiredParams = { email, verificationCode }
+    const missingParams = findMissingParams(requiredParams)
+    appAssert(!missingParams, 'Please fill in all the required fields', HTTP_STATUS.BAD_REQUEST)
+    
+    // Validate and sanitize email
+    appAssert(validator.isEmail(email), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)
+    const sanitizedEmail = sanitizeHtml(email.trim())  // Sanitize to remove potentially harmful HTML
+
+    // Find the user associated with the email
+    const user = await UserModel.findOne({ email: sanitizedEmail })
+    appAssert(user, 'No user is associated with that email', HTTP_STATUS.BAD_REQUEST)
+
+    appAssert(verificationCode === user.verificationCode, 'Verification code is incorrect', HTTP_STATUS.BAD_REQUEST)
+
+    // Update user verification status
+    user.verified = true
+    user.verificationCode = null
+    await user.save()
+
+  } catch (error) {
+    throw error
+  }
+}
+
+const logIn = async(email, password) => {
+  try {
+    // Check all the required fields
+    const requiredParams = { email, password }
+    const missingParams = findMissingParams(requiredParams)
+    appAssert(!missingParams, 'Please fill in all the required fields', HTTP_STATUS.BAD_REQUEST)
+
+    // Validate and sanitize email
+    appAssert(validator.isEmail(email), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)
+    const sanitizedEmail = sanitizeHtml(email.trim())  // Sanitize to remove potentially harmful HTML
+
+    // Find the user associated with the email
+    const user = await UserModel.findOne({ email: sanitizedEmail })
+    appAssert(user, 'No user is associated with that email', HTTP_STATUS.BAD_REQUEST)
+
+    // Check if the password is correct (using PasswordUtil class)
+    const isPasswordCorrect = await PasswordUtil.comparePassword(password, user.password)
+    appAssert(isPasswordCorrect, 'Incorrect password, please try again', HTTP_STATUS.BAD_REQUEST)
+
+    return user
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
-  registerUser
+  registerUser,
+  logIn,
+  verifyEmail
 }
