@@ -1,4 +1,9 @@
-const { registerUser, verifyEmail, logIn } = require('../services/authService')
+const { 
+  registerUser, 
+  verifyEmail, 
+  logIn, 
+  changePassword 
+} = require('../services/authService')
 const HTTP_STATUS = require('../constants/httpConstants')
 const logger = require('../logger/logger')
 
@@ -36,6 +41,18 @@ class AuthController {
       next(error)
     }
   }
+
+  async changePassword(req, res, next) {
+    const { userId } = req.params
+    const { currentPassword, newPassword, newPasswordConfirmation } = req.body
+    try {
+      await changePassword(userId, currentPassword, newPassword, newPasswordConfirmation)
+      res.status(HTTP_STATUS.OK).json({ message: 'Password changed succesfully' })
+    } catch (error) {
+      logger.error(`Login error - ${error.message}`)
+      next(error)
+    }
+  } 
 } 
 
 module.exports = new AuthController()

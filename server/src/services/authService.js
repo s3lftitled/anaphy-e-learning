@@ -2,8 +2,9 @@ const UserModel = require('../models/user.model')
 const EmailUtil = require('../utils/emailUtils')
 const PasswordUtil = require('../utils/passwordUtils')
 const HTTP_STATUS = require('../constants/httpConstants')
-const validator = require('validator')  // Using validator library for validation
-const sanitizeHtml = require('sanitize-html')  // To sanitize input for XSS protection
+const mongoose = require('mongoose')
+const validator = require('validator')  
+const sanitizeHtml = require('sanitize-html')  
 const { findMissingParams } = require('../utils/paramsValidator')
 const { appAssert } = require('../utils/appAssert')
 
@@ -74,7 +75,7 @@ const verifyEmail = async(email, verificationCode) => {
   }
 }
 
-const logIn = async(email, password) => {
+const logIn = async (email, password) => {
   try {
     // Check all the required fields
     const requiredParams = { email, password }
@@ -99,8 +100,56 @@ const logIn = async(email, password) => {
   }
 }
 
+const changePassword = async ( userId, currentPassword, newPassword, newPasswordConfirmation ) => {
+  try {
+    // Check all the required fields
+    const requiredParams = { userId, currentPassword, newPassword, newPasswordConfirmation }
+    const missingParams = findMissingParams(requiredParams)
+    appAssert(!missingParams, 'Please fill in all the required fields', HTTP_STATUS.BAD_REQUEST)
+
+     // Validate userId as a MongoDB ObjectId
+     appAssert(
+      mongoose.Types.ObjectId.isValid(userId),
+      'Invalid user ID format',
+      HTTP_STATUS.BAD_REQUEST
+    )
+
+    const user = await UserModel.findById(userId)
+    appAssert(user, 'User is not found', HTTP_STATUS.BAD_REQUEST)
+
+    // Validate that passwords are strings
+    appAssert(
+      typeof currentPassword === 'string' && 
+      typeof newPassword === 'string' && 
+      typeof newPasswordConfirmation === 'string',
+      'Passwords must be strings',
+      HTTP_STATUS.BAD_REQUEST
+    )
+
+    const isPasswordCorrect = await PasswordUtil.comparePassword(currentPassword, user.password)
+    appAssert(isPasswordCorrect, 'Current password is incorrect, please try again', HTTP_STATUS.BAD_REQUEST)
+
+    const isNewPasswordValid = await PasswordUtil.comparePassword(newPassword, user.password)
+    appAssert(!isNewPasswordValid, 'New password cant be the same as your old password', HTTP_STATUS.BAD_REQUEST)
+
+    appAssert(
+      newPassword === newPasswordConfirmation,
+      'New password and confirmation password do not match',
+      HTTP_STATUS.BAD_REQUEST
+    )
+
+    const hashedPassword = await PasswordUtil.hashPassword(newPassword)
+
+    user.password = hashedPassword
+    await user.save()
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   registerUser,
   logIn,
-  verifyEmail
+  verifyEmail,
+  changePassword,
 }
