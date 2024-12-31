@@ -7,6 +7,7 @@ const validator = require('validator')
 const sanitizeHtml = require('sanitize-html')  
 const { findMissingParams } = require('../utils/paramsValidator')
 const { appAssert } = require('../utils/appAssert')
+const { generateTokens } = require('../middlewares/jsonWebTokens')
 
 const registerUser = async (email, password, passwordConfirmation) => {
   try {
@@ -94,7 +95,11 @@ const logIn = async (email, password) => {
     const isPasswordCorrect = await PasswordUtil.comparePassword(password, user.password)
     appAssert(isPasswordCorrect, 'Incorrect password, please try again', HTTP_STATUS.BAD_REQUEST)
 
-    return user
+    const tokens = generateTokens(user)
+
+    const { accessToken, refreshToken } = tokens
+
+    return { user, accessToken, refreshToken }
   } catch (error) {
     throw error
   }

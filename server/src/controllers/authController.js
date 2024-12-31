@@ -34,8 +34,16 @@ class AuthController {
   async logIn(req, res, next) {
     const { email, password } = req.body
     try {
-      const user = await logIn(email, password)
-      res.status(HTTP_STATUS.OK).json({ data: user, message: 'Log in succesfully' })
+      const { user, accessToken, refreshToken} = await logIn(email, password)
+
+      // Set cookies
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      })
+
+      res.status(HTTP_STATUS.OK).json({ data: { user, accessToken } , message: 'Log in succesfully' })
     } catch (error) {
       logger.error(`Login error - ${error.message}`)
       next(error)
