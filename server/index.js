@@ -29,7 +29,7 @@ app.use(cors(corsOptions))
 app.use(cookieParser())
 
 app.get('/health-check', (req, res) => {
-  res.send('server is healthy')
+  res.send('server is healthy!!')
 })
 
 app.use('/auth/api', authRoute)
