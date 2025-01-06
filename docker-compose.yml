@@ -1,4 +1,4 @@
-name: anaphy e-learning
+name: anaphy-e-learning
 
 services:
   api:
@@ -10,5 +10,27 @@ services:
     volumes:
       - ./server:/app
       - /app/node_modules
+    networks:
+      - anaphy-e-learning
     ports:
-      - "5001:5001"
+      - "5000:5000"
+  
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./client/.env
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    networks:
+      - anaphy-e-learning
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+
+networks:
+  anaphy-e-learning:
+    driver: bridge
