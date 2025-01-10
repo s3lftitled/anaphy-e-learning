@@ -24,8 +24,8 @@ Follow these steps to set up the project locally using Docker:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-repo/anaphy-elearning.git
-cd anaphy-elearning
+git clone https://github.com/s3lftitled/anaphy-e-learning.git
+cd anaphy-e-learning
 ```
 
 ### 2. Set Up Environment Variables
