@@ -8,6 +8,7 @@ const logger = require('./src/logger/logger')
 const errorHandler = require('./src/middlewares/errorHandler')
 
 const authRoute = require('./src/router/authRouter')
+const topicRoute = require('./src/router/topicRouter')
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -33,6 +34,7 @@ app.get('/health-check', (req, res) => {
 })
 
 app.use('/auth/api', authRoute)
+app.use('/topics/api', topicRoute)
 
 app.use(errorHandler)
 
