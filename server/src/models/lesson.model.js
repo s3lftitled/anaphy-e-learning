@@ -1,25 +1,25 @@
 const mongoose = require('mongoose')
 
-// Lesson Schema
 const lessonSchema = new mongoose.Schema({
-  title: { type: String, required: true },
+  title: { type: String, required: true, trim: true },
   topic: { type: mongoose.Schema.Types.ObjectId, ref: 'Topic', required: true },
-  description: String,
-  order: { type: Number, required: true }, // For ordering lessons within topics
+  description: { type: String, trim: true }, 
   content: [{
-    type: { 
-      type: String, 
-      enum: ['page', 'quiz'], 
-      required: true 
+    type: {
+      type: String,
+      enum: ['page', 'quiz'],
+      required: true,
     },
-    contentId: { 
-      type: mongoose.Schema.Types.ObjectId, 
-      refPath: 'content.type' 
+    contentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      refPath: 'content.type',
     },
-    order: { type: Number, required: true } // For ordering pages and quizzes within lesson
+    order: { type: Number, required: true },
   }],
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+}, {
+  timestamps: true,
 })
 
-module.exports = mongoose.model('LessonModel', lessonSchema)
+lessonSchema.index({ topic: 1, order: 1 })
+
+module.exports = mongoose.model('Lesson', lessonSchema)
