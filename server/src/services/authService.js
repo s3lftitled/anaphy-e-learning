@@ -5,15 +5,13 @@ const HTTP_STATUS = require('../constants/httpConstants')
 const mongoose = require('mongoose')
 const validator = require('validator')  
 const sanitizeHtml = require('sanitize-html')  
-const { findMissingParams } = require('../utils/paramsValidator')
+const { validateRequiredParams } = require('../utils/paramsValidator')
 const { appAssert } = require('../utils/appAssert')
 const { generateTokens } = require('../middlewares/jsonWebTokens')
 
 const registerUser = async (email, password, passwordConfirmation) => {
   try {
-    const requiredParams = { email, password, passwordConfirmation }
-    const missingParams = findMissingParams(requiredParams)
-    appAssert(!missingParams, 'Please fill in all the required fields', HTTP_STATUS.BAD_REQUEST)
+    validateRequiredParams({ email, password, passwordConfirmation })
 
     // Validate and sanitize email
     appAssert(validator.isEmail(email), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)
@@ -52,9 +50,7 @@ const registerUser = async (email, password, passwordConfirmation) => {
 const verifyEmail = async(email, verificationCode) => {
   try {
     // Check all the required fields
-    const requiredParams = { email, verificationCode }
-    const missingParams = findMissingParams(requiredParams)
-    appAssert(!missingParams, 'Please fill in all the required fields', HTTP_STATUS.BAD_REQUEST)
+    validateRequiredParams({ email, verificationCode })
     
     // Validate and sanitize email
     appAssert(validator.isEmail(email), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)
@@ -79,9 +75,7 @@ const verifyEmail = async(email, verificationCode) => {
 const logIn = async (email, password) => {
   try {
     // Check all the required fields
-    const requiredParams = { email, password }
-    const missingParams = findMissingParams(requiredParams)
-    appAssert(!missingParams, 'Please fill in all the required fields', HTTP_STATUS.BAD_REQUEST)
+   validateRequiredParams({ email, password })
 
     // Validate and sanitize email
     appAssert(validator.isEmail(email), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)
@@ -108,9 +102,7 @@ const logIn = async (email, password) => {
 const changePassword = async ( userId, currentPassword, newPassword, newPasswordConfirmation ) => {
   try {
     // Check all the required fields
-    const requiredParams = { userId, currentPassword, newPassword, newPasswordConfirmation }
-    const missingParams = findMissingParams(requiredParams)
-    appAssert(!missingParams, 'Please fill in all the required fields', HTTP_STATUS.BAD_REQUEST)
+    validateRequiredParams({ userId, currentPassword, newPassword, newPasswordConfirmation })
 
      // Validate userId as a MongoDB ObjectId
      appAssert(
