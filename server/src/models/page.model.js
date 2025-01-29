@@ -22,4 +22,4 @@ const pageSchema = new mongoose.Schema({
 // Index on title for search efficiency
 pageSchema.index({ title: 1 })
 
-module.exports = mongoose.model('Page', pageSchema)
+module.exports = mongoose.model('PageModel', pageSchema)
