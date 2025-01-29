@@ -4,6 +4,7 @@ const lessonSchema = new mongoose.Schema({
   title: { type: String, required: true, trim: true },
   topic: { type: mongoose.Schema.Types.ObjectId, ref: 'Topic', required: true },
   description: { type: String, trim: true }, 
+  order: { type: Number, required: true },
   content: [{
     type: {
       type: String,
@@ -22,4 +23,4 @@ const lessonSchema = new mongoose.Schema({
 
 lessonSchema.index({ topic: 1, order: 1 })
 
-module.exports = mongoose.model('Lesson', lessonSchema)
+module.exports = mongoose.model('LessonModel', lessonSchema)
