@@ -9,13 +9,18 @@ const { validateRequiredParams } = require('../utils/paramsValidator')
 const { appAssert } = require('../utils/appAssert')
 const { generateTokens } = require('../middlewares/jsonWebTokens')
 
-const registerUser = async (email, password, passwordConfirmation) => {
+const registerUser = async (name, email, password, passwordConfirmation) => {
   try {
-    validateRequiredParams({ email, password, passwordConfirmation })
+    console.log(name, email, password, passwordConfirmation)
+    validateRequiredParams({ name, email, password, passwordConfirmation })
 
     // Validate and sanitize email
     appAssert(validator.isEmail(email), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)
     const sanitizedEmail = sanitizeHtml(email.trim())  // Sanitize to remove potentially harmful HTML
+
+    // Validate and sanitize name
+    appAssert(name.length >= 6 && name.length <= 35, 'Name must be longer than 6 characters and shorter than 35', HTTP_STATUS.BAD_REQUEST)
+    const sanitizedName = sanitizeHtml(name.trim())
 
     // Validate and sanitize password
     appAssert(password.length >= 8, 'Password must be at least 8 characters long', HTTP_STATUS.BAD_REQUEST)
@@ -37,6 +42,7 @@ const registerUser = async (email, password, passwordConfirmation) => {
 
     // Proceed with user creation, after sanitizing inputs
     await UserModel.create({
+      name: sanitizedName,
       email: sanitizedEmail,
       password: hashedPassword,
       verificationCode,

@@ -9,9 +9,9 @@ const logger = require('../logger/logger')
 
 class AuthController {
   async register(req, res, next) {
-    const { email, password, passwordConfirmation } = req.body
+    const { name, email, password, passwordConfirmation } = req.body
     try {
-      await registerUser(email, password, passwordConfirmation)
+      await registerUser(name, email, password, passwordConfirmation)
       res.status(HTTP_STATUS.CREATED).json({ message: 'Registration successful! Please check your email for verification.'})
     } catch (error) {
       logger.error(`Registration error - ${error.message}`)
