@@ -1,8 +1,100 @@
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import api from '../../utils/api'
+import './Login.css'
+
 const Login = () => {
+  const [ loginData, setLoginData ] = useState({})
+  const navigate = useNavigate()
+
+  const handleFieldChange = (e) => {
+    const { name, value } = e.target
+    let formattedValue = value
+
+    try {
+      formattedValue = JSON.parse(value)
+    } catch (error) {
+      // Ignore parsing errors and keep the value as a string
+    }
+
+    setLoginData((prevData) => ({
+      ...prevData,
+      [name]: formattedValue,
+    }))
+  }
+
+  
+  const handleLogin = async (e) => {
+    if (!loginData.email || !loginData.password) {
+      alert('Please fill in all the required fields')
+      return
+    }
+    e.preventDefault()
+    try {
+      const response = await api.post('auth/api/v1/login', { email: loginData.email, password: loginData.password })
+
+      if (response.status === 200) {
+        alert(response.data.message)
+        navigate('/home')
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        alert(error.response.data.message)
+      } else {
+        alert('An error occurred. Please try again.')
+      }
+    }
+  }
+
   return (
-    <>
-     <h1>Login Page</h1>
-    </>
+    <div className="login">
+      <div className="glow glow-1"></div>
+      <div className="glow glow-2"></div>
+      <div className="glow glow-3"></div>
+
+      <img className="register-img" src="skull.png" alt="Skull Logo" />
+
+      <nav className="login-nav">
+        <button className="login-button" href="">Login</button>
+        <Link className='nav-link' href="">About</Link>
+        <Link className='nav-link' href="">Contact</Link>
+        <Link className='nav-link' href="">Home</Link>
+      </nav>
+
+      <div className="login-form-container">
+        <h2>Login</h2>
+        <form onSubmit={handleLogin}>
+          <div className="login-input-group">
+            <label htmlFor="email">Email</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              placeholder="yourname@panpacificu.edu.ph" 
+              required 
+              onChange={handleFieldChange}
+            />
+          </div>
+
+          <div className="login-input-group">
+            <label htmlFor="password">Password</label>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              placeholder="••••••••" 
+              required 
+              onChange={handleFieldChange}
+            />
+          </div>
+
+          <div className='login-options'>
+            <button type="submit">Login</button>
+            <Link className='signup-prompt' to='/register'>Don't have an account?</Link>
+          </div>
+        </form>
+      </div>
+    </div>
   )
 }
 
