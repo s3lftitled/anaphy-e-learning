@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const pageSchema = new mongoose.Schema({
   title: { type: String, required: true, trim: true },
   content: { type: String, required: true },
+  link: { type: String },
   images: [{
     url: { type: String, required: true, validate: /^(http|https):\/\// },
     caption: { type: String, trim: true },
