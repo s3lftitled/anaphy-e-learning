@@ -8,11 +8,31 @@ const sanitizeHtml = require('sanitize-html')
 const { validateRequiredParams } = require('../utils/paramsValidator')
 const { appAssert } = require('../utils/appAssert')
 const { generateTokens } = require('../middlewares/jsonWebTokens')
+const axios = require('axios')
+
+const CAPTCHA_SECRET = process.env.CAPTCHA_SECRET
+
+const verifyCaptcha = async (captchaToken) => {
+  const response = await axios.post(
+    'https://www.google.com/recaptcha/api/siteverify',
+    null,
+    {
+      params: {
+        secret: CAPTCHA_SECRET,
+        response: captchaToken,
+      },
+    }
+  )
+return responsee.data.success
+}
 
 const registerUser = async (name, email, password, passwordConfirmation) => {
   try {
     console.log(name, email, password, passwordConfirmation)
     validateRequiredParams({ name, email, password, passwordConfirmation })
+
+    //captcha
+    appAssert(await verifyCaptcha(captchaToken), 'Invalid CAPTCHA', HTTP_STATUS.BAD_REQUEST)
 
     // Validate and sanitize email
     appAssert(validator.isEmail(email), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)
@@ -57,6 +77,9 @@ const verifyEmail = async(email, verificationCode) => {
   try {
     // Check all the required fields
     validateRequiredParams({ email, verificationCode })
+
+    //captcha 
+    appAssert(await verifyCaptcha(captchaToken), 'Invalid CAPTCHA'. HTTP_STATUS.BAD_REQUEST)
     
     // Validate and sanitize email
     appAssert(validator.isEmail(email), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)
@@ -104,6 +127,8 @@ const logIn = async (email, password) => {
     throw error
   }
 }
+
+//captcha
 
 const changePassword = async ( userId, currentPassword, newPassword, newPasswordConfirmation ) => {
   try {

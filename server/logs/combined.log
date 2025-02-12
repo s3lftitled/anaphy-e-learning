@@ -1,0 +1,32 @@
+info: Connected to Database {"timestamp":"2025-02-12 11:50:41"}
+info: Server is now listening on 5000 {"timestamp":"2025-02-12 11:50:41"}
+info: Connected to Database {"timestamp":"2025-02-12 12:07:21"}
+info: Server is now listening on 5000 {"timestamp":"2025-02-12 12:07:21"}
+info: Connected to Database {"timestamp":"2025-02-12 12:08:34"}
+info: Server is now listening on 5000 {"timestamp":"2025-02-12 12:08:34"}
+info: Incoming OPTIONS request {"ip":"::ffff:172.18.0.1","method":"OPTIONS","route":"/auth/api/v1/registration","timestamp":"2025-02-12 12:09:50"}
+info: Incoming POST request {"ip":"::ffff:172.18.0.1","method":"POST","route":"/auth/api/v1/registration","timestamp":"2025-02-12 12:09:50"}
+info: Incoming OPTIONS request {"ip":"::ffff:172.18.0.1","method":"OPTIONS","route":"/auth/api/v1/verify-email/jashua.obina@panpacificu.edu.ph","timestamp":"2025-02-12 12:10:35"}
+info: Incoming POST request {"ip":"::ffff:172.18.0.1","method":"POST","route":"/auth/api/v1/verify-email/jashua.obina@panpacificu.edu.ph","timestamp":"2025-02-12 12:10:35"}
+info: Incoming OPTIONS request {"ip":"::ffff:172.18.0.1","method":"OPTIONS","route":"/auth/api/v1/login","timestamp":"2025-02-12 12:10:49"}
+info: Incoming POST request {"ip":"::ffff:172.18.0.1","method":"POST","route":"/auth/api/v1/login","timestamp":"2025-02-12 12:10:49"}
+info: Connected to Database {"timestamp":"2025-02-12 12:17:20"}
+info: Server is now listening on 5000 {"timestamp":"2025-02-12 12:17:20"}
+info: Incoming OPTIONS request {"ip":"::ffff:172.18.0.1","method":"OPTIONS","route":"/auth/api/v1/login","timestamp":"2025-02-12 12:17:37"}
+info: Incoming POST request {"ip":"::ffff:172.18.0.1","method":"POST","route":"/auth/api/v1/login","timestamp":"2025-02-12 12:17:37"}
+info: Connected to Database {"timestamp":"2025-02-12 12:34:54"}
+info: Server is now listening on 5000 {"timestamp":"2025-02-12 12:34:54"}
+info: Incoming OPTIONS request {"ip":"::ffff:172.18.0.1","method":"OPTIONS","route":"/auth/api/v1/login","timestamp":"2025-02-12 12:35:30"}
+info: Incoming POST request {"ip":"::ffff:172.18.0.1","method":"POST","route":"/auth/api/v1/login","timestamp":"2025-02-12 12:35:30"}
+info: Incoming OPTIONS request {"ip":"::ffff:172.18.0.1","method":"OPTIONS","route":"/auth/api/v1/login","timestamp":"2025-02-12 12:46:50"}
+info: Incoming POST request {"ip":"::ffff:172.18.0.1","method":"POST","route":"/auth/api/v1/login","timestamp":"2025-02-12 12:46:50"}
+info: Connected to Database {"timestamp":"2025-02-12 12:49:48"}
+info: Server is now listening on 5000 {"timestamp":"2025-02-12 12:49:48"}
+info: Connected to Database {"timestamp":"2025-02-12 12:51:41"}
+info: Server is now listening on 5000 {"timestamp":"2025-02-12 12:51:41"}
+info: Connected to Database {"timestamp":"2025-02-12 12:54:04"}
+info: Server is now listening on 5000 {"timestamp":"2025-02-12 12:54:04"}
+info: Connected to Database {"timestamp":"2025-02-12 12:54:46"}
+info: Server is now listening on 5000 {"timestamp":"2025-02-12 12:54:46"}
+info: Incoming OPTIONS request {"ip":"::ffff:172.18.0.1","method":"OPTIONS","route":"/auth/api/v1/login","timestamp":"2025-02-12 12:56:15"}
+info: Incoming POST request {"ip":"::ffff:172.18.0.1","method":"POST","route":"/auth/api/v1/login","timestamp":"2025-02-12 12:56:15"}
