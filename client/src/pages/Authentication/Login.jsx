@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import ReCAPTCHA from 'react-google-recaptcha'
 import api from '../../utils/api'
 import './Login.css'
 
+
 const Login = () => {
   const [ loginData, setLoginData ] = useState({})
+  const [captchaToken, setCaptchaToken] = useState(null)
   const navigate = useNavigate()
 
   const handleFieldChange = (e) => {
@@ -23,10 +26,15 @@ const Login = () => {
     }))
   }
 
+  const handleCaptchaChange = (token) => {
+    setCaptchaToken(token)
+    //store captcha
+  }
+
   
   const handleLogin = async (e) => {
-    if (!loginData.email || !loginData.password) {
-      alert('Please fill in all the required fields')
+    if (!loginData.email || !loginData.password || !captchaToken) {
+      alert('Please fill in all the required fields and complete the Captcha')
       return
     }
     e.preventDefault()
@@ -87,6 +95,11 @@ const Login = () => {
               onChange={handleFieldChange}
             />
           </div>
+
+          <ReCAPTCHA
+          sitekey="6Lfl_9QqAAAAAAFX9cr264UKhJVVRXlawTuXD-y0"
+          onChange={handleCaptchaChange}
+          />
 
           <div className='login-options'>
             <button type="submit">Login</button>
