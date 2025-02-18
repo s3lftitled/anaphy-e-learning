@@ -11,6 +11,7 @@ const authRoute = require('./src/router/authRouter')
 const topicRoute = require('./src/router/topicRouter')
 const lessonRoute = require('./src/router/lessonRouter')
 const pageRoute = require('./src/router/pageRouter')
+const teacherManagementRoute = require('./src/router/teacherManagementRouter')
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -39,6 +40,7 @@ app.use('/auth/api', authRoute)
 app.use('/topics/api', topicRoute)
 app.use('/lessons/api', lessonRoute)
 app.use('/pages/api', pageRoute)
+app.use('/teacher-management/api', teacherManagementRoute)
 
 app.use(errorHandler)
 
