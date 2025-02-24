@@ -1,14 +1,30 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Home, Plus, Mail, User, Trash2 } from 'lucide-react'
 import api from '../../utils/api'
 import './TeacherManagement.css'
 
 const TeacherManagement = () => {
   const [email, setEmail] = useState('')
-  const [teachers, setTeachers] = useState([
-  ])
+  const [teachers, setTeachers] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    fetchTeachers()
+  }, [])
+
+  const fetchTeachers = async () => {
+    try {
+      const response = await api.get('teacher-management/api/v1/fetch-teachers')
+      console.log(response)
+      if (response.status === 200) {
+        setTeachers(response.data.teachers)
+        console.log(teachers)
+      }
+    } catch (error) {
+      // ignore error  
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -96,30 +112,36 @@ const TeacherManagement = () => {
                 </tr>
               </thead>
               <tbody>
-                {teachers.map(teacher => (
-                  <tr key={teacher.id}>
-                    <td>
-                      <div className="teacher-email">
-                        <User size={16} />
-                        {teacher.email}
-                      </div>
-                    </td>
-                    <td>
-                      <span className={`status-badge ${teacher.status.toLowerCase()}`}>
-                        {teacher.status}
-                      </span>
-                    </td>
-                    <td>{teacher.dateAdded}</td>
-                    <td>
-                      <button 
-                        className="delete-button"
-                        onClick={() => handleDelete(teacher.id)}
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </td>
+                { teachers.length === 0 ? ( 
+                  <tr>
+                   <td colSpan="4" style={{ textAlign: 'center' }}>No teachers available</td>
                   </tr>
-                ))}
+                ) : ( 
+                  teachers.map(teacher => (
+                    <tr key={teacher.id}>
+                      <td>
+                        <div className="teacher-email">
+                          <User size={16} />
+                          {teacher.email}
+                        </div>
+                      </td>
+                      <td>
+                        <span className={`status-badge ${teacher.status.toLowerCase()}`}>
+                          {teacher.status}
+                        </span>
+                      </td>
+                      <td>{new Date(teacher.createdAt).toLocaleString()}</td>
+                      <td>
+                        <button 
+                          className="delete-button"
+                          onClick={() => handleDelete(teacher.id)}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
