@@ -1,13 +1,13 @@
-body {
+/*Background Image*/
+.landing-page {
   width: 100%;
   height: 100vh;
   background: #100E24;
   overflow: hidden;
-  font-size: 16px;
 }
 
-/*Background Image*/
 .container {
+  font-size: 16px;
   position: absolute;
   left: 500px;
   top: 0px;
@@ -110,7 +110,7 @@ h3 {
   padding: 20px;
 }
 
-.nav-link, .landing-login {
+.landing-nav .nav-link, .landing-nav .landing-login {
   color: #FFFFFF; 
   background-color: transparent; 
   text-decoration: none;

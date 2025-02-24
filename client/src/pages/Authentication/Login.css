@@ -5,13 +5,13 @@
   overflow: hidden;
 }
 
-.glow {
+.login .glow {
   position: absolute;
   filter: blur(500px);
   transform: rotate(2.85deg);
 }
 
-.glow-1 {
+.login .glow-1 {
   width: 313.85px;
   height: 630.15px;
   left: 1594.91px;
@@ -19,7 +19,7 @@
   background: #32A7EF;
 }
 
-.glow-2 {
+.login .glow-2 {
   width: 571.47px;
   height: 565.25px;
   left: 1269.15px;
@@ -27,7 +27,7 @@
   background: #55B8FF;
 }
 
-.glow-3 {
+.login .glow-3 {
   width: 313.85px;
   height: 630.15px;
   left: 1593.38px;
