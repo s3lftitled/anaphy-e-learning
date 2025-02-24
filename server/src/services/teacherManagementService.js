@@ -64,7 +64,18 @@ const completeTeacherAccount = async (id, token, name, password) => {
   }
 }
 
+const fetchTeacherAccounts = async () => {
+  try {
+    const teachers = await TeacherModel.find({}, 'email status createdAt')
+    console.log(teachers)
+    return teachers
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   createTeacherAccount,
-  completeTeacherAccount
+  completeTeacherAccount,
+  fetchTeacherAccounts
 }
