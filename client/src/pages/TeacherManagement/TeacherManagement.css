@@ -194,6 +194,108 @@
   margin: 0;
 }
 
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.confirmation-modal {
+  background-color: white;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+  margin: 0 0 0 12px;
+  font-size: 18px;
+}
+
+.alert-icon {
+  color: #e53935;
+}
+
+.mail-icon {
+  color: #2196f3;
+}
+
+.modal-content {
+  padding: 20px 16px;
+}
+
+.modal-email {
+  font-weight: 600;
+  padding: 8px 12px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  margin-top: 8px;
+  word-break: break-all;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px;
+  border-top: 1px solid #eee;
+  gap: 12px;
+}
+
+.cancel-button {
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  background-color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.confirm-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.confirm-button.delete {
+  background-color: #e53935;
+}
+
+.confirm-button.add {
+  background-color: #4caf50;
+}
+
+.cancel-button:hover {
+  background-color: #f5f5f5;
+}
+
+.confirm-button.delete:hover {
+  background-color: #d32f2f;
+}
+
+.confirm-button.add:hover {
+  background-color: #43a047;
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .admin-content {
