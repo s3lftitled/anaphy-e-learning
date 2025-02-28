@@ -35,7 +35,8 @@ const createTeacherAccount = async (email) => {
     // Send confirmation email with the token
     const confirmationLink = `http://localhost:5173/confirm-teacher-account?token=${encodeURIComponent(confirmationToken)}&id=${encodeURIComponent(teacher._id)}`;
     await EmailUtil.sendConfirmationEmail(sanitizedEmail, confirmationLink)
-
+   
+    return teacher
   } catch (error) {
     throw error
   }
@@ -74,8 +75,30 @@ const fetchTeacherAccounts = async () => {
   }
 }
 
+const deleteTeacherAccount = async (teacherId) => {
+  try {
+    // Validate if teacherId is provided
+    validateRequiredParams({ teacherId })
+
+    // Check if the provided teacherId is a valid MongoDB ObjectId
+    appAssert(validator.isMongoId(teacherId), 'Invalid teacher ID format', HTTP_STATUS.BAD_REQUEST)
+
+    // Find the teacher by ID
+    const teacher = await TeacherModel.findById(teacherId);
+    appAssert(teacher, 'Teacher not found', HTTP_STATUS.BAD_REQUEST)
+
+    // Delete the teacher account
+    await TeacherModel.findByIdAndDelete(teacherId)
+
+    return { message: 'Teacher account successfully deleted' }
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   createTeacherAccount,
   completeTeacherAccount,
-  fetchTeacherAccounts
+  fetchTeacherAccounts,
+  deleteTeacherAccount
 }

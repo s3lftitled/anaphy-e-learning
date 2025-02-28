@@ -1,7 +1,8 @@
 const {
   createTeacherAccount,
   completeTeacherAccount,
-  fetchTeacherAccounts
+  fetchTeacherAccounts,
+  deleteTeacherAccount,
 } = require('../services/teacherManagementService')
 const HTTP_STATUS = require('../constants/httpConstants')
 const logger = require('../logger/logger')
@@ -10,8 +11,8 @@ class TeacherManagementController {
   async createTeacher(req, res, next) {
     const { email } = req.body
     try {
-      await createTeacherAccount(email)
-      res.status(HTTP_STATUS.OK).json({ message: 'Teacher account succesfully created, confirmation link has beent sent to their email'})
+      const teacher = await createTeacherAccount(email)
+      res.status(HTTP_STATUS.CREATED).json({ message: 'Teacher account succesfully created, confirmation link has beent sent to their email', teacher})
     } catch (error) {
       logger.error(`Teacher creation error - ${error.message}`)
       next(error)
@@ -36,6 +37,18 @@ class TeacherManagementController {
       res.status(HTTP_STATUS.OK).json({ message: 'Teachers fetched succesfully', teachers})
     } catch(error) {
       logger.error(`Error fetching teachers - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async deleteTeacher(req, res, next) {
+    const { teacherId } = req.params
+    try {
+      const response = await deleteTeacherAccount(teacherId)
+
+      res.status(HTTP_STATUS.OK).json({ message: response })
+    } catch (error) {
+      logger.error(`Error deleting teacher - ${error.message}`)
       next(error)
     }
   }

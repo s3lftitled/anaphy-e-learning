@@ -6,6 +6,7 @@ const teacherSchema = new mongoose.Schema({
   password: { type: String },
   createdAt: { type: Date, default: Date.now },
   status: { type: String, enum: ['pending', 'active'], default: 'pending' },
+  role: { type: String, default: 'teacher'},
   confirmationToken: { type: String }, // Store token for verification
   tokenExpires: { type: Date } // Set expiration time for security
 })
