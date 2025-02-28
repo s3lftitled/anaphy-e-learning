@@ -1,4 +1,5 @@
 const UserModel = require('../models/user.model')
+const TeacherModel = require('../models/teacher.model')
 const EmailUtil = require('../utils/emailUtils')
 const PasswordUtil = require('../utils/passwordUtils')
 const HTTP_STATUS = require('../constants/httpConstants')
@@ -12,27 +13,26 @@ const axios = require('axios')
 
 const CAPTCHA_SECRET = process.env.CAPTCHA_SECRET
 
-const verifyCaptcha = async (captchaToken) => {
+const verifyCaptcha = async (recaptcha) => {
   const response = await axios.post(
     'https://www.google.com/recaptcha/api/siteverify',
     null,
     {
       params: {
         secret: CAPTCHA_SECRET,
-        response: captchaToken,
+        response: recaptcha,
       },
     }
   )
-return responsee.data.success
+  return response.data.success
 }
 
-const registerUser = async (name, email, password, passwordConfirmation) => {
+const registerUser = async (name, email, password, passwordConfirmation, recaptcha) => {
   try {
-    console.log(name, email, password, passwordConfirmation)
-    validateRequiredParams({ name, email, password, passwordConfirmation })
+    validateRequiredParams({ name, email, password, passwordConfirmation, recaptcha })
 
     //captcha
-    appAssert(await verifyCaptcha(captchaToken), 'Invalid CAPTCHA', HTTP_STATUS.BAD_REQUEST)
+    appAssert(await verifyCaptcha(recaptcha), 'Invalid CAPTCHA', HTTP_STATUS.BAD_REQUEST)
 
     // Validate and sanitize email
     appAssert(validator.isEmail(email), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)
@@ -79,7 +79,7 @@ const verifyEmail = async(email, verificationCode) => {
     validateRequiredParams({ email, verificationCode })
 
     //captcha 
-    appAssert(await verifyCaptcha(captchaToken), 'Invalid CAPTCHA'. HTTP_STATUS.BAD_REQUEST)
+    // appAssert(await verifyCaptcha(captchaToken), 'Invalid CAPTCHA'. HTTP_STATUS.BAD_REQUEST)
     
     // Validate and sanitize email
     appAssert(validator.isEmail(email), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)
@@ -111,7 +111,11 @@ const logIn = async (email, password) => {
     const sanitizedEmail = sanitizeHtml(email.trim())  // Sanitize to remove potentially harmful HTML
 
     // Find the user associated with the email
-    const user = await UserModel.findOne({ email: sanitizedEmail })
+    let user = await UserModel.findOne({ email: sanitizedEmail })
+
+    if (!user) {
+      user = await TeacherModel.findOne({ email: sanitizedEmail })
+    }
     appAssert(user, 'No user is associated with that email', HTTP_STATUS.BAD_REQUEST)
 
     // Check if the password is correct (using PasswordUtil class)
