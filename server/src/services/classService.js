@@ -7,6 +7,7 @@ const { validateRequiredParams } = require('../utils/paramsValidator')
 const { appAssert } = require('../utils/appAssert')
 const { generateUniqueClassCode } = require('../utils/classUtils')
 const TeacherModel = require('../models/teacher.model')
+const UserModel = require("../models/user.model")
 
 const createClassService = async (userRole, teacherId, className) => {
   try {
@@ -48,6 +49,119 @@ const createClassService = async (userRole, teacherId, className) => {
   }
 }
 
+const inviteStudentService = async (userRole, teacherId, studentId, classId) => {
+  try {
+    validateRequiredParams(userRole, teacherId, studentId, classId)
+    appAssert(userRole === "teacher", "Permission denied", HTTP_STATUS.FORBIDDEN)
+    appAssert(validator.isMongoId(teacherId) && validator.isMongoId(studentId) && validator.isMongoId(classId),
+              "Invalid IDs", HTTP_STATUS.BAD_REQUEST)
+
+    const classData = await ClassModel.findById(classId)
+    appAssert(classData, "Class not found", HTTP_STATUS.NOT_FOUND)
+    appAssert(classData.teacher.toString() === teacherId, "Not your class", HTTP_STATUS.FORBIDDEN)
+
+    const student = await UserModel.findById(studentId)
+    appAssert(student, "Student not found", HTTP_STATUS.NOT_FOUND)
+
+    // Check if student is already in the class
+    const existingStudent = classData.students.find(s => s.student.toString() === studentId && s.status === "joined")
+    appAssert(!existingStudent, "Student is already in the class", HTTP_STATUS.BAD_REQUEST)
+
+    // Check if student already has an invite
+    const existingInvite = student.invitations.find((invite) => invite.classId.toString() === classId)
+    appAssert(!existingInvite, "Student already invited", HTTP_STATUS.BAD_REQUEST)
+
+    // Add invitation to both class and student
+    const studentIndex = classData.students.findIndex(s => s.student.toString() === studentId)
+
+    if (studentIndex !== -1) {
+        // Student exists, update their status
+        classData.students[studentIndex].status = "invited"
+    } else {
+        // Student does not exist, add them
+        classData.students.push({ student: studentId, status: "invited" })
+    }
+
+    student.invitations.push({ classId, classCode: classData.code, status: "invited" })
+
+    await classData.save()
+    await student.save()
+
+  } catch (error) {
+    throw(error)
+  }
+}
+
+const acceptInvitationService = async (userRole, studentId, classId) => {
+  try {
+    validateRequiredParams(userRole, studentId, classId)
+    appAssert(userRole === "student", "Permission denied", HTTP_STATUS.FORBIDDEN)
+    appAssert(validator.isMongoId(studentId) && validator.isMongoId(classId), "Invalid IDs", HTTP_STATUS.BAD_REQUEST)
+
+    const classData = await ClassModel.findById(classId)
+    appAssert(classData, "Class not found", HTTP_STATUS.NOT_FOUND)
+
+    const student = await UserModel.findById(studentId)
+    appAssert(student, "Student not found", HTTP_STATUS.NOT_FOUND)
+
+    // Find the student's invitation
+    const inviteIndex = student.invitations.findIndex((invite) => invite.classId.toString() === classId)
+    appAssert(inviteIndex !== -1, "No invitation found", HTTP_STATUS.BAD_REQUEST)
+
+    // Move student to "joinedClasses" and remove from invitations
+    student.joinedClasses.push(classId)
+    student.invitations.splice(inviteIndex, 1) // Remove invitation
+
+    // Update the class list
+    const studentEntry = classData.students.find((s) => s.student.toString() === studentId)
+    if (studentEntry) {
+      studentEntry.status = "joined" // Update class status
+    }
+
+    await classData.save()
+    await student.save()
+  } catch (error) {
+    throw(error)
+  }
+}
+
+const rejectInvitationService = async (userRole, studentId, classId) => {
+  try {
+    validateRequiredParams(userRole, studentId, classId)
+    appAssert(userRole === "student", "Permission denied", HTTP_STATUS.FORBIDDEN)
+    appAssert(validator.isMongoId(studentId) && validator.isMongoId(classId), "Invalid IDs", HTTP_STATUS.BAD_REQUEST)
+
+    const student = await UserModel.findById(studentId)
+    appAssert(student, "Student not found", HTTP_STATUS.NOT_FOUND)
+
+    const classData = await ClassModel.findById(classId)
+    appAssert(classData, "Class not found", HTTP_STATUS.NOT_FOUND)
+
+    // Find the invitation in student model
+    const inviteIndex = student.invitations.findIndex((invite) => invite.classId.toString() === classId)
+    appAssert(inviteIndex !== -1, "No invitation found", HTTP_STATUS.BAD_REQUEST)
+
+    // Remove the invitation from student
+    student.invitations.splice(inviteIndex, 1)
+
+    // Find the student in class and update status to "rejected"
+    const studentEntry = classData.students.find((s) => s.student.toString() === studentId)
+    if (studentEntry) {
+      studentEntry.status = "rejected"
+    }
+
+    // Save the updated records
+    await student.save()
+    await classData.save()
+
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   createClassService,
+  acceptInvitationService,
+  rejectInvitationService,
+  inviteStudentService,
 }
