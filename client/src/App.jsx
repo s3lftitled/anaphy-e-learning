@@ -7,7 +7,6 @@ const Register = lazy(() => import('./pages/Authentication/Register'))
 const LandingPage = lazy(() => import('./pages/Landing/LandingPage'))
 const Verification = lazy(() => import('./pages/Authentication/Verification'))
 const Homepage = lazy(() => import('./pages/Home/Home'))
-const AboutUs = lazy(() => import('./pages/AboutUs/AboutUs'))
 const TeacherManagement = lazy(() => import('./pages/TeacherManagement/TeacherManagement'))
 const ConfirmationForm = lazy(() => import('./components/ConfirmationForm'))
 
@@ -23,7 +22,6 @@ const App = () => {
           <Route path='/verification/:email' element={<Verification />}/>
           <Route path='/teacher-management' element={<TeacherManagement/>}/>
           <Route path='/confirm-teacher-account' element={<ConfirmationForm/>}/>
-          <Route path='/about-us' element={<AboutUs/>}/>
         </Routes>
       </Suspense>
     </Router>
