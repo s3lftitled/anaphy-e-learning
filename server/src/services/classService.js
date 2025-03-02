@@ -21,8 +21,7 @@ const createClassService = async (userRole, teacherId, className) => {
 
     // Find teacher accound by its id
     const teacher = await TeacherModel.findById(teacherId)
- 
-    console.log(teacher)
+
 
     // Check if teacher account exists
     appAssert(teacher, 'Teacher account not found', HTTP_STATUS.BAD_REQUEST)
