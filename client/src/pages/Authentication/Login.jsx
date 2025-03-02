@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
 import api from '../../utils/api'
+import useAuth from '../../hooks/useAuth'
 import './Login.css'
 
 
 const Login = () => {
   const [ loginData, setLoginData ] = useState({})
   const [captchaToken, setCaptchaToken] = useState(null)
+  const { setAuth } = useAuth()
   const navigate = useNavigate()
 
   const handleFieldChange = (e) => {
@@ -39,10 +41,14 @@ const Login = () => {
     }
     e.preventDefault()
     try {
-      const response = await api.post('auth/api/v1/login', { email: loginData.email, password: loginData.password })
+      const response = await api.post('auth/api/v1/login', { email: loginData.email, password: loginData.password },
+        { withCredentials: true }
+      )
 
       if (response.status === 200) {
         alert(response.data.message)
+        console.log(response.data.accessToken)
+        setAuth({ accessToken: response.data.accessToken})
         navigate('/home')
       }
     } catch (error) {
