@@ -7,6 +7,7 @@ const teacherSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   status: { type: String, enum: ['pending', 'active'], default: 'pending' },
   role: { type: String, default: 'teacher'},
+  classes: [{ type: mongoose.Schema.Types.ObjectId, ref: "ClassModel" }],
   confirmationToken: { type: String }, // Store token for verification
   tokenExpires: { type: Date } // Set expiration time for security
 })
