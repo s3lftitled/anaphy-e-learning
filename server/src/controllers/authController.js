@@ -39,11 +39,10 @@ class AuthController {
       // Set cookies
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: true,
-        sameSite: 'none',
+        sameSite: 'lax',
       })
 
-      res.status(HTTP_STATUS.OK).json({ data: { user, accessToken } , message: 'Log in succesfully' })
+      res.status(HTTP_STATUS.OK).json({ user, accessToken, message: 'Log in succesfully' })
     } catch (error) {
       logger.error(`Login error - ${error.message}`)
       next(error)
