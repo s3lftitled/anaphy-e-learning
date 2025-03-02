@@ -13,6 +13,7 @@ const lessonRoute = require('./src/router/lessonRouter')
 const pageRoute = require('./src/router/pageRouter')
 const teacherManagementRoute = require('./src/router/teacherManagementRouter')
 const classRoute = require('./src/router/classRouter')
+const tokenRoute = require('./src/router/tokenRouter')
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -43,6 +44,7 @@ app.use('/lessons/api', lessonRoute)
 app.use('/pages/api', pageRoute)
 app.use('/teacher-management/api', teacherManagementRoute)
 app.use('/class/api', classRoute)
+app.use('/token/api', tokenRoute)
 
 app.use(errorHandler)
 
