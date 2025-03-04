@@ -8,10 +8,10 @@ class TokenController {
 
       console.log("Refresh:", refreshToken)
 
-      const newAccessToken = await TokenService.refreshAccessToken(refreshToken)
+      const { newAccessToken, userId } = await TokenService.refreshAccessToken(refreshToken)
 
       res.setHeader('Authorization', `Bearer ${newAccessToken}`)
-      res.status(200).json({ accessToken: newAccessToken })
+      res.status(200).json({ accessToken: newAccessToken, userId })
     } catch (error) {
       logger.error(`Error refreshing the token - ${error.message}`)
       next(error)
