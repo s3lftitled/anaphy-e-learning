@@ -115,6 +115,15 @@
   margin-bottom: 4px;
 }
 
+.login-img {
+  position: absolute;
+  bottom: -40px;
+  right: 800px;
+  height: 100vh;
+  opacity: 0.7;
+  height: 800px;
+}
+
 .login-input-group input:focus {
   border-color: #55B8FF;
   outline: none;

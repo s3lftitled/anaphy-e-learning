@@ -66,7 +66,7 @@ const Login = () => {
       <div className="glow glow-2"></div>
       <div className="glow glow-3"></div>
 
-      <img className="register-img" src="skull.png" alt="Skull Logo" />
+      <img className="login-img" src="skull1.png" alt="Skull Logo" />
 
       <nav className="login-nav">
         <button className="login-button" href="">Login</button>
@@ -103,8 +103,8 @@ const Login = () => {
           </div>
 
           <ReCAPTCHA
-          sitekey="6Lfl_9QqAAAAAAFX9cr264UKhJVVRXlawTuXD-y0"
-          onChange={handleCaptchaChange}
+            sitekey="6Lfl_9QqAAAAAAFX9cr264UKhJVVRXlawTuXD-y0"
+            onChange={handleCaptchaChange}
           />
 
           <div className='login-options'>
