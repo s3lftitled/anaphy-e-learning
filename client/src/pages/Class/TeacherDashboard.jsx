@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useUser } from '../../context/UserContext'
 import './TeacherDashboard.css'
+import usePrivateApi from '../../hooks/usePrivateApi'
 
 const TeacherDashboard = () => {
   // State for classes data
@@ -10,109 +13,113 @@ const TeacherDashboard = () => {
   const [inviteEmail, setInviteEmail] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
+  const { user } = useUser()
+  const [error, setError] = useState(null)
+  const privateAxios = usePrivateApi()
 
-  // Mock data for teacher profile
-  const teacher = {
-    name: "Jane Smith",
-    subject: "Anaphy",
-    avatar: "/api/placeholder/150/150"
+  // Fetch classes data from API
+  useEffect(() => {
+    if (user) {
+      fetchClasses()
+    }
+  }, [user])
+
+  const fetchClasses = async () => {
+    try {
+      setLoading(true)
+      
+      // Replace with your actual API endpoint
+      const response = await privateAxios.get(`class/api/v1/fetch-teacher-classes/${user.id}`, {}, { 
+        withCredentials: true
+      })
+      
+      const { classesDetails } = response.data
+      
+      // Transform the API response to match our component's expected structure
+      const transformedClasses = classesDetails.map(cls => ({
+        id: cls._id,
+        name: cls.name,
+        code: cls.code,
+        createdAt: cls.createdAt || new Date().toISOString().split('T')[0], // Default if not provided
+        students: cls.students.map(student => ({
+          id: student._id,
+          name: student.name,
+          email: student.email,
+          status: student.status,
+          lastActive: student.lastActive || null
+        })),
+        assignments: cls.assignments || 0,
+        announcements: cls.announcements || 0
+      }))
+      
+      setClasses(transformedClasses)
+      
+      // Set first class as active if available
+      if (transformedClasses.length > 0) {
+        setActiveClass(transformedClasses[0])
+      }
+      
+      setLoading(false)
+    } catch (error) {
+      console.error("Error fetching classes:", error)
+      setError("Failed to load classes. Please try again later.")
+      setLoading(false)
+    }
   }
 
-  // Fetch classes data (simulated)
-  useEffect(() => {
-    // This would be an API call in production
-    const fetchClasses = async () => {
-      try {
-        // Simulating API delay
-        setTimeout(() => {
-          const mockClasses = [
-            {
-              id: '1',
-              name: 'Anaphy 101',
-              code: 'CLASS452789',
-              createdAt: '2025-02-15',
-              students: [
-                { id: '101', name: 'Alex Johnson', email: 'alex@example.com', status: 'joined', lastActive: '2025-02-28' },
-                { id: '102', name: 'Maria Garcia', email: 'maria@example.com', status: 'joined', lastActive: '2025-02-27' },
-                { id: '103', name: 'James Wilson', email: 'james@example.com', status: 'invited', lastActive: null },
-                { id: '104', name: 'Sarah Lee', email: 'sarah@example.com', status: 'joined', lastActive: '2025-03-01' },
-              ],
-              assignments: 3,
-              announcements: 2
-            },
-            {
-              id: '2',
-              name: 'Anaphy 103',
-              code: 'CLASS789123',
-              createdAt: '2025-01-10',
-              students: [
-                { id: '201', name: 'Thomas Brown', email: 'thomas@example.com', status: 'joined', lastActive: '2025-02-25' },
-                { id: '202', name: 'Emma Davis', email: 'emma@example.com', status: 'joined', lastActive: '2025-02-29' },
-                { id: '203', name: 'Michael Chen', email: 'michael@example.com', status: 'joined', lastActive: '2025-02-28' },
-              ],
-              assignments: 5,
-              announcements: 1
-            },
-            {
-              id: '3',
-              name: 'Anaphy 102',
-              code: 'CLASS364851',
-              createdAt: '2025-02-20',
-              students: [
-                { id: '301', name: 'Sophia Rodriguez', email: 'sophia@example.com', status: 'joined', lastActive: '2025-02-26' },
-                { id: '302', name: 'Noah Martin', email: 'noah@example.com', status: 'rejected', lastActive: null },
-                { id: '303', name: 'Olivia Thompson', email: 'olivia@example.com', status: 'invited', lastActive: null },
-              ],
-              assignments: 1,
-              announcements: 3
-            }
-          ]
-
-          setClasses(mockClasses)
-          setActiveClass(mockClasses[0])
-          setLoading(false)
-        }, 1000)
-      } catch (error) {
-        console.error("Error fetching classes:", error)
-        setLoading(false)
-      }
-    }
-
-    fetchClasses()
-  }, [])
 
   const handleClassSelect = (classData) => {
     setActiveClass(classData)
   }
 
-  const handleInviteStudent = (e) => {
+  const handleInviteStudent = async (e) => {
     e.preventDefault()
     if (!inviteEmail) return
+    
+    try {
+      // Call API to invite student
+      const response = await fetch(`/api/classes/${activeClass.id}/invite`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: inviteEmail })
+      })
+      
+      if (!response.ok) {
+        throw new Error(`API request failed with status ${response.status}`)
+      }
+      
+      const data = await response.json()
+      
+      // Update the local state with the newly invited student
+      const newStudent = {
+        id: data.student._id,
+        name: data.student.name,
+        email: data.student.email,
+        status: 'invited',
+        lastActive: null
+      }
 
-    // This would be an API call in production
-    const newStudent = {
-      id: `${Math.floor(Math.random() * 1000)}`,
-      name: inviteEmail.split('@')[0], // Just for mock data
-      email: inviteEmail,
-      status: 'invited',
-      lastActive: null
+      // Update the active class with the new student
+      const updatedClass = {
+        ...activeClass,
+        students: [...activeClass.students, newStudent]
+      }
+
+      // Update classes array
+      const updatedClasses = classes.map(c => 
+        c.id === activeClass.id ? updatedClass : c
+      )
+
+      setClasses(updatedClasses)
+      setActiveClass(updatedClass)
+      setInviteEmail('')
+      setShowInviteModal(false)
+    } catch (error) {
+      console.error("Error inviting student:", error)
+      alert("Failed to invite student. Please try again.")
     }
-
-    // Update the active class with the new student
-    const updatedClass = {
-      ...activeClass,
-      students: [...activeClass.students, newStudent]
-    }
-
-    // Update classes array
-    const updatedClasses = classes.map(c => 
-      c.id === activeClass.id ? updatedClass : c
-    )
-
-    setClasses(updatedClasses)
-    setActiveClass(updatedClass)
-    setInviteEmail('')
-    setShowInviteModal(false)
   }
 
   const getStatusClass = (status) => {
@@ -146,27 +153,20 @@ const TeacherDashboard = () => {
     return stats
   }
 
-  const stats = getClassStats();
+  const stats = getClassStats()
 
-  if (loading) {
-    return (
-      <div className="dashboard-container loading-container">
-        <div className="spinner-container">
-          <div className="dashboard-spinner"></div>
-          <p>Loading your dashboard...</p>
-        </div>
-      </div>
-    )
+  if (error) {
+    return <div className="error-container">{error}</div>
   }
 
   return (
     <div className="dashboard-container">
       <div className="dashboard-sidebar">
         <div className="teacher-profile">
-          <img src={teacher.avatar} alt={teacher.name} className="teacher-avatar" />
+          <img src={user.avatar} alt={user.name} className="teacher-avatar" />
           <div className="teacher-info">
-            <h3>{teacher.name}</h3>
-            <p>{teacher.subject} Teacher</p>
+            <h3>{user.name}</h3>
+            <p>Anatomy Teacher</p>
           </div>
         </div>
         
@@ -174,23 +174,29 @@ const TeacherDashboard = () => {
         
         <div className="sidebar-header">
           <h3>My Classes</h3>
-          <button className="new-class-btn">+</button>
+          <button className="new-class-btn" onClick={() => window.location.href = '/teacher-class-page'}>+</button>
         </div>
         
         <div className="classes-list">
-          {classes.map(cls => (
-            <div 
-              key={cls.id} 
-              className={`class-item ${activeClass?.id === cls.id ? 'active' : ''}`}
-              onClick={() => handleClassSelect(cls)}
-            >
-              <div className="class-item-icon">{cls.name.charAt(0)}</div>
-              <div className="class-item-details">
-                <h4>{cls.name}</h4>
-                <p>{cls.students.length} students</p>
+          {classes.length > 0 ? (
+            classes.map(cls => (
+              <div 
+                key={cls.id} 
+                className={`class-item ${activeClass?.id === cls.id ? 'active' : ''}`}
+                onClick={() => handleClassSelect(cls)}
+              >
+                <div className="class-item-icon">{cls.name.charAt(0)}</div>
+                <div className="class-item-details">
+                  <h4>{cls.name}</h4>
+                  <p>{cls.students.length} students</p>
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="empty-classes">
+              <p>No classes found. Create a new class to get started.</p>
             </div>
-          ))}
+          )}
         </div>
         
         <div className="sidebar-footer">
@@ -200,7 +206,7 @@ const TeacherDashboard = () => {
       </div>
       
       <div className="dashboard-main">
-        {activeClass && (
+        {activeClass ? (
           <>
             <div className="dashboard-header">
               <div className="header-info">
@@ -211,8 +217,6 @@ const TeacherDashboard = () => {
                 </div>
               </div>
               <div className="header-actions">
-                <button className="action-btn">Assignments</button>
-                <button className="action-btn">Materials</button>
                 <button 
                   className="invite-btn"
                   onClick={() => setShowInviteModal(true)}
@@ -234,10 +238,6 @@ const TeacherDashboard = () => {
               <div className="stat-card">
                 <div className="stat-value">{stats.invited}</div>
                 <div className="stat-label">Pending Invites</div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-value">{activeClass.assignments}</div>
-                <div className="stat-label">Assignments</div>
               </div>
             </div>
             
@@ -291,13 +291,13 @@ const TeacherDashboard = () => {
                           {student.lastActive || 'Never'}
                         </div>
                         <div className="col-actions">
-                          <button className="row-action-btn">
+                          <button className="row-action-btn" onClick={() => window.location.href = `/student/${student.id}/progress`}>
                             <span className="action-icon">📊</span>
                           </button>
-                          <button className="row-action-btn">
+                          <button className="row-action-btn" onClick={() => window.location.href = `/student/${student.id}/message`}>
                             <span className="action-icon">✉️</span>
                           </button>
-                          <button className="row-action-btn danger">
+                          <button className="row-action-btn danger" onClick={() => handleRemoveStudent(student.id)}>
                             <span className="action-icon">❌</span>
                           </button>
                         </div>
@@ -312,6 +312,11 @@ const TeacherDashboard = () => {
               </div>
             </div>
           </>
+        ) : (
+          <div className="empty-dashboard">
+            <h2>No Class Selected</h2>
+            <p>Please select a class from the sidebar or create a new class to get started.</p>
+          </div>
         )}
       </div>
       

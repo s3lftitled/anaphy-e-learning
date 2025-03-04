@@ -136,7 +136,7 @@ const TeacherClassPage = () => {
             </div>
             <div className="modal-footer">
               <button className="secondary-btn" onClick={handleCloseSuccess}>Close</button>
-              <button className="primary-btn">Go to Class Dashboard</button>
+              <button className="primary-btn" onClick={() => window.location.href = '/teacher-dashboard'}>Go to Class Dashboard</button>
             </div>
           </div>
         </div>
