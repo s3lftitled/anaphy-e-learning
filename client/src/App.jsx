@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
 import { AuthProvider } from './context/AuthContext'
+import { UserProvider } from './context/UserContext.jsx'
+import { AppProvider } from './context/UserContext.jsx'
 import './App.css'
 
 const Login = lazy(() => import('./pages/Authentication/Login'))
@@ -16,25 +18,34 @@ const PersistLogin = lazy(() => import('./components/PersistLogin'))
 
 const App = () => {
   return (
-    <AuthProvider>
       <Router>
-        <Suspense fallback={<div>Loading...</div>}>
+        <AuthProvider>
+        <Suspense >
           <Routes>
-            <Route path='/' element={<LandingPage />}/>
-            <Route path='/login' element={<Login />}/>
-            <Route path='/register' element={<Register />}/>
-            <Route path='/verification/:email' element={<Verification />}/>
-            <Route element={<PersistLogin />}>
-              <Route path='/home' element={<Homepage />}/>
-              <Route path='/teacher-management' element={<TeacherManagement/>}/>
-              <Route path='/confirm-teacher-account' element={<ConfirmationForm/>}/>
-              <Route path='/teacher-class-page' element={<TeacherClassPage/>}/>
-              <Route path='/teacher-dashboard' element={<TeacherDashboard/>}/>
+            {/* Public Routes */}
+            <Route path='/' element={<LandingPage />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/verification/:email' element={<Verification />} />
+            <Route 
+              element={
+                <AppProvider>
+                  <UserProvider>
+                    <PersistLogin />
+                  </UserProvider>
+                </AppProvider>
+              }
+            >
+              <Route path='/home' element={<Homepage />} />
+              <Route path='/teacher-management' element={<TeacherManagement />} />
+              <Route path='/confirm-teacher-account' element={<ConfirmationForm />} />
+              <Route path='/teacher-class-page' element={<TeacherClassPage />} />
+              <Route path='/teacher-dashboard' element={<TeacherDashboard />} />
             </Route>
           </Routes>
         </Suspense>
-     </Router>
-    </AuthProvider>
+        </AuthProvider>
+      </Router>
   )
 }
 
