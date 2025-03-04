@@ -2,7 +2,8 @@ const {
   createClassService,
   acceptInvitationService,
   rejectInvitationService,
-  inviteStudentService
+  inviteStudentService,
+  fetchTeacherClassService,
 } = require('../services/classService')
 const HTTP_STATUS = require('../constants/httpConstants')
 const logger = require('../logger/logger')
@@ -53,6 +54,18 @@ class ClassController {
       res.status(HTTP_STATUS.OK).json({ message: 'Invitation rejected succesfully' })
     } catch (error) {
       logger.error(`Error rejecting class invitation - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async fetchTeacherClasses(req, res, next) {
+    const { teacherId } = req.params
+    try {
+      const classesDetails = await fetchTeacherClassService(teacherId)
+
+      res.status(HTTP_STATUS.OK).json({ classesDetails, message: 'Fetch classes and its details succesfully' })
+    } catch (error) {
+      logger.error(`Error fetching teacher classes - ${error.message}`)
       next(error)
     }
   }

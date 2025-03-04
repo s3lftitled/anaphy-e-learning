@@ -163,9 +163,44 @@ const rejectInvitationService = async (userRole, studentId, classId) => {
   }
 }
 
+const fetchTeacherClassService = async (teacherId) => {
+  try {
+    validateRequiredParams(teacherId)
+
+    appAssert(validator.isMongoId(teacherId), 'Invalid user id', HTTP_STATUS.BAD_REQUEST)
+
+    const teacher = await TeacherModel.findById(teacherId).populate({
+      path: "classes",
+      populate: {
+        path: "students.student",
+        select: "name email", 
+      },
+    })
+
+    appAssert(teacher, 'User id is not found', HTTP_STATUS.NOT_FOUND)
+
+    const classesDetails = teacher.classes.map((classItem) => ({
+      _id: classItem._id,
+      name: classItem.name,
+      code: classItem.code,
+      students: classItem.students.map((s) => ({
+        _id: s.student._id,
+        name: s.student.name,
+        email: s.student.email,
+        status: s.status, 
+      })),
+    }))
+
+    return classesDetails
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   createClassService,
   acceptInvitationService,
   rejectInvitationService,
   inviteStudentService,
+  fetchTeacherClassService,
 }
