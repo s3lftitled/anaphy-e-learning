@@ -183,8 +183,8 @@ section {
 
 .sdg-container {
   display: flex;
-  flex-wrap: wrap; 
-  justify-content: space-around; 
+  flex-wrap: wrap;
+  justify-content: space-around;
   padding: 20px;
   width: 100%;
   max-width: 1200px;
@@ -213,6 +213,7 @@ section {
   font-size: 2rem;
   margin-bottom: 15px;
   color: #55B8FF;
+  justify-self: center;
 }
 
 .sdg-3 h3, .sdg-4 h3, .sdg-9 h3 {
@@ -226,6 +227,32 @@ section {
 
 .sdg-3 h3:hover, .sdg-4 h3:hover, .sdg-9 h3:hover {
   color: #ffffff;
+}
+
+/* Icon styles */
+.sdg-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+}
+
+.sdg-3:hover .sdg-icon, 
+.sdg-4:hover .sdg-icon, 
+.sdg-9:hover .sdg-icon {
+  transform: scale(1.1);
+}
+
+.sdg3-icon svg {
+  filter: drop-shadow(0 0 8px rgba(255, 82, 82, 0.4));
+}
+
+.sdg4-icon svg {
+  filter: drop-shadow(0 0 8px rgba(76, 175, 80, 0.4));
+}
+
+.sdg9-icon svg {
+  filter: drop-shadow(0 0 8px rgba(255, 152, 0, 0.4));
 }
 
 /* Contact Section Styles */
