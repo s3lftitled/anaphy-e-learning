@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const lessonSchema = new mongoose.Schema({
   title: { type: String, required: true, trim: true },
-  topic: { type: mongoose.Schema.Types.ObjectId, ref: 'Topic', required: true },
+  topic: { type: mongoose.Schema.Types.ObjectId, ref: 'TopicModel', required: true },
   description: { type: String, trim: true }, 
   order: { type: Number, required: true },
   content: [{

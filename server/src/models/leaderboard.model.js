@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 
 // Leaderboard Schema
 const leaderboardSchema = new mongoose.Schema({
-  topic: { type: mongoose.Schema.Types.ObjectId, ref: 'Topic', required: true },
+  topic: { type: mongoose.Schema.Types.ObjectId, ref: 'TopicModel', required: true },
   entries: [{
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'UserModel', required: true },
     totalScore: { type: Number, required: true }, // Combined score from quizzes and exam
     quizScores: Number,
     examScore: Number,
