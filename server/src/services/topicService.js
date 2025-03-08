@@ -11,14 +11,14 @@ const createTopicService = async (name, description) => {
     validateRequiredParams({ name, description })
 
     appAssert(
-      name.length < 30,
+      name.length < 80,
       'Topic name cant be longer than 30 characters',
       HTTP_STATUS.BAD_REQUEST
     )
 
     appAssert(
-      description.length < 200,
-      'Topic description cant be longer than 200 characters',
+      description.length < 600,
+      'Topic description cant be longer than 600 characters',
       HTTP_STATUS.BAD_REQUEST
     )
 
@@ -44,6 +44,7 @@ const fetchAllTopicsService = async () => {
     const topics = await TopicModel.find({})
 
     const allTopics = topics.map(topic => ({
+      _id: topic._id,
       name: topic.name,
       description: topic.description
     }))

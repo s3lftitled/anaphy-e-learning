@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 
 const topicSchema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true, maxlength: 30 },
-  description: { type: String, trim: true, maxlength: 200 },
+  name: { type: String, required: true, trim: true, maxlength: 80 },
+  description: { type: String, trim: true, maxlength: 600 },
   exam: { type: mongoose.Schema.Types.ObjectId, ref: 'Exam' },
   lessons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Lesson' }],
 }, {
