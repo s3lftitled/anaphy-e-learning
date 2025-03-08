@@ -10,7 +10,7 @@ async createPage(req, res, next) {
   const { title, content, link, order } = req.body
   const { lessonId } = req.params
   try {
-    await createPageService(title, content, lessonId, order)
+    await createPageService(title, content, lessonId, link, order)
     res.status(HTTP_STATUS.OK).json({ message: 'Page created succesfully' })
   } catch (error) {
     logger.error(`Pagecreation error - ${error.message}`)
