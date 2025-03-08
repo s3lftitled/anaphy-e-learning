@@ -102,10 +102,12 @@ const Login = () => {
             />
           </div>
 
-          <ReCAPTCHA
-            sitekey="6Lfl_9QqAAAAAAFX9cr264UKhJVVRXlawTuXD-y0"
-            onChange={handleCaptchaChange}
-          />
+          <div className="recaptcha-container">
+            <ReCAPTCHA
+              sitekey="6Lfl_9QqAAAAAAFX9cr264UKhJVVRXlawTuXD-y0"
+              onChange={handleCaptchaChange}
+            />
+          </div>
 
           <div className='login-options'>
             <button type="submit">Login</button>
