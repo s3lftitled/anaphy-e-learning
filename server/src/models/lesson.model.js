@@ -8,7 +8,7 @@ const lessonSchema = new mongoose.Schema({
   content: [{
     type: {
       type: String,
-      enum: ['page', 'quiz'],
+      enum: ['PageModel', 'QuizModel'],
       required: true,
     },
     contentId: {
