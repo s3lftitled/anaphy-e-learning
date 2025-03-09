@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Home, BookOpen, Search, User } from 'lucide-react'
+import { Home, HelpCircle, Search, User, Settings } from 'lucide-react'
+import AnatomyChatbot from '../../components/ChatbotComponent/Chatbot'
+import HelpSidebar from '../../components/HelpSidebarComponent/Help'
 import './Home.css'
 import { useUser } from '../../context/UserContext'
 
@@ -10,32 +12,47 @@ const Homepage = () => {
     { name: "Nervous System", icon: "🧠" },
     { name: "Cardiovascular System", icon: "❤️" },
     { name: "Respiratory System", icon: "🫁" }
-  ]
-
-  const { user } = useUser()
+  ];
+  
+  const { user } = useUser();
   const [searchActive, setSearchActive] = useState(false)
+  const [activeSidebarItem, setActiveSidebarItem] = useState('home')
+  const [helpSidebarOpen, setHelpSidebarOpen] = useState(false)
+  
+  // Toggle help sidebar when help button is clicked
+  const toggleHelpSidebar = () => {
+    setHelpSidebarOpen(!helpSidebarOpen)
+    setActiveSidebarItem('help')
+  }
 
+  // Close help sidebar when clicking elsewhere
+  useEffect(() => {
+    if (activeSidebarItem !== 'help') {
+      setHelpSidebarOpen(false);
+    }
+  }, [activeSidebarItem]);
 
   return (
     <div className="homepage">
+      <AnatomyChatbot />
       <nav className="navbar">
         <div className="nav-content">
           <div className="logo">
-            <span className="logo-text">LOGO</span>
+            <span className='logo-text'>Logo</span>
             <div className="logo-underline"></div>
           </div>
           
           <div className={`search-container ${searchActive ? 'active' : ''}`}>
             <Search className="search-icon" size={18} onClick={() => setSearchActive(!searchActive)} />
-            <input 
-              type="search" 
-              placeholder="Search anatomy topics..." 
-              className="search-input" 
+            <input
+              type="search"
+              placeholder="Search anatomy topics..."
+              className="search-input"
               onFocus={() => setSearchActive(true)}
               onBlur={() => setSearchActive(false)}
             />
           </div>
-
+          
           <div className="user-profile">
             <div className="user-avatar">
               <User size={20} />
@@ -44,20 +61,44 @@ const Homepage = () => {
           </div>
         </div>
       </nav>
-
+      
       <aside className="sidebar">
         <div className="sidebar-top">
-          <button className="sidebar-button active">
+          <button 
+            className={`sidebar-button ${activeSidebarItem === 'home' ? 'active' : ''}`}
+            onClick={() => setActiveSidebarItem('home')}
+          >
             <Home size={20} />
             <span className="sidebar-tooltip">Home</span>
           </button>
-          <button className="sidebar-button">
-            <BookOpen size={20} />
-            <span className="sidebar-tooltip">Library</span>
+        </div>
+        <div className="sidebar-bottom">
+          <button 
+            className={`sidebar-button ${activeSidebarItem === 'help' ? 'active' : ''}`}
+            onClick={toggleHelpSidebar}
+          >
+            <HelpCircle size={20} />
+            <span className="sidebar-tooltip">Help</span>
+          </button>
+          <button 
+            className={`sidebar-button ${activeSidebarItem === 'settings' ? 'active' : ''}`}
+            onClick={() => setActiveSidebarItem('settings')}
+          >
+            <Settings size={20} />
+            <span className="sidebar-tooltip">Settings</span>
           </button>
         </div>
       </aside>
-
+      
+      {/* Help Sidebar */}
+      <HelpSidebar 
+        isOpen={helpSidebarOpen} 
+        onClose={() => {
+          setHelpSidebarOpen(false)
+          setActiveSidebarItem('home')
+        }} 
+      />
+      
       <main className="main-content">
         <div className="hero-section">
           <div className="hero-content">
@@ -72,7 +113,7 @@ const Homepage = () => {
             <div className="pulse-effect"></div>
           </div>
         </div>
-
+        
         <h2 className="section-title">Body Systems</h2>
         
         <div className="topics-grid">
