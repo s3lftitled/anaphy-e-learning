@@ -18,6 +18,7 @@ const PersistLogin = lazy(() => import('./components/PersistLogin'))
 const CreateTopic = lazy(() => import('./pages/Content/CreateTopic.jsx'))
 const CreateLesson = lazy(() => import('./pages/Content/CreateLesson.jsx'))
 const CreateMultiplePages = lazy(() => import('./pages/Content/CreateMultiplePages.jsx'))
+const ELearningPlatform = lazy(() => import('./pages/E-Learning/Main.jsx'))
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const App = () => {
                 </AppProvider>
               }
             >
+              <Route path='/e-learning' element={<ELearningPlatform/>} />
               <Route path='/home' element={<Homepage />} />
               <Route path='/teacher-management' element={<TeacherManagement />} />
               <Route path='/confirm-teacher-account' element={<ConfirmationForm />} />
