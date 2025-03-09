@@ -5,5 +5,6 @@ const TopicController = require('../controllers/topicController')
 router.post('/v1/create-topic', TopicController.createTopic)
 router.get('/v1/fetch-all-topics', TopicController.fetchAllTopics)
 router.get('/v1/fetch-topic/:topicId', TopicController.fetchTopic)
+router.get('/v1/fetch-topic-lessons/:topicId', TopicController.fetchTopicLessons)
 
 module.exports = router

@@ -83,8 +83,32 @@ const fetchTopicService = async (topicId) => {
     throw error
   }
 }
+
+const fetchTopicLessonsService = async (topicId) => {
+  try {
+    validateRequiredParams(topicId)
+
+    appAssert(
+      mongoose.Types.ObjectId.isValid(topicId),
+      'Invalid topic ID',
+      HTTP_STATUS.BAD_REQUEST
+    )
+
+    const topic = await TopicModel.findById(topicId).populate('lessons', '_id title')
+
+    appAssert(topic, 'Topic is not found', HTTP_STATUS.NOT_FOUND)
+
+    const topicLessons = topic.lessons.map(({ _id, title }) => ({ _id, title }))
+
+    return topicLessons
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
  createTopicService,
  fetchAllTopicsService,
  fetchTopicService,
+ fetchTopicLessonsService,
 }
