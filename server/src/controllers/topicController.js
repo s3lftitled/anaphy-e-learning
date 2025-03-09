@@ -3,6 +3,7 @@ const {
   fetchAllTopicsService,
   fetchTopicService,
   fetchTopicLessonsService,
+  fetchTopicContentsService,
 } = require('../services/topicService')
 const HTTP_STATUS = require('../constants/httpConstants')
 const logger = require('../logger/logger')
@@ -47,6 +48,16 @@ class TopicController {
       res.status(HTTP_STATUS.OK).json({ topicLessons, message: 'Topic lessons fetched succesfully' })
     } catch(error) {
       logger.error(`Error fetching topic lessons - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async fetchTopicContents(req, res, next) {
+    try {
+      const topic = await fetchTopicContentsService()
+      res.status(HTTP_STATUS.OK).json({ topic })
+    } catch (error) {
+      logger.error(`Error fetching topic contents - ${error.message}`)
       next(error)
     }
   }

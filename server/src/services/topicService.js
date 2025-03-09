@@ -106,9 +106,29 @@ const fetchTopicLessonsService = async (topicId) => {
   }
 }
 
+const fetchTopicContentsService = async () => { 
+  try {
+    const topic = await TopicModel.find({})
+      .populate({
+        path: "lessons",
+        populate: {
+          path: "content",
+          populate: { path: "contentId" } // Populate contentId to get actual content
+        }
+      })
+
+    appAssert(topic, "Topic not found", HTTP_STATUS.NOT_FOUND) 
+        
+    return topic
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
  createTopicService,
  fetchAllTopicsService,
  fetchTopicService,
  fetchTopicLessonsService,
+ fetchTopicContentsService,
 }
