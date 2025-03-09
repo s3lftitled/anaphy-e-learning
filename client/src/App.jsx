@@ -15,6 +15,10 @@ const ConfirmationForm = lazy(() => import('./components/ConfirmationForm'))
 const TeacherClassPage = lazy(() => import('./pages/Class/TeacherClassPage'))
 const TeacherDashboard = lazy(() => import('./pages/Class/TeacherDashboard'))
 const PersistLogin = lazy(() => import('./components/PersistLogin'))
+const NeuronComponent = lazy(() => import('./pages/Neurons/Neurons.jsx'))
+const CreateTopic = lazy(() => import('./pages/Content/CreateTopic.jsx'))
+const CreateLesson = lazy(() => import('./pages/Content/CreateLesson.jsx'))
+const CreateMultiplePages = lazy(() => import('./pages/Content/CreateMultiplePages.jsx'))
 
 const App = () => {
   return (
@@ -27,6 +31,10 @@ const App = () => {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/verification/:email' element={<Verification />} />
+            <Route path='/neuron' element={<NeuronComponent />} />
+            <Route path='/create-topic' element={<CreateTopic/>} />
+            <Route path='/create-lesson' element={<CreateLesson/>} />
+            <Route path='/create-multiple-pages' element={<CreateMultiplePages/>} />
             <Route 
               element={
                 <AppProvider>
