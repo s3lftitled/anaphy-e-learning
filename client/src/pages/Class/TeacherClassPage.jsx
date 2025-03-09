@@ -36,7 +36,7 @@ const TeacherClassPage = () => {
         }
     } catch (err) {
       setError(err.message || 'An error occurred while creating the class')
-      setIsLoading(false);
+      setIsLoading(false)
     }
   }
   
@@ -78,7 +78,7 @@ const TeacherClassPage = () => {
                   placeholder="Enter class name (6-14 characters)"
                   required
                 />
-                <span className="char-count" style={{ color: className.length > 14 ? 'red' : 'inherit' }}>
+                <span className="char-count" style={{ color: className.length > 14 ? 'red' : 'white' }}>
                   {className.length}/14
                 </span>
               </div>
