@@ -8,7 +8,7 @@ const mongoose = require('mongoose')
 
 const createPageService = async(title, content, lessonId, link, order) => {
   try {
-    validateRequiredParams({ title, content, link })
+    validateRequiredParams({ title, content, lessonId, link })
 
     const sanitizedTitle = validator.trim(validator.escape(title))
     const sanitizedContent = validator.trim(validator.escape(content))
