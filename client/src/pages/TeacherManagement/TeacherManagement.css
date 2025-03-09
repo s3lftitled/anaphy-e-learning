@@ -70,7 +70,7 @@
 }
 
 .input-group input {
-  width: 100%;
+  width: 92%;
   padding: 0.75rem 1rem 0.75rem 2.75rem;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
@@ -88,7 +88,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.3rem;
   background-color: #0a2d4a;
   color: white;
   border: none;
