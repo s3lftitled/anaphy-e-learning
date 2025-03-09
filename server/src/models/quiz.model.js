@@ -23,7 +23,7 @@ const quizSchema = new mongoose.Schema({
     },
     correctAnswer: { type: mongoose.Schema.Types.Mixed, required: true },
     points: { type: Number, default: 1 },
-    explanation: { type: String, trim: true },
+    rationale: { type: String, trim: true },
   }],
 }, {
   timestamps: true,
