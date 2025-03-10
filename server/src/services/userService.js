@@ -42,6 +42,36 @@ const fetchUserDataService = async (userId) => {
   }
 }
 
+const changeUserNameService = async (userId, newName) => {
+  try {
+    validateRequiredParams( userId, newName )
+
+    appAssert(validator.isMongoId(userId), 'Invalid user ID format', HTTP_STATUS.BAD_REQUEST)
+
+    const sanitizedName = sanitizeHtml(newName.trim())
+
+    appAssert(
+      sanitizedName.length <= 35 && sanitizedName.length >= 6,
+      'Name should be a minimum of 6 characters and a maximum of 35 characters',
+      HTTP_STATUS.BAD_REQUEST
+    )
+    
+    let user = await UserModel.findById(userId)
+
+    if (!user) {
+      user = await TeacherModel.findById(userId)
+    }
+
+    appAssert(user, 'User is not found', HTTP_STATUS.NOT_FOUND)
+
+    user.name = sanitizedName
+    await user.save()
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
-  fetchUserDataService
+  fetchUserDataService, 
+  changeUserNameService,
 }
