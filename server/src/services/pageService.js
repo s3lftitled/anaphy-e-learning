@@ -70,7 +70,7 @@ const createPagesService = async (pages, lessonId) => {
       // Save the page and return its promise
       return newPage.save().then(savedPage => {
         // Add the new page to the lesson's content array
-        lesson.content.push({ type: 'page', contentId: savedPage._id, order })
+        lesson.content.push({ type: 'PageModel', contentId: savedPage._id, order })
       })
     })
 
