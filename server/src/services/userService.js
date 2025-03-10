@@ -1,5 +1,6 @@
 const TeacherModel = require('../models/teacher.model')
 const UserModel = require("../models/user.model")
+const PasswordUtil = require('../utils/passwordUtils')
 const validator = require('validator')  
 const sanitizeHtml = require('sanitize-html')  
 const { validateRequiredParams } = require('../utils/paramsValidator')
@@ -71,7 +72,41 @@ const changeUserNameService = async (userId, newName) => {
   }
 }
 
+const changePasswordService = async (userId, currentPassword, newPassword, newPasswordConfirmation) => {
+  try {
+    validateRequiredParams(userId, currentPassword, newPassword, newPasswordConfirmation)
+
+    appAssert(validator.isMongoId(userId), 'Invalid user ID format', HTTP_STATUS.BAD_REQUEST)
+
+    let user = await UserModel.findById(userId)
+
+    if (!user) {
+      user = await TeacherModel.findById(userId)
+    }
+
+    appAssert(user, 'User not found', HTTP_STATUS.NOT_FOUND)
+
+    const isPasswordMatch = await PasswordUtil.comparePassword(currentPassword, user.password)
+
+    appAssert(isPasswordMatch, 'Incorrect password', HTTP_STATUS.BAD_REQUEST)
+
+    appAssert(
+      newPassword === newPasswordConfirmation, 
+      'New password and password confirmation do not match', 
+      HTTP_STATUS.BAD_REQUEST
+    )
+
+    const hashedPassword = await PasswordUtil.hashPassword(newPassword)
+
+    user.password = hashedPassword
+    await user.save()
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   fetchUserDataService, 
   changeUserNameService,
+  changePasswordService,
 }
