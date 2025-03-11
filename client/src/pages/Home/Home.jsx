@@ -77,8 +77,8 @@ const Homepage = () => {
       
       <main className="main-content">
         <div className="hero-section">
-          <div className="hero-content">
-            <h1 className="hero-title">
+          <div className="head-content">
+            <h1 className="home-title">
               Interactive Human<br />
               <span className="hero-highlight">Anatomy</span>
             </h1>
