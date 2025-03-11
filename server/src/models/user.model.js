@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   role: { type: String, default: "student" },
   verificationCode: { type: String },
+  profilePicture: { type: String },
 
   // Invitations array (pending invites)
   invitations: [
