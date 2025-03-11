@@ -1,0 +1,308 @@
+/* Settings Sidebar Styles */
+.settings-sidebar {
+  position: fixed;
+  top: 0;
+  left: -520px; /* Start offscreen on the left side */
+  width: 320px;
+  height: 100vh;
+  background-color: var(--white);
+  box-shadow: var(--shadow-md);
+  z-index: 950; /* Just above the main sidebar but below navbar */
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  margin-top: 60px; /* Match navbar height */
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.settings-sidebar.open {
+  left: 70px; /* Align with the width of the main sidebar */
+}
+
+.settings-sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.settings-sidebar-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary);
+  position: relative;
+}
+
+.settings-sidebar-header h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 2px;
+}
+
+.settings-close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-light);
+  display: flex;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.settings-close-button:hover {
+  background-color: rgba(12, 65, 96, 0.1);
+  color: var(--primary);
+}
+
+.settings-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  background-color: var(--secondary);
+}
+
+.tab-button {
+  flex: 1;
+  padding: 1rem;
+  background: none;
+  border: none;
+  font-weight: 600;
+  color: var(--text-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  position: relative;
+  transition: var(--transition);
+}
+
+.tab-button.active {
+  color: var(--primary);
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+}
+
+.settings-sidebar-content {
+  padding: 1.5rem;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.profile-picture-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.profile-picture {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  border: 3px solid var(--primary-light);
+  background-color: var(--secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: var(--secondary);
+  color: var(--text-light);
+}
+
+.upload-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(26, 90, 128, 0.7);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.profile-picture:hover .upload-overlay {
+  opacity: 1;
+}
+
+.upload-text {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  color: var(--text);
+  background-color: var(--secondary);
+  transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 2px rgba(26, 90, 128, 0.2);
+  outline: none;
+}
+
+.disabled-input {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  cursor: not-allowed;
+}
+
+.field-note {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  margin-top: 0.2rem;
+}
+
+.submit-button {
+  margin-top: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.submit-button:disabled {
+  background: var(--text-light);
+  transform: none;
+  cursor: not-allowed;
+}
+
+.save-icon {
+  margin-left: 5px;
+}
+
+.status-message {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.status-message.success {
+  background-color: rgba(79, 195, 247, 0.2);
+  color: var(--primary);
+  border: 1px solid rgba(79, 195, 247, 0.3);
+}
+
+.status-message.error {
+  background-color: rgba(255, 82, 82, 0.1);
+  color: #d32f2f;
+  border: 1px solid rgba(255, 82, 82, 0.2);
+}
+
+/* Adjust main content when sidebar is open */
+.settings-sidebar.open ~ .main-content {
+  margin-left: calc(70px + 320px);
+  transition: var(--transition);
+}
+
+@media (max-width: 992px) {
+  .settings-sidebar {
+    width: 280px;
+  }
+  
+  .settings-sidebar.open ~ .main-content {
+    margin-left: calc(70px + 280px);
+  }
+}
+
+@media (max-width: 768px) {
+  .settings-sidebar.open {
+    left: 60px;
+  }
+  
+  .settings-sidebar.open ~ .main-content {
+    margin-left: calc(60px + 280px);
+  }
+}
+
+@media (max-width: 576px) {
+  .settings-sidebar {
+    width: calc(100% - 60px);
+  }
+  
+  .settings-sidebar.open ~ .main-content {
+    margin-left: 100%;
+  }
+}
