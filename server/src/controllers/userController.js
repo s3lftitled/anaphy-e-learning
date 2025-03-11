@@ -1,6 +1,6 @@
 const {
   fetchUserDataService,
-  changeUserNameService,
+  updateProfileService,
   changePasswordService,
 } = require('../services/userService')
 const HTTP_STATUS = require('../constants/httpConstants')
@@ -20,11 +20,11 @@ class UserController {
     }
   }
 
-  async changeUserName(req, res, next) {
+  async updateProfile(req, res, next) {
     const { userId } = req.params
-    const { newName } = req.body
+    const { newName, base64Image } = req.body
     try {
-      await changeUserNameService(userId, newName)
+      await updateProfileService(userId, base64Image, newName)
       res.status(HTTP_STATUS.OK).json({ message: 'Name changed succesfully' })
     } catch (error) {
       logger.error(`Error changing name - ${error.message}`)

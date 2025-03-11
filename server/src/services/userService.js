@@ -6,6 +6,7 @@ const sanitizeHtml = require('sanitize-html')
 const { validateRequiredParams } = require('../utils/paramsValidator')
 const { appAssert } = require('../utils/appAssert')
 const HTTP_STATUS = require('../constants/httpConstants')
+const sharp = require('sharp')
 
 const fetchUserDataService = async (userId) => {
   try {
@@ -18,6 +19,7 @@ const fetchUserDataService = async (userId) => {
     if (user) {
       return {
         id: user._id,
+        profilePicture: user.profilePicture,
         name: user.name,
         email: user.email,
         role: user.role,
@@ -32,6 +34,7 @@ const fetchUserDataService = async (userId) => {
 
     return {
       id: teacher._id,
+      profilePicture: teacher.profilePicture,
       name: teacher.name,
       email: teacher.email,
       role: teacher.role,
@@ -43,20 +46,12 @@ const fetchUserDataService = async (userId) => {
   }
 }
 
-const changeUserNameService = async (userId, newName) => {
+const updateProfileService = async (userId, base64Image, newName) => {
   try {
-    validateRequiredParams( userId, newName )
+    appAssert(base64Image || newName, 'No new data to change', HTTP_STATUS.BAD_REQUEST)
 
     appAssert(validator.isMongoId(userId), 'Invalid user ID format', HTTP_STATUS.BAD_REQUEST)
 
-    const sanitizedName = sanitizeHtml(newName.trim())
-
-    appAssert(
-      sanitizedName.length <= 35 && sanitizedName.length >= 6,
-      'Name should be a minimum of 6 characters and a maximum of 35 characters',
-      HTTP_STATUS.BAD_REQUEST
-    )
-    
     let user = await UserModel.findById(userId)
 
     if (!user) {
@@ -65,8 +60,52 @@ const changeUserNameService = async (userId, newName) => {
 
     appAssert(user, 'User is not found', HTTP_STATUS.NOT_FOUND)
 
-    user.name = sanitizedName
-    await user.save()
+    if (base64Image) {
+      const allowedFormats = ['jpeg', 'jpg', 'png']
+      // Detect the image format from base64 string
+      const detectedFormat = base64Image.match(/^data:image\/(\w+);base64,/)
+      const imageFormat = detectedFormat ? detectedFormat[1] : null
+ 
+       // Check if image format is supported
+      appAssert(
+        imageFormat || allowedFormats.includes(imageFormat.toLowerCase()), 
+        'Unsupported image format. Please upload a JPEG, JPG, or PNG image.',
+        HTTP_STATUS.BAD_REQUEST
+      ) 
+  
+        // Convert base64 image to buffer
+      const imageBuffer = Buffer.from(base64Image.split(',')[1], 'base64')
+  
+      // Resize the image
+      const resizedImage = await sharp(imageBuffer)
+        .resize({
+          fit: 'cover',
+          width: 200,
+          height: 200,
+          withoutEnlargement: true,
+        })
+        .toFormat(imageFormat)
+        .toBuffer()
+  
+      // Convert resized image buffer to base64
+      const resizedImageBase64 = `data:image/${imageFormat};base64,${resizedImage.toString('base64')}`
+
+      user.profilePicture = resizedImageBase64
+      await user.save()
+    }
+
+    if (newName) {
+      const sanitizedName = sanitizeHtml(newName.trim())
+
+      appAssert(
+        sanitizedName.length <= 35 && sanitizedName.length >= 6,
+        'Name should be a minimum of 6 characters and a maximum of 35 characters',
+        HTTP_STATUS.BAD_REQUEST
+      )
+      user.name = sanitizedName
+      await user.save()
+    }
+
   } catch (error) {
     throw error
   }
@@ -107,6 +146,6 @@ const changePasswordService = async (userId, currentPassword, newPassword, newPa
 
 module.exports = {
   fetchUserDataService, 
-  changeUserNameService,
+  updateProfileService,
   changePasswordService,
 }
