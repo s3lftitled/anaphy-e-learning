@@ -3,6 +3,7 @@ import api from '../../utils/api'
 import { X, Save, Upload, User, Key } from 'lucide-react'
 import './Settings.css'
 import { useUser } from '../../context/UserContext'
+import { UNSAFE_shouldHydrateRouteLoader } from 'react-router-dom'
 
 const SettingsSidebar = ({ isOpen, onClose, userData }) => {
   const fileInputRef = useRef(null);
@@ -105,10 +106,10 @@ const SettingsSidebar = ({ isOpen, onClose, userData }) => {
     setSubmitStatus(null)
 
     try {
-      const response = await api.put('users/api/v1/update-password', {
-        userId: userData.id,
+      const response = await api.put(`user/api/v1/change-password/${userData.id}`, {
         currentPassword: passwordData.currentPassword,
-        newPassword: passwordData.newPassword
+        newPassword: passwordData.newPassword,
+        newPasswordConfirmation: passwordData.confirmPassword 
       })
 
       if (response.status === 200) {
@@ -250,9 +251,9 @@ const SettingsSidebar = ({ isOpen, onClose, userData }) => {
                 value={passwordData.newPassword}
                 onChange={handlePasswordChange}
                 required
-                minLength="8"
+                minLength="6"
               />
-              <p className="field-note">Minimum 8 characters</p>
+              <p className="field-note">Minimum 6 characters</p>
             </div>
             
             <div className="form-group">
