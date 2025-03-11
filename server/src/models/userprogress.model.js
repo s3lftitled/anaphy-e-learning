@@ -22,6 +22,12 @@ const userProgressSchema = new mongoose.Schema({
     passed: Boolean,
     completedAt: Date,
     attempts: Number
+  },
+  lastViewed: {
+    contentId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    topicId: { type: mongoose.Schema.Types.ObjectId, ref: 'Topic', required: true },
+    lessonId: { type: mongoose.Schema.Types.ObjectId, ref: 'Lesson', required: true },
+    timestamp: { type: Date, default: Date.now }
   }
 })
 
