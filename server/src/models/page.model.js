@@ -10,12 +10,7 @@ const pageSchema = new mongoose.Schema({
     altText: { type: String, trim: true },
     position: { type: Number, required: true },
   }],
-  videos: [{
-    url: { type: String, required: true, validate: /^(http|https):\/\// },
-    caption: { type: String, trim: true },
-    duration: { type: Number, min: 0 },
-    position: { type: Number, required: true },
-  }],
+  videos: { type: String }
 }, {
   timestamps: true,
 })
