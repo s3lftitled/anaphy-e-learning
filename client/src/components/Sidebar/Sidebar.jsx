@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import HelpSidebar from '../../components/HelpSidebarComponent/Help'
 import SettingsSidebar from '../../components/Settings/Settings'
 import { Home, HelpCircle, Settings } from 'lucide-react'
-import { useUser } from '../../context/UserContext'
+import './Sidebar.css'
 
 const Sidebar = ({ user }) => {
   const [activeSidebarItem, setActiveSidebarItem] = useState('home')
