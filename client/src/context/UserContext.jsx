@@ -42,13 +42,13 @@ export const UserProvider = ({ children }) => {
       try {
         const refreshResponse = await privateAxios.post('/token/api/refresh', {}, { 
           withCredentials: true 
-        });
+        })
         
-        const { accessToken, userId } = refreshResponse.data;
+        const { accessToken, userId } = refreshResponse.data
         
         const userResponse = await privateAxios.get(`/user/api/v1/fetch-user/${userId}`, {
           headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        })
         
         return userResponse.data.user;
       } catch (error) {
