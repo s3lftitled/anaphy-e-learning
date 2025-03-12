@@ -18,16 +18,16 @@ const Navbar = ({ user }) => {
   
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = () => setShowDropdown(false);
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    const handleClickOutside = () => setShowDropdown(false)
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
   }, [])
 
   return (
     <nav className="navbar">
       <div className="nav-content">
         <div className="logo">
-          <span className="logo-text">Logo</span>
+          <span className="logo-text">ANATOMICA</span>
           <div className="logo-underline"></div>
         </div>
         
@@ -45,8 +45,8 @@ const Navbar = ({ user }) => {
         <div 
           className="user-profile"
           onClick={(e) => {
-            e.stopPropagation();
-            setShowDropdown(!showDropdown);
+            e.stopPropagation()
+            setShowDropdown(!showDropdown)
           }}
         >
           <div className="user-avatar-wrapper">
