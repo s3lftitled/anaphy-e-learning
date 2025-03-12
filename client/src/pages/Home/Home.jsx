@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Home, HelpCircle, Settings } from 'lucide-react'
 import AnatomyChatbot from '../../components/ChatbotComponent/Chatbot'
-import HelpSidebar from '../../components/HelpSidebarComponent/Help'
-import SettingsSidebar from '../../components/Settings/Settings'
 import './Home.css'
 import { useUser } from '../../context/UserContext'
 import Navbar from '../../components/Navbar/Navbar'
+import Sidebar from '../../components/Sidebar/Sidebar'
 
 const Homepage = () => {
   const topics = [
@@ -16,91 +14,14 @@ const Homepage = () => {
     { name: "Respiratory System", icon: "🫁" }
   ]
   
-  const { user } = useUser();
-  const [searchActive, setSearchActive] = useState(false)
-  const [activeSidebarItem, setActiveSidebarItem] = useState('home')
-  const [helpSidebarOpen, setHelpSidebarOpen] = useState(false)
-  const [settingsSidebarOpen, setSettingsSidebarOpen] = useState(false)
-  
-  // Toggle help sidebar when help button is clicked
-  const toggleHelpSidebar = () => {
-    setSettingsSidebarOpen(false)
-    setHelpSidebarOpen(!helpSidebarOpen)
-    setActiveSidebarItem('help')
-  }
-  
-  // Toggle settings sidebar when settings button is clicked
-  const toggleSettingsSidebar = () => {
-    setHelpSidebarOpen(false)
-    setSettingsSidebarOpen(!settingsSidebarOpen)
-    setActiveSidebarItem('settings')
-  }
-
-  // Close sidebars when clicking elsewhere
-  useEffect(() => {
-    if (activeSidebarItem !== 'help') {
-      setHelpSidebarOpen(false);
-    }
-    if (activeSidebarItem !== 'settings') {
-      setSettingsSidebarOpen(false);
-    }
-  }, [activeSidebarItem])
-
+  const { user } = useUser()
+ 
   return (
     <div className="homepage">
       <AnatomyChatbot />
       <Navbar user={user}/>
       
-      <aside className="sidebar">
-        <div className="sidebar-top">
-          <button 
-            className={`sidebar-button ${activeSidebarItem === 'home' ? 'active' : ''}`}
-            onClick={() => setActiveSidebarItem('home')}
-          >
-            <Home size={20} />
-            <span className="sidebar-tooltip">Home</span>
-          </button>
-        </div>
-        <div className="sidebar-bottom">
-          <button 
-            className={`sidebar-button ${activeSidebarItem === 'help' ? 'active' : ''}`}
-            onClick={toggleHelpSidebar}
-          >
-            <HelpCircle size={20} />
-            <span className="sidebar-tooltip">Help</span>
-          </button>
-          <button 
-            className={`sidebar-button ${activeSidebarItem === 'settings' ? 'active' : ''}`}
-            onClick={toggleSettingsSidebar}
-          >
-            <Settings size={20} />
-            <span className="sidebar-tooltip">Settings</span>
-          </button>
-        </div>
-      </aside>
-      
-      {/* Help Sidebar */}
-      {helpSidebarOpen && (
-        <HelpSidebar 
-          isOpen={helpSidebarOpen} 
-          onClose={() => {
-            setHelpSidebarOpen(false)
-            setActiveSidebarItem('home')
-          }} 
-        />
-      )}
-      
-      {/* Settings Sidebar */}
-      {settingsSidebarOpen && (
-        <SettingsSidebar 
-          isOpen={settingsSidebarOpen} 
-          onClose={() => {
-            setSettingsSidebarOpen(false)
-            setActiveSidebarItem('home')
-          }}
-          userData={user}
-        />
-      )}
+      <Sidebar user={user}/>
       
       <main className="main-content">
         <div className="hero-section">
