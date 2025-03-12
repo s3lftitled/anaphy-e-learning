@@ -19,6 +19,7 @@ const CreateTopic = lazy(() => import('./pages/Content/CreateTopic.jsx'))
 const CreateLesson = lazy(() => import('./pages/Content/CreateLesson.jsx'))
 const CreateMultiplePages = lazy(() => import('./pages/Content/CreateMultiplePages.jsx'))
 const ELearningPage = lazy(() => import('./pages/E-Learning/E-LearningPage.jsx'))
+const NotFound = lazy(() => import('./pages/NotFound/NotFound.jsx'))
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
             <Route path='/create-topic' element={<CreateTopic/>} />
             <Route path='/create-lesson' element={<CreateLesson/>} />
             <Route path='/create-multiple-pages' element={<CreateMultiplePages/>} />
+            <Route path='/*' element={<NotFound />} />
             <Route 
               element={
                 <AppProvider>
