@@ -20,7 +20,6 @@ const Homepage = () => {
     <div className="homepage">
       <AnatomyChatbot />
       <Navbar user={user}/>
-      
       <Sidebar user={user}/>
       
       <main className="main-content">
