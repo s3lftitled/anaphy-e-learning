@@ -8,12 +8,12 @@ const Navbar = ({ user }) => {
   
   // Get user initials for fallback avatar
   const getUserInitials = () => {
-    if (!user?.name) return '';
+    if (!user?.name) return ''
     return user.name.split(' ')
       .map(name => name[0])
       .join('')
       .toUpperCase()
-      .substring(0, 2);
+      .substring(0, 2)
   }
   
   // Close dropdown when clicking outside
@@ -21,7 +21,7 @@ const Navbar = ({ user }) => {
     const handleClickOutside = () => setShowDropdown(false);
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
-  }, []);
+  }, [])
 
   return (
     <nav className="navbar">
