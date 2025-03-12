@@ -69,9 +69,9 @@ export const UserProvider = ({ children }) => {
       }
     }
   )
-
+  
   if (isLoading) {
-    return <p>Loading...</p>
+    return null
   }
 
   if (isError) {
