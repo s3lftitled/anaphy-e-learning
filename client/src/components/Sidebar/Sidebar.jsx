@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import HelpSidebar from '../../components/HelpSidebarComponent/Help'
 import SettingsSidebar from '../../components/Settings/Settings'
-import { Home, HelpCircle, Settings } from 'lucide-react'
+import { Home, HelpCircle, Settings, Users, BookOpen, GraduationCap } from 'lucide-react'
 import './Sidebar.css'
 
 const Sidebar = ({ user }) => {
@@ -43,6 +43,33 @@ const Sidebar = ({ user }) => {
         >
           <Home size={20} />
           <span className="sidebar-tooltip">Home</span>
+        </button>
+        
+        {/* Class Icon */}
+        <button 
+          className={`sidebar-button ${activeSidebarItem === 'classes' ? 'active' : ''}`}
+          onClick={() => setActiveSidebarItem('classes')}
+        >
+          <GraduationCap size={20} />
+          <span className="sidebar-tooltip">Classes</span>
+        </button>
+        
+        {/* Teacher Dashboard Icon */}
+        <button 
+          className={`sidebar-button ${activeSidebarItem === 'teacherDashboard' ? 'active' : ''}`}
+          onClick={() => setActiveSidebarItem('teacherDashboard')}
+        >
+          <BookOpen size={20} />
+          <span className="sidebar-tooltip">Teacher Dashboard</span>
+        </button>
+        
+        {/* Admin Icon for Teacher Management */}
+        <button 
+          className={`sidebar-button ${activeSidebarItem === 'teacherManagement' ? 'active' : ''}`}
+          onClick={() => setActiveSidebarItem('teacherManagement')}
+        >
+          <Users size={20} />
+          <span className="sidebar-tooltip">Teacher Management</span>
         </button>
       </div>
       <div className="sidebar-bottom">
