@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import HelpSidebar from '../../components/HelpSidebarComponent/Help'
 import SettingsSidebar from '../../components/Settings/Settings'
 import { Home, HelpCircle, Settings, Users, BookOpen, GraduationCap } from 'lucide-react'
@@ -8,10 +9,13 @@ const Sidebar = ({ user }) => {
   const [activeSidebarItem, setActiveSidebarItem] = useState('home')
   const [helpSidebarOpen, setHelpSidebarOpen] = useState(false)
   const [settingsSidebarOpen, setSettingsSidebarOpen] = useState(false)
+  const [teacherMgmtSidebarOpen, setTeacherMgmtSidebarOpen] = useState(false)
+  const navigate = useNavigate()
 
   // Toggle help sidebar when help button is clicked
   const toggleHelpSidebar = () => {
     setSettingsSidebarOpen(false)
+    setTeacherMgmtSidebarOpen(false)
     setHelpSidebarOpen(!helpSidebarOpen)
     setActiveSidebarItem('help')
   }
@@ -19,6 +23,7 @@ const Sidebar = ({ user }) => {
   // Toggle settings sidebar when settings button is clicked
   const toggleSettingsSidebar = () => {
     setHelpSidebarOpen(false)
+    setTeacherMgmtSidebarOpen(false)
     setSettingsSidebarOpen(!settingsSidebarOpen)
     setActiveSidebarItem('settings')
   }
@@ -56,8 +61,8 @@ const Sidebar = ({ user }) => {
         
         {/* Teacher Dashboard Icon */}
         <button 
-          className={`sidebar-button ${activeSidebarItem === 'teacherDashboard' ? 'active' : ''}`}
-          onClick={() => setActiveSidebarItem('teacherDashboard')}
+          className='sidebar-button'
+          onClick={() => navigate('/teacher-dashboard')}
         >
           <BookOpen size={20} />
           <span className="sidebar-tooltip">Teacher Dashboard</span>
@@ -65,8 +70,8 @@ const Sidebar = ({ user }) => {
         
         {/* Admin Icon for Teacher Management */}
         <button 
-          className={`sidebar-button ${activeSidebarItem === 'teacherManagement' ? 'active' : ''}`}
-          onClick={() => setActiveSidebarItem('teacherManagement')}
+          className='sidebar-button'
+          onClick={() => navigate('/teacher-management')}
         >
           <Users size={20} />
           <span className="sidebar-tooltip">Teacher Management</span>
