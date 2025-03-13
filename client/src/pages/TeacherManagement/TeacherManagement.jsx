@@ -83,144 +83,146 @@ const TeacherManagement = () => {
   }
 
   return (
-    <div className="admin-container">
-      {/* Navigation */}
-      <nav className="admin-nav">
-        <div className="nav-content">
-          <div className="logo">
-            <Home size={24} />
-            <span>Admin Dashboard</span>
+    <>
+      <div className="admin-container">
+        {/* Navigation */}
+        <nav className="admin-nav">
+          <div className="nav-content">
+            <div className="logo">
+              <Home size={24} />
+              <span>Admin Dashboard</span>
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
 
-      {/* Main Content */}
-      <div className="admin-content">
-        <div className="content-header">
-          <h1>Teacher Account Management</h1>
-        </div>
-
-        {/* Add Teacher Form */}
-        <div className="add-teacher-section">
-          <div className="form-container">
-            <h2>Add New Teacher</h2>
-            <form onSubmit={handleSubmit} className="add-teacher-form">
-              <div className="input-group">
-                <Mail className="input-icon" size={20} />
-                <input
-                  type="email"
-                  placeholder="Enter teacher's email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <button type="submit" className="add-button" disabled={loading}>
-                {loading ? 'Adding...' : <><Plus size={20} /> Add Teacher</>}
-              </button>
-            </form>
-            {error && <p className="error-message">{error}</p>}
+        {/* Main Content */}
+        <div className="admin-content">
+          <div className="content-header">
+            <h1>Teacher Account Management</h1>
           </div>
-        </div>
 
-        {/* Teachers List */}
-        <div className="teachers-list-section">
-          <h2>Teacher Accounts</h2>
-          <div className="table-container">
-            <table className="teachers-table">
-              <thead>
-                <tr>
-                  <th>Email</th>
-                  <th>Status</th>
-                  <th>Date Added</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                { teachers.length === 0 ? ( 
+          {/* Add Teacher Form */}
+          <div className="add-teacher-section">
+            <div className="form-container">
+              <h2>Add New Teacher</h2>
+              <form onSubmit={handleSubmit} className="add-teacher-form">
+                <div className="input-group">
+                  <Mail className="input-icon" size={20} />
+                  <input
+                    type="email"
+                    placeholder="Enter teacher's email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <button type="submit" className="add-button" disabled={loading}>
+                  {loading ? 'Adding...' : <><Plus size={20} /> Add Teacher</>}
+                </button>
+              </form>
+              {error && <p className="error-message">{error}</p>}
+            </div>
+          </div>
+
+          {/* Teachers List */}
+          <div className="teachers-list-section">
+            <h2>Teacher Accounts</h2>
+            <div className="table-container">
+              <table className="teachers-table">
+                <thead>
                   <tr>
-                    <td colSpan="4" style={{ textAlign: 'center' }}>No teachers available</td>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Date Added</th>
+                    <th>Actions</th>
                   </tr>
-                ) : ( 
-                  teachers.map(teacher => (
-                    <tr key={teacher.id}>
-                      <td>
-                        <div className="teacher-email">
-                          <User size={16} />
-                          {teacher.email}
-                        </div>
-                      </td>
-                      <td>
-                        <span className={`status-badge ${teacher.status.toLowerCase()}`}>
-                          {teacher.status}
-                        </span>
-                      </td>
-                      <td>{new Date(teacher.createdAt).toLocaleString()}</td>
-                      <td>
-                        <button 
-                          className="delete-button"
-                          onClick={() => handleDeleteClick(teacher)}
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </td>
+                </thead>
+                <tbody>
+                  { teachers.length === 0 ? ( 
+                    <tr>
+                      <td colSpan="4" style={{ textAlign: 'center' }}>No teachers available</td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : ( 
+                    teachers.map(teacher => (
+                      <tr key={teacher.id}>
+                        <td>
+                          <div className="teacher-email">
+                            <User size={16} />
+                            {teacher.email}
+                          </div>
+                        </td>
+                        <td>
+                          <span className={`status-badge ${teacher.status.toLowerCase()}`}>
+                            {teacher.status}
+                          </span>
+                        </td>
+                        <td>{new Date(teacher.createdAt).toLocaleString()}</td>
+                        <td>
+                          <button 
+                            className="delete-button"
+                            onClick={() => handleDeleteClick(teacher)}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
+
+          {/* Delete Confirmation Modal */}
+          {showDeleteConfirmation && (
+            <div className="modal-overlay">
+              <div className="confirmation-modal">
+                <div className="modal-header">
+                  <AlertCircle size={24} className="alert-icon" />
+                  <h3>Confirm Deletion</h3>
+                </div>
+                <div className="modal-content">
+                  <p>Are you sure you want to delete this teacher account?</p>
+                  <p className="modal-email">{teacherToDelete?.email}</p>
+                </div>
+                <div className="modal-actions">
+                  <button className="cancel-button" onClick={() => setShowDeleteConfirmation(false)}>
+                    Cancel
+                  </button>
+                  <button className="confirm-button delete" onClick={confirmDelete}>
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Add Confirmation Modal */}
+          {showAddConfirmation && (
+            <div className="modal-overlay">
+              <div className="confirmation-modal">
+                <div className="modal-header">
+                  <Mail size={24} className="mail-icon" />
+                  <h3>Confirm Addition</h3>
+                </div>
+                <div className="modal-content">
+                  <p>Are you sure you want to add this teacher?</p>
+                  <p className="modal-email">{email}</p>
+                </div>
+                <div className="modal-actions">
+                  <button className="cancel-button" onClick={() => setShowAddConfirmation(false)}>
+                    Cancel
+                  </button>
+                  <button className="confirm-button add" onClick={confirmAddTeacher}>
+                    Add Teacher
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-
-        {/* Delete Confirmation Modal */}
-        {showDeleteConfirmation && (
-          <div className="modal-overlay">
-            <div className="confirmation-modal">
-              <div className="modal-header">
-                <AlertCircle size={24} className="alert-icon" />
-                <h3>Confirm Deletion</h3>
-              </div>
-              <div className="modal-content">
-                <p>Are you sure you want to delete this teacher account?</p>
-                <p className="modal-email">{teacherToDelete?.email}</p>
-              </div>
-              <div className="modal-actions">
-                <button className="cancel-button" onClick={() => setShowDeleteConfirmation(false)}>
-                  Cancel
-                </button>
-                <button className="confirm-button delete" onClick={confirmDelete}>
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Add Confirmation Modal */}
-        {showAddConfirmation && (
-          <div className="modal-overlay">
-            <div className="confirmation-modal">
-              <div className="modal-header">
-                <Mail size={24} className="mail-icon" />
-                <h3>Confirm Addition</h3>
-              </div>
-              <div className="modal-content">
-                <p>Are you sure you want to add this teacher?</p>
-                <p className="modal-email">{email}</p>
-              </div>
-              <div className="modal-actions">
-                <button className="cancel-button" onClick={() => setShowAddConfirmation(false)}>
-                  Cancel
-                </button>
-                <button className="confirm-button add" onClick={confirmAddTeacher}>
-                  Add Teacher
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
-    </div>
+    </>
   )
 }
 
