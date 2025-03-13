@@ -19,6 +19,15 @@ const userSchema = new mongoose.Schema({
     }
   ],
 
+  pendingApproval: [
+    {
+      classId: { type: mongoose.Schema.Types.ObjectId, ref: "ClassModel" },
+      classCode: { type: String },
+      status: { type: String, enum: ["accepted", "rejected", "pending"], default: "pending" },
+      requestedAt: { type: Date, default: Date.now }
+    }
+  ],
+
   // Joined classes
   joinedClasses: [{ type: mongoose.Schema.Types.ObjectId, ref: "ClassModel" }]
 })
