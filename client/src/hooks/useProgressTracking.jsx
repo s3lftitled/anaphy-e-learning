@@ -43,6 +43,21 @@ export const useProgressTracking = (user, currentTopic, currentLesson, currentPa
     fetchUserProgress()
   }, [user])
 
+  const updateUserProgress = async (updatedProgress) => {
+    if (!user || !user.id) return
+    
+    try {      
+      // Make API call to update progress
+      await api.post(`progress/api/v1/update-progress/${user.id}`, {
+        quizResults: updatedProgress.quizResults
+      })
+      
+    } catch (err) {
+      console.error('Error updating user progress:', err)
+      console.error('Error details:', err.response ? err.response.data : err.message)
+    }
+  }
+
   const markContentAsCompleted = async (contentId) => {
     if (user && user.id && currentTopic && currentLesson && contentId) {
       try {
@@ -105,8 +120,10 @@ export const useProgressTracking = (user, currentTopic, currentLesson, currentPa
 
   return {
     userProgress,
+    setUserProgress,
     completedContent,
     markContentAsCompleted,
-    calculateProgress
+    calculateProgress,
+    updateUserProgress,
   }
 }
