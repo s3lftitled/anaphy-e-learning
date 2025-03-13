@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import api from '../utils/api'
+import api from '../../utils/api'
 import { useNavigate, useLocation } from 'react-router-dom'
 import "./ConfirmationForm.css" // Import the CSS file for styling
 
