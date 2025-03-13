@@ -3,7 +3,8 @@ const {
   saveUserProgressService,
   completeContentService,
   getUserProgressService,
-  getUserTopicProgressService
+  getUserTopicProgressService,
+  updateUserProgressService,
 } = require('../services/progressService')
 const HTTP_STATUS = require('../constants/httpConstants')
 const logger = require('../logger/logger')
@@ -63,6 +64,18 @@ class ProgressController {
       })
     } catch (error) {
       logger.error(`Error fetching user topic progress - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async updateProgress(req, res, next) {
+    const { userId } = req.params
+    const { quizResults } = req.body
+    try {
+      await updateUserProgressService(userId, quizResults)
+      res.status(HTTP_STATUS.OK).json({ message: 'User progress updated succesfully' })
+    } catch (error) {
+      logger.error(`Error updating user topic progress - ${error.message}`)
       next(error)
     }
   }

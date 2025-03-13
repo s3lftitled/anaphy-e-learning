@@ -87,7 +87,6 @@ const completeContentService = async (userId, topicId, lessonId, contentId, cont
         }]
       })
     } else {
-      console.log(userProgress.completedContent)
       // Check if content is already marked as completed
       const contentCompleted = userProgress.completedContent.some(
         content => content.contentId.toString() === contentId.toString()
@@ -135,13 +134,18 @@ const getUserProgressService = async (userId) => {
     const result = {
       lastViewed: null,
       topicsProgress: [],
-      overallProgress: 0
+      overallProgress: 0,
+      quizResults: []
     }
 
     // Find the most recent lastViewed
-    let mostRecentTimestamp = new Date(0);
+    let mostRecentTimestamp = new Date(0)
     
     for (const progress of allProgress) {
+      if (progress.quizResults && progress.quizResults.length > 0) {
+        result.quizResults.push(...progress.quizResults)
+      }
+
       if (progress.lastViewed && progress.lastViewed.timestamp) {
         const timestamp = new Date(progress.lastViewed.timestamp)
         if (timestamp > mostRecentTimestamp) {
@@ -177,7 +181,7 @@ const getUserProgressService = async (userId) => {
     })
 
     // Calculate progress for each topic
-    let totalCompleted = 0;
+    let totalCompleted = 0
     
     for (const progress of allProgress) {
       const topicId = progress.topic.toString();
@@ -221,8 +225,6 @@ const getUserTopicProgressService = async (userId, topicId) => {
       user: userId, 
       topic: topicId 
     }).lean()
-
-    console.log(progress)
 
     // If no progress exists yet
     if (!progress) {
@@ -301,8 +303,29 @@ const getUserTopicProgressService = async (userId, topicId) => {
       percentComplete,
       completedCount,
       totalContent,
-      lessonProgress
+      lessonProgress,
     }
+  } catch (error) {
+    throw error
+  }
+}
+
+const updateUserProgressService = async (userId, quizResults) => {
+  try {
+    validateRequiredParams(userId, quizResults)
+    
+    appAssert(validator.isMongoId(userId), 'Invalid user ID format', HTTP_STATUS.BAD_REQUEST)
+
+    // Find existing progress
+    let userProgress = await UserProgressModel.findOne({ user: userId })
+
+    // Update fields, including quizResults if provided
+    if (quizResults) {
+      userProgress.quizResults = quizResults
+    }
+
+    await userProgress.save()
+    return userProgress
   } catch (error) {
     throw error
   }
@@ -312,5 +335,6 @@ module.exports = {
   saveUserProgressService,
   completeContentService,
   getUserProgressService,
-  getUserTopicProgressService
+  getUserTopicProgressService,
+  updateUserProgressService,
 }
