@@ -119,7 +119,7 @@ const LandingPage = () => {
               <img className="contact-image" src="" alt="John Lino" />
             </div>
             <h2 className="member-name">Demonteverde, John Lino Javien</h2>
-            <h3 className="position">Leader/Backend Developer</h3>
+            <h3 className="position">Lead Developer</h3>
 
             <div className="social-icons">
               <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
