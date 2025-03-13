@@ -4,6 +4,7 @@ const {
   rejectInvitationService,
   inviteStudentService,
   fetchTeacherClassService,
+  joinClassService,
 } = require('../services/classService')
 const HTTP_STATUS = require('../constants/httpConstants')
 const logger = require('../logger/logger')
@@ -66,6 +67,19 @@ class ClassController {
       res.status(HTTP_STATUS.OK).json({ classesDetails, message: 'Fetch classes and its details succesfully' })
     } catch (error) {
       logger.error(`Error fetching teacher classes - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async joinClass(req, res, next) {
+    const { studentId } = req.params
+    const { classCode } = req.body
+    try {
+      await joinClassService(classCode, studentId)
+
+      res.status(HTTP_STATUS.OK).json({ message: 'Request sent! Waiting for teacher approval.' })
+    } catch (error) {
+      logger.error(`Error joining class - ${error.message}`)
       next(error)
     }
   }

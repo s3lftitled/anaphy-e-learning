@@ -7,5 +7,6 @@ router.post('/v1/invite-student/:userRole/:teacherId/:studentId/:classId', Class
 router.put('/v1/accept-invite/:userRole/:studentId/:classId', ClassController.acceptInvite)
 router.delete('/v1/reject-invite/:userRole/:studentId/:classId', ClassController.rejectInvite)
 router.get('/v1/fetch-teacher-classes/:teacherId', ClassController.fetchTeacherClasses)
+router.post('/v1/join-class/:studentId', ClassController.joinClass)
 
 module.exports = router

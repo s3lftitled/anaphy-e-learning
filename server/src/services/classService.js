@@ -197,10 +197,34 @@ const fetchTeacherClassService = async (teacherId) => {
   }
 }
 
+const joinClassService = async (classCode, studentId) => {
+  try {
+    validateRequiredParams(classCode, studentId)
+
+    const classData = await ClassModel.findOne({ code: classCode })
+    appAssert(classData, 'Class is not found', HTTP_STATUS.NOT_FOUND)
+
+    const existingStudent = classData.students.find(s => s.student.equals(studentId))
+    appAssert(!existingStudent, 'Already invited, pending, or joined', HTTP_STATUS.BAD_REQUEST)
+
+    const student = await UserModel.findById(studentId)
+    appAssert(student, 'Student is not found', HTTP_STATUS.NOT_FOUND)
+
+    classData.students.push({ student: studentId, status: "pending" })
+    await classData.save()
+    
+    student.pendingApproval.push({ classId: classData._id, classCode: classData.code })
+    await student.save()
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   createClassService,
   acceptInvitationService,
   rejectInvitationService,
   inviteStudentService,
   fetchTeacherClassService,
+  joinClassService,
 }
