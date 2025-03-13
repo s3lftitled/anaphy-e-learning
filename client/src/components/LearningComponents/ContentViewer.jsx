@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import TextToSpeech from './TextToSpeech'
 import ContentMedia from './ContentMedia'
 import NavigationButtons from './NavigationButtons'
+import QuizViewer from './QuizViewer'
 import './LearningComponentsStyles.css'
 
 const ContentViewer = ({
@@ -9,8 +11,13 @@ const ContentViewer = ({
   currentPage,
   handlePrevPage,
   handleNextPage,
-  isContentCompleted
+  isContentCompleted,
+  markContentAsCompleted,
+  userProgress,
+  updateUserProgress,
 }) => {
+  const [quizResults, setQuizResults] = useState(null)
+
   if (!currentPage) {
     return (
       <div className="main-content">
@@ -21,6 +28,15 @@ const ContentViewer = ({
       </div>
     )
   }
+
+  const handleQuizComplete = (results) => {
+    setQuizResults(results)
+    if (results.passed && !isContentCompleted(currentPage._id)) {
+      markContentAsCompleted(currentPage._id)
+    }
+  }
+
+  const isQuiz = currentPage.type === 'QuizModel'
 
   return (
     <div className="main-content">
@@ -34,16 +50,26 @@ const ContentViewer = ({
             <span> &gt; </span>
             <span>{currentPage.contentId.title}</span>
           </div>
-          <TextToSpeech content={currentPage.contentId.content} />
+          {!isQuiz && <TextToSpeech content={currentPage.contentId.content} />}
         </div>
-        
-        <div className="content-body" dangerouslySetInnerHTML={{ __html: currentPage.contentId.content }} />
-        
-        <ContentMedia content={currentPage.contentId} />
-        
+
+        {isQuiz ? (
+          <QuizViewer 
+            quiz={currentPage.contentId} 
+            onComplete={handleQuizComplete}
+            userProgress={userProgress} // Pass this prop
+            updateUserProgress={updateUserProgress} // Pass this prop
+          />
+        ) : (
+          <>
+            <div className="content-body" dangerouslySetInnerHTML={{ __html: currentPage.contentId.content }} />
+            <ContentMedia content={currentPage.contentId} />
+          </>
+        )}
+
         <NavigationButtons
           currentPage={currentPage}
-          isCompleted={isContentCompleted(currentPage._id)}
+          isCompleted={isContentCompleted(currentPage._id) || (quizResults && quizResults.passed)}
           onPrevious={handlePrevPage}
           onNext={handleNextPage}
         />
