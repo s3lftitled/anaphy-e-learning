@@ -1,4 +1,3 @@
-// ELearningPage.jsx
 import { useState } from 'react'
 import { useUser } from '../../context/UserContext'
 import Navbar from '../../components/Navbar/Navbar'
@@ -14,22 +13,24 @@ const ELearningPage = () => {
   const { user } = useUser()
   const [sidebarExpanded, setSidebarExpanded] = useState(true)
   
-  const { 
-    topics, 
-    currentTopic, 
-    setCurrentTopic, 
+  const {
+    topics,
+    currentTopic,
+    setCurrentTopic,
     currentLesson,
-    setCurrentLesson, 
+    setCurrentLesson,
     currentPage,
-    setCurrentPage,  
-    isLoading, 
-    error 
+    setCurrentPage,
+    isLoading,
+    error,
   } = useLearningData(user)
   
   const {
     completedContent,
     markContentAsCompleted,
-    calculateProgress
+    calculateProgress,
+    userProgress,
+    updateUserProgress,
   } = useProgressTracking(user, currentTopic, currentLesson, currentPage)
   
   const {
@@ -48,7 +49,7 @@ const ELearningPage = () => {
     setCurrentLesson,
     currentPage,
     setCurrentPage,
-    markContentAsCompleted
+    markContentAsCompleted,
   )
 
   const toggleSidebar = () => {
@@ -64,7 +65,7 @@ const ELearningPage = () => {
     <>
       <Navbar user={user} />
       <div className="e-learning-page">
-        <Sidebar 
+        <Sidebar
           topics={topics}
           currentTopic={currentTopic}
           currentLesson={currentLesson}
@@ -80,13 +81,16 @@ const ELearningPage = () => {
           toggleSidebar={toggleSidebar}
         />
         
-        <ContentViewer 
+        <ContentViewer
           currentTopic={currentTopic}
           currentLesson={currentLesson}
           currentPage={currentPage}
           handlePrevPage={handlePrevPage}
           handleNextPage={handleNextPage}
           isContentCompleted={contentId => completedContent.includes(contentId)}
+          markContentAsCompleted={markContentAsCompleted}
+          userProgress={userProgress} 
+          updateUserProgress={updateUserProgress} 
         />
       </div>
     </>
