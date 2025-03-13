@@ -9,7 +9,7 @@ const ClassSchema = new mongoose.Schema({
       student: { type: mongoose.Schema.Types.ObjectId, ref: "UserModel" },
       status: {
         type: String,
-        enum: ["invited", "rejected", "joined"],
+        enum: ["invited", "rejected", "joined", "pending"],
         default: "invited",
       },
     },
