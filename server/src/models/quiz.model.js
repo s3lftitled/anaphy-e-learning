@@ -32,4 +32,4 @@ const quizSchema = new mongoose.Schema({
 // Index on title for quick lookups
 quizSchema.index({ title: 1 })
 
-module.exports = mongoose.model('Quiz', quizSchema)
+module.exports = mongoose.model('QuizModel', quizSchema)
