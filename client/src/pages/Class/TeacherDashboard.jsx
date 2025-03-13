@@ -19,10 +19,11 @@ const TeacherDashboard = () => {
 
   // Fetch classes data from API
   useEffect(() => {
-    if (user) {
+    if (user && user.id) {
+      console.log(user)
       fetchClasses()
     }
-  }, [user])
+  }, [user, user.id])
 
   const fetchClasses = async () => {
     try {

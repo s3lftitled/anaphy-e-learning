@@ -487,22 +487,24 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  animation: fadeIn 0.2s ease-out;
+  animation: fadeIn 0.25s ease-out;
+  backdrop-filter: blur(3px);
 }
 
 .invite-modal {
   background-color: #fff;
-  border-radius: 10px;
+  border-radius: 12px;
   width: 90%;
   max-width: 500px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  animation: slideUp 0.3s ease-out;
+  animation: slideUp 0.35s ease-out;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 @keyframes fadeIn {
@@ -511,12 +513,12 @@
 }
 
 @keyframes slideUp {
-  from { transform: translateY(30px); opacity: 0; }
+  from { transform: translateY(40px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
 
 .modal-header {
-  padding: 20px;
+  padding: 20px 24px;
   background-color: #f9fafb;
   border-bottom: 1px solid #e5e7eb;
   display: flex;
@@ -526,7 +528,7 @@
 
 .modal-header h2 {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: #111827;
 }
@@ -538,24 +540,34 @@
   color: #6b7280;
   cursor: pointer;
   line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
 }
 
 .close-modal-btn:hover {
   color: #111827;
+  background-color: rgba(0, 0, 0, 0.06);
 }
 
 .modal-body {
-  padding: 20px;
+  padding: 24px;
 }
 
 .modal-body p {
   margin-top: 0;
-  color: #6b7280;
-  font-size: 0.9rem;
+  margin-bottom: 16px;
+  color: #4b5563;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .form-group label {
@@ -568,15 +580,140 @@
 
 .form-group input {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
   transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .form-group input:focus {
   outline: none;
-  border-color: #55B8FF;
-  box-shadow: 0 0 0 3px rgba(85, 184, 255, 0.15);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.form-group input::placeholder {
+  color: #9ca3af;
+}
+
+.form-divider {
+  position: relative;
+  text-align: center;
+  margin: 24px 0;
+  height: 20px;
+}
+
+.form-divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #e5e7eb;
+}
+
+.form-divider span {
+  position: relative;
+  background-color: #fff;
+  padding: 0 16px;
+  color: #6b7280;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.class-code-info {
+  background-color: #f3f4f6;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.class-code-info p {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.code-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.code-display span {
+  font-family: monospace;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111827;
+  letter-spacing: 1px;
+}
+
+.copy-code-btn {
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-code-btn:hover {
+  background-color: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.cancel-btn {
+  background-color: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.send-invite-btn {
+  background-color: #3b82f6;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.send-invite-btn:hover {
+  background-color: #2563eb;
+}
+
+.send-invite-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
 }
