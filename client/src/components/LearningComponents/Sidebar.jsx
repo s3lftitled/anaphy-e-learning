@@ -1,6 +1,7 @@
 // components/Sidebar.jsx
 import React from 'react'
 import ProgressRing from './ProgressRing'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const Sidebar = ({
   topics,
@@ -24,7 +25,7 @@ const Sidebar = ({
   return (
     <div className={`sidebar ${sidebarExpanded ? 'expanded' : 'collapsed'}`}>
       <div className="sidebar-toggle" onClick={toggleSidebar}>
-        {sidebarExpanded ? '←' : '→'}
+        {sidebarExpanded ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
       </div>
       
       <div className="sidebar-content">
