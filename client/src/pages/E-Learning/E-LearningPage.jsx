@@ -5,6 +5,7 @@ import Sidebar from '../../components/LearningComponents/Sidebar'
 import ContentViewer from '../../components/LearningComponents/ContentViewer'
 import LoadingIndicator from '../../components/LearningComponents/LoadingIndicator'
 import ErrorMessage from '../../components/LearningComponents/ErrorMessage'
+import FloatingHomeButton from '../../components/FloatingHomeButton/FloatingHomeButton'
 import { useLearningData } from '../../hooks/useLearningData'
 import { useProgressTracking } from '../../hooks/useProgressTracking'
 import { useNavigation } from '../../hooks/useNavigation'
@@ -92,6 +93,8 @@ const ELearningPage = () => {
           userProgress={userProgress} 
           updateUserProgress={updateUserProgress} 
         />
+
+        <FloatingHomeButton />
       </div>
     </>
   )
