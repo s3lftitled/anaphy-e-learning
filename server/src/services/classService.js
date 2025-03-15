@@ -183,6 +183,7 @@ const fetchTeacherClassService = async (teacherId) => {
       _id: classItem._id,
       name: classItem.name,
       code: classItem.code,
+      announcements: classItem.announcements,
       students: classItem.students.map((s) => ({
         _id: s.student._id,
         name: s.student.name,
@@ -200,6 +201,8 @@ const fetchTeacherClassService = async (teacherId) => {
 const joinClassService = async (classCode, studentId) => {
   try {
     validateRequiredParams(classCode, studentId)
+
+    console.log(studentId)
 
     const classData = await ClassModel.findOne({ code: classCode })
     appAssert(classData, 'Class is not found', HTTP_STATUS.NOT_FOUND)
@@ -220,6 +223,181 @@ const joinClassService = async (classCode, studentId) => {
   }
 }
 
+const searchClassService = async (classCode) => {
+  try {
+    validateRequiredParams(classCode)
+
+    const classData = await ClassModel.findOne({ code: classCode }).populate('teacher', 'name')
+    appAssert(classData, 'No class found', HTTP_STATUS.NOT_FOUND)
+
+    console.log(classData)
+
+    const searchedClass = {
+      className: classData?.name,
+      classTeacher: classData?.teacher?.name,
+      classCode
+    }
+
+    return searchedClass
+  } catch (error) {
+    throw error
+  }
+}
+
+const fetchPendingApprovalsService = async (classId) => {
+  try {
+    validateRequiredParams(classId)
+
+    const classData = await ClassModel.findById(classId).populate({
+      path: "students.student",
+      select: "name email"
+    })
+    appAssert(classData, 'Class is not found', HTTP_STATUS.NOT_FOUND)
+
+    const pendingStudents = classData.students.filter(s => s.status === 'pending')
+
+    return pendingStudents
+  } catch (error) {
+    throw error
+  }
+}
+
+const acceptPendingApprovalsService = async (classId, userId) => {
+  try {
+    validateRequiredParams(classId, userId)
+
+    const student = await UserModel.findById(userId)
+    appAssert(student, 'Student is not found', HTTP_STATUS.NOT_FOUND)
+
+    const classData = await ClassModel.findById(classId).populate({
+      path: "students.student",
+      select: "name email"
+    })
+    appAssert(classData, 'Class is not found', HTTP_STATUS.NOT_FOUND)
+
+    let studentUpdated = false
+    classData.students.forEach(s => {
+      if (s.status === 'pending' && s.student.equals(student._id)) {
+        s.status === 'joined'
+        studentUpdated = true
+      } 
+    })
+    await classData.save()
+
+    appAssert(studentUpdated, 'Student is not in pending list', HTTP_STATUS.BAD_REQUEST)
+
+
+    if (studentUpdated) {
+      student.joinedClasses.push(classData._id)
+      await student.save()
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
+const rejectPendingApprovalRequestService = async (classId, userId) => {
+  try {
+    validateRequiredParams(classId, userId)
+
+    const student = await UserModel.findById(userId)
+    appAssert(student, 'Student is not found', HTTP_STATUS.NOT_FOUND)
+
+    const classData = await ClassModel.findById(classId)
+    appAssert(classData, 'Class is not found', HTTP_STATUS.NOT_FOUND)
+
+    const isPending = classData.students.some(s => s.student.equals(student._id))
+
+    appAssert(isPending, 'Student is not pending to join', HTTP_STATUS.NOT_FOUND)
+
+    const initialLength = classData.students.length
+    classData.students = classData.students.filter(s => !s.student.equals(student._id))
+
+    if (classData.students.length !== initialLength) {
+      await classData.save()
+    }
+    
+  } catch (error) {
+    throw error
+  }
+}
+
+const createClassAnnouncementService = async (teacherId, classId, title, message) => {
+  try {
+    validateRequiredParams(teacherId, classId, title, message)
+
+    appAssert(validator.isMongoId(teacherId), 'Invalid teacher id', HTTP_STATUS.BAD_REQUEST)
+    appAssert(validator.isMongoId(classId), 'Invalid class id', HTTP_STATUS.BAD_REQUEST)
+
+    const teacher = await TeacherModel.findById(teacherId)
+    appAssert(teacher, 'Teacher is not found', HTTP_STATUS.NOT_FOUND)
+
+    const classData = await ClassModel.findById(classId)
+    appAssert(classData, 'Class is not found', HTTP_STATUS.NOT_FOUND)
+
+    appAssert(
+      classData.teacher.equals(teacher._id), 
+      'You dont have any permission to post an announcement in this class',
+      HTTP_STATUS.FORBIDDEN
+    )
+
+    classData.announcements.push({ title: title, message: message })
+    classData.save()
+  } catch (error) {
+    throw error
+  }
+}
+
+const fetchClassAnnouncementsService = async (teacherId, classId) => {
+  try {
+    validateRequiredParams(teacherId, classId)
+
+    appAssert(validator.isMongoId(teacherId), 'Invalid teacher id', HTTP_STATUS.BAD_REQUEST)
+    appAssert(validator.isMongoId(classId), 'Invalid class id', HTTP_STATUS.BAD_REQUEST)
+
+    const teacher = await TeacherModel.findById(teacherId)
+    appAssert(teacher, 'Teacher is not found', HTTP_STATUS.NOT_FOUND)
+
+    const classData = await ClassModel.findById(classId)
+    appAssert(classData, 'Class is not found', HTTP_STATUS.NOT_FOUND)
+
+    appAssert(
+      classData.teacher.equals(teacher._id), 
+      'You dont have any permission to fetch the announcements in this class',
+      HTTP_STATUS.FORBIDDEN
+    )
+
+    return classData.announcements
+  } catch (error) {
+    throw error
+  }
+}
+
+const fetchStudentJoinedClassesService = async (studentId) => {
+  try {
+    validateRequiredParams(studentId)
+
+    appAssert(validator.isMongoId(studentId), 'Invalid student id', HTTP_STATUS.NOT_FOUND)
+
+    const student = await UserModel.findById(studentId)
+
+    appAssert(student, 'Student is not found', HTTP_STATUS.NOT_FOUND)
+
+    console.log(student)
+
+    const joinedClasses = await Promise.all(
+      student.joinedClasses.map(async (c) => {
+        return ClassModel.findById(c._id)
+      })
+    )
+
+    console.log(joinedClasses)
+    return joinedClasses
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   createClassService,
   acceptInvitationService,
@@ -227,4 +405,11 @@ module.exports = {
   inviteStudentService,
   fetchTeacherClassService,
   joinClassService,
+  searchClassService,
+  fetchPendingApprovalsService,
+  acceptPendingApprovalsService,
+  rejectPendingApprovalRequestService,
+  createClassAnnouncementService,
+  fetchClassAnnouncementsService,
+  fetchStudentJoinedClassesService,
 }

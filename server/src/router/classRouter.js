@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const ClassController = require('../controllers/classController')
+const classController = require('../controllers/classController')
 
 router.post('/v1/create-class/:userRole/:teacherId', ClassController.createClass)
 router.post('/v1/invite-student/:userRole/:teacherId/:studentId/:classId', ClassController.inviteStudent)
@@ -8,5 +9,12 @@ router.put('/v1/accept-invite/:userRole/:studentId/:classId', ClassController.ac
 router.delete('/v1/reject-invite/:userRole/:studentId/:classId', ClassController.rejectInvite)
 router.get('/v1/fetch-teacher-classes/:teacherId', ClassController.fetchTeacherClasses)
 router.post('/v1/join-class/:studentId', ClassController.joinClass)
+router.get('/v1/search-class', ClassController.searchClass)
+router.get('/v1/fetch-pending-approvals/:classId', ClassController.fetchPendingApprovals)
+router.put('/v1/accept-pending-approval/:classId/:studentId', ClassController.acceptPendingApprovals)
+router.delete('/v1/reject-pending-approval/:classId/:studentId', ClassController.rejectPendingApprovalRequest)
+router.post('/v1/create-class-announcement/:teacherId/:classId', ClassController.createClassAnnouncement)
+router.get('/v1/fetch-announcements/:teacherId/:classId', ClassController.fetchClassAnnouncements)
+router.get('/v1/fetch-joined-classes/:studentId', ClassController.fetchStudentJoinedClasses)
 
 module.exports = router
