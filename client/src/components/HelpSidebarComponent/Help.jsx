@@ -66,7 +66,7 @@ const HelpSidebar = ({ isOpen, onClose }) => {
       
       <div className="help-sidebar-content">
         <form onSubmit={handleSubmit} className="help-form">
-          <div className="form-group">
+          <div className="help-form-group">
             <label htmlFor="type">Issue Type</label>
             <select 
               id="type" 
@@ -82,7 +82,7 @@ const HelpSidebar = ({ isOpen, onClose }) => {
             </select>
           </div>
           
-          <div className="form-group">
+          <div className="help-form-group">
             <label htmlFor="title">Title</label>
             <input 
               type="text" 
@@ -95,7 +95,7 @@ const HelpSidebar = ({ isOpen, onClose }) => {
             />
           </div>
           
-          <div className="form-group">
+          <div className="help-form-group">
             <label htmlFor="description">Description</label>
             <textarea 
               id="description" 
@@ -108,7 +108,7 @@ const HelpSidebar = ({ isOpen, onClose }) => {
             />
           </div>
           
-          <div className="form-group">
+          <div className="help-form-group">
             <label htmlFor="email">Email Address</label>
             <input 
               type="email" 
