@@ -50,7 +50,7 @@ export const UserProvider = ({ children }) => {
           headers: { Authorization: `Bearer ${accessToken}` },
         })
         
-        return userResponse.data.user;
+        return userResponse.data.user
       } catch (error) {
         console.error("Authentication error:", error);
         throw error;
