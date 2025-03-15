@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { User } from 'lucide-react'
+import { getUserInitials } from '../../utils/getUserInitials'
 import { useUser } from '../../context/UserContext'
 import './TeacherDashboard.css'
 import usePrivateApi from '../../hooks/usePrivateApi'
+import FloatingHomeButton from '../../components/FloatingHomeButton/FloatingHomeButton'
 
 const TeacherDashboard = () => {
   // State for classes data
@@ -16,6 +19,16 @@ const TeacherDashboard = () => {
   const { user } = useUser()
   const [error, setError] = useState(null)
   const privateAxios = usePrivateApi()
+  
+  // New state for announcements and join requests
+  const [showAnnouncementsModal, setShowAnnouncementsModal] = useState(false)
+  const [showCreateAnnouncementModal, setShowCreateAnnouncementModal] = useState(false)
+  const [showJoinRequestsModal, setShowJoinRequestsModal] = useState(false)
+  const [announcements, setAnnouncements] = useState([])
+  const [joinRequests, setJoinRequests] = useState([])
+  const [announcementTitle, setAnnouncementTitle] = useState('')
+  const [announcementContent, setAnnouncementContent] = useState('')
+  const navigate = useNavigate()
 
   // Fetch classes data from API
   useEffect(() => {
@@ -49,8 +62,6 @@ const TeacherDashboard = () => {
           status: student.status,
           lastActive: student.lastActive || null
         })),
-        assignments: cls.assignments || 0,
-        announcements: cls.announcements || 0
       }))
       
       setClasses(transformedClasses)
@@ -67,7 +78,6 @@ const TeacherDashboard = () => {
       setLoading(false)
     }
   }
-
 
   const handleClassSelect = (classData) => {
     setActiveClass(classData)
@@ -123,6 +133,136 @@ const TeacherDashboard = () => {
     }
   }
 
+  // New functions for announcements and join requests
+  const fetchAnnouncements = async () => {
+    if (!activeClass) return
+
+    try {
+      const response = await privateAxios.get(`/class/api/v1/fetch-announcements/${user.id}/${activeClass.id}`, {
+        withCredentials: true
+      })
+      
+      console.log(response)
+      setAnnouncements(response.data.announcements || [])
+      setShowAnnouncementsModal(true)
+    } catch (error) {
+      console.error("Error fetching announcements:", error)
+      alert("Failed to load announcements. Please try again.")
+    }
+  }
+
+  const fetchJoinRequests = async () => {
+    if (!activeClass) return
+
+    try {
+      const response = await privateAxios.get(`/class/api/v1/fetch-pending-approvals/${activeClass.id}`, {
+        withCredentials: true
+      })
+
+      setJoinRequests(response.data?.pendingApprovals || [])
+      console.log(response.data?.pendingApprovals)
+      setShowJoinRequestsModal(true)
+    } catch (error) {
+      console.error("Error fetching join requests:", error)
+      alert("Failed to load join requests. Please try again.")
+    }
+  }
+
+  const handleCreateAnnouncement = async (e) => {
+    e.preventDefault()
+    if (!announcementTitle || !announcementContent || !activeClass) return
+
+    try {
+      const response = await privateAxios.post(`/class/api/v1/create-class-announcement/${user.id}/${activeClass.id}`, {
+        title: announcementTitle,
+        message: announcementContent
+      }, {
+        withCredentials: true
+      })
+      
+      if (response.status === 201) {
+        // Update the active class with new announcement count
+        const updatedClass = {
+          ...activeClass,
+          announcements: (activeClass.announcements || 0) + 1
+        }
+
+        // Update classes array
+        const updatedClasses = classes.map(c => 
+          c.id === activeClass.id ? updatedClass : c
+        )
+
+        setClasses(updatedClasses)
+        setActiveClass(updatedClass)
+        setAnnouncementTitle('')
+        setAnnouncementContent('')
+        setShowCreateAnnouncementModal(false)
+        alert("Announcement created successfully!")
+      }
+    } catch (error) {
+      console.error("Error creating announcement:", error)
+      alert("Failed to create announcement. Please try again.")
+    }
+  }
+
+  const handleJoinRequestAction = async (requestId, action) => {
+    try {
+      console.log(requestId)
+      const studentId = requestId
+      const classId = activeClass.id
+      
+      if (!studentId) {
+        throw new Error("Student ID not found in request data")
+      }
+      
+      if (action === 'accept') {
+        await privateAxios.put(`/class/api/v1/accept-pending-approval/${classId}/${studentId}`, {}, {
+          withCredentials: true
+        })
+      } else if (action === 'reject') {
+        await privateAxios.delete(`/class/api/v1/reject-pending-approval/${classId}/${studentId}`, {
+          withCredentials: true
+        })
+      }
+      
+      // Update join requests list
+      setJoinRequests(joinRequests.filter(req => req.id !== requestId))
+      
+      // If accepted, update students list
+      if (action === 'accept') {
+        const acceptedStudent = joinRequests.find(req => req.id === requestId)
+        if (acceptedStudent) {
+          const newStudent = {
+            id: acceptedStudent.studentId,
+            name: acceptedStudent.studentName,
+            email: acceptedStudent.studentEmail,
+            status: 'joined',
+            lastActive: null
+          }
+          
+          // Update active class
+          const updatedClass = {
+            ...activeClass,
+            students: [...activeClass.students, newStudent]
+          }
+          
+          // Update classes array
+          const updatedClasses = classes.map(c => 
+            c.id === activeClass.id ? updatedClass : c
+          )
+          
+          setClasses(updatedClasses)
+          setActiveClass(updatedClass)
+        }
+      }
+      
+      alert(`Student ${action === 'accept' ? 'accepted' : 'rejected'} successfully!`)
+    } catch (error) {
+      console.error(`Error ${action}ing join request:`, error)
+      alert(`Failed to ${action} student. Please try again.`)
+    }
+  }
+
   const getStatusClass = (status) => {
     switch(status) {
       case 'joined': return 'status-joined'
@@ -164,7 +304,19 @@ const TeacherDashboard = () => {
     <div className="dashboard-container">
       <div className="dashboard-sidebar">
         <div className="teacher-profile">
-          <img src={user.avatar} alt={user.name} className="teacher-avatar" />
+          <div className="user-avatar">
+            {user.profilePicture ? (
+              <img 
+                  src={user.profilePicture} 
+                  alt={user.name || 'User profile'} 
+                  className="avatar-image"
+                />
+              ) : (
+                <div className="avatar-placeholder">
+                  {user.name ? getUserInitials(user) : <User size={16} />}
+                </div>
+              )}
+          </div>
           <div className="teacher-info">
             <h3>{user.name}</h3>
             <p>Anatomy Teacher</p>
@@ -201,8 +353,7 @@ const TeacherDashboard = () => {
         </div>
         
         <div className="sidebar-footer">
-          <button className="sidebar-btn">Settings</button>
-          <button className="sidebar-btn">Help</button>
+          <button className="sidebar-btn">Sign Out</button>
         </div>
       </div>
       
@@ -218,6 +369,24 @@ const TeacherDashboard = () => {
                 </div>
               </div>
               <div className="header-actions">
+                <button 
+                  className="action-btn view-announcements-btn"
+                  onClick={fetchAnnouncements}
+                >
+                  View Announcements
+                </button>
+                <button 
+                  className="action-btn create-announcement-btn"
+                  onClick={() => setShowCreateAnnouncementModal(true)}
+                >
+                  Create Announcement
+                </button>
+                <button 
+                  className="action-btn join-requests-btn"
+                  onClick={fetchJoinRequests}
+                >
+                  Pending Approvals
+                </button>
                 <button 
                   className="invite-btn"
                   onClick={() => setShowInviteModal(true)}
@@ -283,30 +452,22 @@ const TeacherDashboard = () => {
                       <div key={student.id} className="table-row">
                         <div className="col-name">{student.name}</div>
                         <div className="col-email">{student.email}</div>
-                        <div className="col-status">
-                          <span className={`status-badge ${getStatusClass(student.status)}`}>
-                            {student.status}
-                          </span>
+                        <div className={`col-status ${getStatusClass(student.status)}`}>
+                          {student.status}
                         </div>
                         <div className="col-activity">
-                          {student.lastActive || 'Never'}
+                          {student.lastActive ? new Date(student.lastActive).toLocaleDateString() : 'Never'}
                         </div>
                         <div className="col-actions">
-                          <button className="row-action-btn" onClick={() => window.location.href = `/student/${student.id}/progress`}>
-                            <span className="action-icon">📊</span>
-                          </button>
-                          <button className="row-action-btn" onClick={() => window.location.href = `/student/${student.id}/message`}>
-                            <span className="action-icon">✉️</span>
-                          </button>
-                          <button className="row-action-btn danger" onClick={() => handleRemoveStudent(student.id)}>
-                            <span className="action-icon">❌</span>
-                          </button>
+                          <button className="action-icon view-btn">👁️</button>
+                          <button className="action-icon email-btn">✉️</button>
+                          <button className="action-icon remove-btn">❌</button>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <div className="empty-state">
-                      <p>No students match your search criteria</p>
+                    <div className="empty-table">
+                      <p>No students found matching your filters.</p>
                     </div>
                   )}
                 </div>
@@ -315,68 +476,162 @@ const TeacherDashboard = () => {
           </>
         ) : (
           <div className="empty-dashboard">
-            <h2>No Class Selected</h2>
-            <p>Please select a class from the sidebar or create a new class to get started.</p>
+            <h2>Welcome to Your Teacher Dashboard</h2>
+            <p>Select a class from the sidebar or create a new class to get started.</p>
           </div>
         )}
       </div>
       
+      {/* Invite Student Modal */}
       {showInviteModal && (
         <div className="modal-overlay">
-          <div className="invite-modal">
+          <div className="modal">
             <div className="modal-header">
               <h2>Invite Students</h2>
-              <button className="close-modal-btn" onClick={() => setShowInviteModal(false)}>×</button>
+              <button className="close-btn" onClick={() => setShowInviteModal(false)}>×</button>
             </div>
             <div className="modal-body">
-              <p>Invite students to join your class. You can send an invitation directly to their email.</p>
-              
               <form onSubmit={handleInviteStudent}>
                 <div className="form-group">
-                  <label>Student Email</label>
+                  <label>Student Email:</label>
                   <input 
                     type="email" 
-                    placeholder="Enter student email"
                     value={inviteEmail}
                     onChange={(e) => setInviteEmail(e.target.value)}
+                    placeholder="Enter student email"
                     required
                   />
                 </div>
-                
-                <div className="form-divider">
-                  <span>OR</span>
-                </div>
-                
-                <div className="class-code-info">
-                  <p>Share this class code with your students:</p>
-                  <div className="code-display">
-                    <span>{activeClass.code}</span>
-                    <button 
-                      type="button"
-                      className="copy-code-btn"
-                      onClick={() => {
-                        navigator.clipboard.writeText(activeClass.code);
-                        alert('Class code copied to clipboard!');
-                      }}
-                    >
-                      Copy
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="modal-actions">
-                  <button type="button" className="cancel-btn" onClick={() => setShowInviteModal(false)}>
-                    Cancel
-                  </button>
-                  <button type="submit" className="send-invite-btn">
-                    Send Invitation
-                  </button>
+                <div className="form-actions">
+                  <button type="button" className="cancel-btn" onClick={() => setShowInviteModal(false)}>Cancel</button>
+                  <button type="submit" className="submit-btn">Send Invitation</button>
                 </div>
               </form>
             </div>
           </div>
         </div>
       )}
+      
+      {/* View Announcements Modal */}
+      {showAnnouncementsModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h2>Class Announcements</h2>
+              <button className="close-btn" onClick={() => setShowAnnouncementsModal(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              {announcements.length > 0 ? (
+                <div className="announcements-list">
+                  {announcements.map(announcement => (
+                    <div className="announcement-item">
+                      <h3>{announcement.title}</h3>
+                      <p className="announcement-date">{new Date(announcement.createdAt).toLocaleDateString()}</p>
+                      <p className="announcement-content">{announcement.message}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="empty-announcements">
+                  <p>No announcements have been made for this class yet.</p>
+                </div>
+              )}
+            </div>
+            <div className="modal-footer">
+              <button className="btn" onClick={() => setShowAnnouncementsModal(false)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Create Announcement Modal */}
+      {showCreateAnnouncementModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h2>Create Announcement</h2>
+              <button className="close-btn" onClick={() => setShowCreateAnnouncementModal(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={handleCreateAnnouncement}>
+                <div className="form-group">
+                  <label>Title:</label>
+                  <input 
+                    type="text" 
+                    value={announcementTitle}
+                    onChange={(e) => setAnnouncementTitle(e.target.value)}
+                    placeholder="Enter announcement title"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Content:</label>
+                  <textarea 
+                    value={announcementContent}
+                    onChange={(e) => setAnnouncementContent(e.target.value)}
+                    placeholder="Enter announcement content"
+                    rows="5"
+                    required
+                  />
+                </div>
+                <div className="form-actions">
+                  <button type="button" className="cancel-btn" onClick={() => setShowCreateAnnouncementModal(false)}>Cancel</button>
+                  <button type="submit" className="submit-btn">Create Announcement</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Join Requests Modal */}
+      {showJoinRequestsModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h2>Pending Join Requests</h2>
+              <button className="close-btn" onClick={() => setShowJoinRequestsModal(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              {joinRequests.length > 0 ? (
+                <div className="join-requests-list">
+                  {joinRequests.map(request => (
+                    <div key={request.student._id} className="join-request-item">
+                      <div className="request-details">
+                        <h3>{request.student.name}</h3>
+                        <p>{request.student.email}</p>
+                        <p className="request-date">Requested: {new Date(request.createdAt).toLocaleDateString()}</p>
+                      </div>
+                      <div className="request-actions">
+                        <button 
+                          className="accept-btn"
+                          onClick={() => handleJoinRequestAction(request.student._id, 'accept')}
+                        >
+                          Accept
+                        </button>
+                        <button 
+                          className="reject-btn"
+                          onClick={() => handleJoinRequestAction(request.student._id, 'reject')}
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="empty-requests">
+                  <p>No pending join requests for this class.</p>
+                </div>
+              )}
+            </div>
+            <div className="modal-footer">
+              <button className="btn" onClick={() => setShowJoinRequestsModal(false)}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+      <FloatingHomeButton />
     </div>
   )
 }
