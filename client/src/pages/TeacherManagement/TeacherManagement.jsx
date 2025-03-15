@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Home, Plus, Mail, User, Trash2, AlertCircle } from 'lucide-react'
+import FloatingHomeButton from '../../components/FloatingHomeButton/FloatingHomeButton'
 import api from '../../utils/api'
 import './TeacherManagement.css'
 
@@ -221,6 +222,7 @@ const TeacherManagement = () => {
             </div>
           )}
         </div>
+        <FloatingHomeButton />
       </div>
     </>
   )
