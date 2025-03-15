@@ -1,0 +1,80 @@
+:root {
+  --primary-floating-btn: #3b82f6; /* example blue color */
+  --primary-light-floating-btn: #60a5fa;
+  --white: #ffffff;
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --transition: all 0.3s ease;
+  --radius-sm: 0.25rem;
+}
+
+/* Floating Home Button Styles */
+.floating-home-button {
+  position: fixed;
+  right: 20px;
+  bottom: 30px;
+  width: 50px;
+  height: 50px;
+  background-color: var(--primary-floating-btn);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  z-index: 100;
+  transition: var(--transition);
+}
+
+.floating-home-button:hover {
+  background-color: var(--primary-light-floating-btn);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.floating-home-button i {
+  font-size: 22px;
+}
+
+/* Tooltip Styles */
+.tooltip {
+  position: absolute;
+  right: 60px;
+  background-color: var(--primary-floating-btn);
+  color: var(--white);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.floating-home-button:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Arrow for tooltip */
+.tooltip:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -5px;
+  margin-top: -5px;
+  border-width: 5px 5px 5px 0;
+  border-style: solid;
+  border-color: transparent var(--primary) transparent transparent;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .floating-home-button {
+    left: 15px;
+    bottom: 20px;
+    width: 45px;
+    height: 45px;
+  }
+}
