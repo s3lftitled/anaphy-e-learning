@@ -3,7 +3,15 @@ const mongoose = require("mongoose")
 const ClassSchema = new mongoose.Schema({
   name: { type: String, maxlength: 14, minlength: 6 },
   code: { type: String, unique: true },
-  teacher: { type: mongoose.Schema.Types.ObjectId, ref: "UserModel" },
+  description: { type: String},
+  teacher: { type: mongoose.Schema.Types.ObjectId, ref: "TeacherModel" },
+  announcements: [
+    { 
+      title: { type: String, required: true},
+      message: { type: String, required: true }, 
+      createdAt: { type: Date, default: Date.now }
+    }
+  ],
   students: [
     {
       student: { type: mongoose.Schema.Types.ObjectId, ref: "UserModel" },
@@ -12,6 +20,7 @@ const ClassSchema = new mongoose.Schema({
         enum: ["invited", "rejected", "joined", "pending"],
         default: "invited",
       },
+      createdAt: { type: Date, default: Date.now }
     },
   ],
   grades: [
