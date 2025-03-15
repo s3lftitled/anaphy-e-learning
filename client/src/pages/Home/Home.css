@@ -151,6 +151,7 @@
   padding: 3rem;
   border-radius: var(--radius-lg);
   height: 200px;
+  width: 100%;
   margin-bottom: 2.5rem;
   display: flex;
   justify-content: space-between;
@@ -177,7 +178,7 @@
 }
 
 .home-title {
-  font-size: 2.5rem;
+  font-size: 2.9rem;
   font-weight: 800;
   line-height: 1.2;
   margin-bottom: 1rem;
@@ -192,7 +193,7 @@
 }
 
 .hero-subtitle {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   opacity: 0.9;
   margin-bottom: 1.5rem;
   max-width: 80%;

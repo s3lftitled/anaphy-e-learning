@@ -32,7 +32,7 @@ const Homepage = () => {
             <p className="hero-subtitle">Explore the human body through our interactive e-learning</p>
           </div>
           <div className="hero-image">
-            <img src="skull rin.png" alt="Skull" className="skull-icon" />
+            <img src="hero-skull.png" alt="Skull" className="skull-icon" />
             <div className="pulse-effect"></div>
           </div>
         </div>
