@@ -1,20 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Search, User, ChevronDown } from 'lucide-react'
 import './Navbar.css'
+import { getUserInitials } from '../../utils/getUserInitials'
 
 const Navbar = ({ user }) => { 
   const [searchActive, setSearchActive] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
-  
-  // Get user initials for fallback avatar
-  const getUserInitials = () => {
-    if (!user?.name) return ''
-    return user.name.split(' ')
-      .map(name => name[0])
-      .join('')
-      .toUpperCase()
-      .substring(0, 2)
-  }
+
   
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -27,7 +19,7 @@ const Navbar = ({ user }) => {
     <nav className="navbar">
       <div className="nav-content">
         <div className="logo">
-          <span className="logo-text">ANATOMICA</span>
+          <span className="logo-text">ANATOMY</span>
           <div className="logo-underline"></div>
         </div>
         
@@ -60,7 +52,7 @@ const Navbar = ({ user }) => {
                 />
               ) : (
                 <div className="avatar-placeholder">
-                  {user.name ? getUserInitials() : <User size={16} />}
+                  {user.name ? getUserInitials(user) : <User size={16} />}
                 </div>
               )}
             </div>
