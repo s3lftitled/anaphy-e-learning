@@ -53,7 +53,6 @@ const App = () => {
               <Route path='/confirm-teacher-account' element={<ConfirmationForm />} />
               <Route path='/teacher-class-page' element={<TeacherClassPage />} />
               <Route path='/teacher-dashboard' element={<TeacherDashboard />} />
-              <Route path='/student-class' element={<StudentClass />} />
             </Route>
           </Routes>
         </Suspense>
