@@ -1,4 +1,5 @@
 const UserModel = require('../models/user.model')
+const UserActivityModel = require('../models/user-activity.model')
 const TeacherModel = require('../models/teacher.model')
 const EmailUtil = require('../utils/emailUtils')
 const PasswordUtil = require('../utils/passwordUtils')
@@ -9,6 +10,7 @@ const sanitizeHtml = require('sanitize-html')
 const { validateRequiredParams } = require('../utils/paramsValidator')
 const { appAssert } = require('../utils/appAssert')
 const { generateTokens } = require('../middlewares/jsonWebTokens')
+const logger = require('../logger/logger')
 const axios = require('axios')
 
 const CAPTCHA_SECRET = process.env.CAPTCHA_SECRET
@@ -101,6 +103,25 @@ const verifyEmail = async(email, verificationCode) => {
   }
 }
 
+const updateUserActivity = async (userId, userType) => {
+  try {
+    // Find or create activity record for this user
+    await UserActivityModel.findOneAndUpdate(
+      { userId, userType },
+      { 
+        userId,
+        userType,
+        lastLogin: new Date(),
+        $inc: { loginCount: 1 } // Increment login count
+      },
+      { upsert: true, new: true }
+    )
+  } catch (error) {
+    logger.error('Error updating user activity:', error)
+    // Don't throw - we don't want analytics to break the main flow
+  }
+}
+
 const logIn = async (email, password) => {
   try {
     // Check all the required fields
@@ -122,6 +143,8 @@ const logIn = async (email, password) => {
     const isPasswordCorrect = await PasswordUtil.comparePassword(password, user.password)
     appAssert(isPasswordCorrect, 'Incorrect password, please try again', HTTP_STATUS.BAD_REQUEST)
 
+    await updateUserActivity(user._id, user.role)
+
     const tokens = generateTokens(user)
 
     const { accessToken, refreshToken } = tokens
@@ -131,8 +154,6 @@ const logIn = async (email, password) => {
     throw error
   }
 }
-
-//captcha
 
 const changePassword = async ( userId, currentPassword, newPassword, newPasswordConfirmation ) => {
   try {
