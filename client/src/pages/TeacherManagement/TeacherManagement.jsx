@@ -104,7 +104,7 @@ const TeacherManagement = () => {
 
           {/* Add Teacher Form */}
           <div className="add-teacher-section">
-            <div className="form-container">
+            <div className="teacher-mgmt-form-container">
               <h2>Add New Teacher</h2>
               <form onSubmit={handleSubmit} className="add-teacher-form">
                 <div className="input-group">
