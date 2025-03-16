@@ -18,6 +18,7 @@ const userRoute = require('./src/router/userRouter')
 const issueRoute = require('./src/router/issueRouter')
 const progressRoute = require('./src/router/progressRouter')
 const quizRoute = require('./src/router/quizRouter')
+const userActivityRoute = require('./src/router/userActivityRouter')
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -53,6 +54,7 @@ app.use('/user/api', userRoute)
 app.use('/issues/api', issueRoute)
 app.use('/progress/api', progressRoute)
 app.use('/quizzes/api', quizRoute)
+app.use('/user-activities/api', userActivityRoute)
 
 app.use(errorHandler)
 
