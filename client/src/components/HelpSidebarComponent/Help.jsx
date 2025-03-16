@@ -123,7 +123,7 @@ const HelpSidebar = ({ isOpen, onClose }) => {
           
           <button 
             type="submit" 
-            className="submit-button"
+            className="submit-button-help"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Submitting...' : 'Submit Ticket'}
@@ -131,7 +131,7 @@ const HelpSidebar = ({ isOpen, onClose }) => {
           </button>
           
           {submitStatus && (
-            <div className={`status-message ${submitStatus.type}`}>
+            <div className={`status-message-help ${submitStatus.type}`}>
               {submitStatus.message}
             </div>
           )}

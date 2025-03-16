@@ -192,7 +192,7 @@ const SettingsSidebar = ({ isOpen, onClose, userData }) => {
               <p className="upload-text">Click to upload new picture</p>
             </div>
             
-            <div className="form-group">
+            <div className="settings-form-group">
               <label htmlFor="name">Full Name</label>
               <input 
                 type="text" 
@@ -219,7 +219,7 @@ const SettingsSidebar = ({ isOpen, onClose, userData }) => {
             
             <button 
               type="submit" 
-              className="submit-button"
+              className="submit-button-settings"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Saving...' : 'Save Changes'}
@@ -270,7 +270,7 @@ const SettingsSidebar = ({ isOpen, onClose, userData }) => {
             
             <button 
               type="submit" 
-              className="submit-button"
+              className="submit-button-settings"
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Updating...' : 'Update Password'}
@@ -280,7 +280,7 @@ const SettingsSidebar = ({ isOpen, onClose, userData }) => {
         )}
         
         {submitStatus && (
-          <div className={`status-message ${submitStatus.type}`}>
+          <div className={`status-message-settings ${submitStatus.type}`}>
             {submitStatus.message}
           </div>
         )}

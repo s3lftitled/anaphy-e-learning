@@ -107,7 +107,7 @@
   outline: none;
 }
 
-.submit-button {
+.submit-button-help {
   margin-top: 0.5rem;
   padding: 0.85rem 1.5rem;
   background: linear-gradient(90deg, var(--primary), var(--primary-light));
@@ -125,12 +125,12 @@
   box-shadow: var(--shadow-sm);
 }
 
-.submit-button:hover {
+.submit-button-help:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
-.submit-button:disabled {
+.submit-button-help:disabled {
   background: var(--text-light);
   transform: none;
   cursor: not-allowed;
@@ -140,8 +140,9 @@
   margin-left: 5px;
 }
 
-.status-message {
+.status-message-help {
   margin-top: 1rem;
+  margin-bottom: 3rem;
   padding: 1rem;
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
@@ -149,13 +150,13 @@
   font-weight: 500;
 }
 
-.status-message.success {
+.status-message-help.success {
   background-color: rgba(79, 195, 247, 0.2);
   color: var(--primary);
   border: 1px solid rgba(79, 195, 247, 0.3);
 }
 
-.status-message.error {
+.status-message-help.error {
   background-color: rgba(255, 82, 82, 0.1);
   color: #d32f2f;
   border: 1px solid rgba(255, 82, 82, 0.2);

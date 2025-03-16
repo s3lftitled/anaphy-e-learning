@@ -174,21 +174,21 @@
   font-weight: 500;
 }
 
-.form-group {
+.settings-form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.form-group label {
+.settings-form-group label {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text);
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.settings-form-group input,
+.settings-form-group select,
+.settings-form-group textarea {
   padding: 0.75rem 1rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: var(--radius-sm);
@@ -198,9 +198,9 @@
   transition: var(--transition);
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.settings-form-group input:focus,
+.settings-form-group select:focus,
+.settings-form-group textarea:focus {
   border-color: var(--primary-light);
   box-shadow: 0 0 0 2px rgba(26, 90, 128, 0.2);
   outline: none;
@@ -217,8 +217,7 @@
   margin-top: 0.2rem;
 }
 
-.submit-button {
-  margin-top: 0.5rem;
+.submit-button-settings {
   padding: 0.85rem 1.5rem;
   background: linear-gradient(90deg, var(--primary), var(--primary-light));
   color: var(--white);
@@ -235,12 +234,12 @@
   box-shadow: var(--shadow-sm);
 }
 
-.submit-button:hover {
+.submit-button-settings:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
-.submit-button:disabled {
+.submit-button-settings:disabled {
   background: var(--text-light);
   transform: none;
   cursor: not-allowed;
@@ -250,8 +249,9 @@
   margin-left: 5px;
 }
 
-.status-message {
+.status-message-settings {
   margin-top: 1rem;
+  margin-bottom: 3rem;
   padding: 1rem;
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
@@ -259,13 +259,13 @@
   font-weight: 500;
 }
 
-.status-message.success {
+.status-message-settings.success {
   background-color: rgba(79, 195, 247, 0.2);
   color: var(--primary);
   border: 1px solid rgba(79, 195, 247, 0.3);
 }
 
-.status-message.error {
+.status-message-settings.error {
   background-color: rgba(255, 82, 82, 0.1);
   color: #d32f2f;
   border: 1px solid rgba(255, 82, 82, 0.2);
