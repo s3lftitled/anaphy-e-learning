@@ -1,6 +1,7 @@
 /* Base styles */
 html {
   scroll-behavior: smooth;
+  background: #100E24;
 }
 
 body {
@@ -18,17 +19,19 @@ body {
 .scrollable-page {
   width: 100%;
   height: 100vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
 }
 
 section {
   width: 100%;
   height: 100vh;
+  min-height: 100vh;
   scroll-snap-align: start;
   position: relative;
   background: #100E24;
+  padding-bottom: 40px;
 }
 
 /* Updated Navigation Bar */
@@ -163,7 +166,7 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 80px 20px 40px;
+  padding: 50px 20px 60px;
   background-color: #100E24;
   background-image: radial-gradient(circle at 85% 25%, rgba(85, 184, 255, 0.15) 0%, transparent 50%),
                     radial-gradient(circle at 15% 75%, rgba(85, 184, 255, 0.15) 0%, transparent 50%);
@@ -488,6 +491,7 @@ section {
   }
 }
 
+
 /* Bubble Styles */
 .bubble {
   position: absolute;
@@ -505,11 +509,243 @@ section {
   }
 }
 
-/* Adjust About Section Sizes */
+
 .aboutus h1 {
-  font-size: 2.5rem; /* Adjust as needed */
+  font-size: 2.5rem; 
 }
 
 .about-description {
-  font-size: 1rem; /* Adjust as needed */
+  font-size: 1rem; 
+}
+
+
+@media (min-width: 1200px) {
+  .about-section {
+    padding: 120px 40px 230px;
+  }
+  
+  .aboutus {
+    max-width: 1000px;
+  }
+  
+  .aboutus h1 {
+    font-size: 4rem;
+  }
+    
+  .about-description {
+    font-size: 1.2rem;
+    max-width: 800px;
+  }
+  
+  .sdg-container {
+    max-width: 1400px;
+  }
+}
+
+/* Medium-Large Screens (992px to 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .about-section {
+    padding: 100px 30px 420px;
+  }
+  
+  .aboutus h1 {
+    font-size: 3.5rem;
+  }
+  
+  .sdg-container {
+    max-width: 960px;
+  }
+}
+
+/* Medium Screens (768px to 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .about-section {
+    padding: 90px 25px 330px;
+  }
+  
+  .aboutus {
+    max-width: 700px;
+  }
+  
+  .aboutus h1 {
+    font-size: 3rem;
+    margin-bottom: 25px;
+  }
+  
+  .about-description {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  
+  .sdg-container {
+    gap: 20px;
+    max-width: 700px;
+  }
+  
+  .sdg-card {
+    width: 280px;
+    height: 310px;
+  }
+}
+
+/* Small Screens (576px to 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .about-section {
+    padding: 80px 20px 550px;
+  }
+  
+  .aboutus {
+    max-width: 500px;
+    margin-bottom: 30px;
+  }
+  
+  .aboutus h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .about-description {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  
+  .sdg-container {
+    gap: 15px;
+  }
+  
+  .sdg-card {
+    width: 250px;
+    height: 350px;
+    padding: 20px;
+  }
+  
+  .sdg-icon-img {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .sdg-card h2 {
+    font-size: 1.1rem;
+  }
+  
+  /* Adjust bubbles for smaller screens */
+  .bubble {
+    opacity: 0.15;
+  }
+}
+
+/*-------------------------------------------------------------------------------------------------------------------- Very Small Screens 575px and below */
+@media (max-width: 575px) {
+  .about-section {
+    padding: 70px 15px 450px;
+  }
+  
+  .aboutus {
+    max-width: 100%;
+    margin-bottom: 25px;
+  }
+  
+  .aboutus h1 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+  }
+  
+  .about-description {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    padding: 0 10px;
+  }
+  
+  .sdg-container {
+    gap: 15px;
+    padding: 0 5px;
+  }
+  
+  .sdg-card {
+    width: 100%;
+    max-width: 280px;
+    height: 250px;
+    padding: 15px;
+  }
+  
+  .sdg-icon {
+    margin-bottom: 10px;
+  }
+  
+  .sdg-icon-img {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .sdg-card h2 {
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+  
+  .sdg-description {
+    bottom: 20px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+  
+  /* Reduce or hide decorative elements on very small screens */
+  .bubble {
+    opacity: 0.1;
+    transform: scale(0.7);
+  }
+}
+
+/* Fix for very small screens (320px and below) */
+@media (max-width: 320px) {
+  .about-section {
+    padding: 60px 10px 630px;
+  }
+  
+  .aboutus h1 {
+    font-size: 1.8rem;
+  }
+  
+  .about-description {
+    font-size: 0.85rem;
+  }
+  
+  .sdg-card {
+    height: 230px;
+    padding: 12px;
+  }
+  
+  .sdg-icon-img {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .sdg-card h2 {
+    font-size: 0.9rem;
+  }
+}
+
+/* Additional fixes for landscape orientation on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .about-section {
+    padding: 60px 15px 730px;
+    min-height: 120vh; /* Ensure enough height in landscape */
+  }
+  
+  .sdg-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .sdg-card {
+    width: 00px;
+    height: 220px;
+    margin: 10px;
+  }
+  
+  .sdg-icon-img {
+    width: 70px;
+    height: 70px;
+  }
 }
