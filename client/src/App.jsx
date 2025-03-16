@@ -20,6 +20,7 @@ const CreateLesson = lazy(() => import('./pages/Content/CreateLesson.jsx'))
 const CreateMultiplePages = lazy(() => import('./pages/Content/CreateMultiplePages.jsx'))
 const ELearningPage = lazy(() => import('./pages/E-Learning/E-LearningPage.jsx'))
 const NotFound = lazy(() => import('./pages/NotFound/NotFound.jsx'))
+const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard/AdminDashboard.jsx'))
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
             <Route path='/create-topic' element={<CreateTopic/>} />
             <Route path='/create-lesson' element={<CreateLesson/>} />
             <Route path='/create-multiple-pages' element={<CreateMultiplePages/>} />
+            <Route path='/admin-dashboard' element={<AdminDashboard/>} />
             <Route path='/*' element={<NotFound />} />
             <Route 
               element={
@@ -51,6 +53,7 @@ const App = () => {
               <Route path='/confirm-teacher-account' element={<ConfirmationForm />} />
               <Route path='/teacher-class-page' element={<TeacherClassPage />} />
               <Route path='/teacher-dashboard' element={<TeacherDashboard />} />
+              <Route path='/student-class' element={<StudentClass />} />
             </Route>
           </Routes>
         </Suspense>
