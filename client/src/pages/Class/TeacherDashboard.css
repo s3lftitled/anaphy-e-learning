@@ -228,6 +228,85 @@
   background-color: #e5e7eb;
 }
 
+.invite-tabs {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.invite-tab-btn {
+  background: none;
+  border: none;
+  padding: 12px 24px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.invite-tab-btn.active {
+  color: #3b82f6;
+}
+
+.invite-tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #3b82f6;
+}
+
+.class-code-section {
+  text-align: center;
+  padding: 15px 0;
+}
+
+.code-instructions {
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.class-code-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  background-color: #f3f4f6;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin: 0 auto;
+  max-width: 300px;
+}
+
+.class-code-display span {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  letter-spacing: 2px;
+}
+
+.copy-btn {
+  background-color: #3b82f6;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+  background-color: #2563eb;
+}
+
 .invite-btn {
   background-color: #55B8FF;
   color: #fff;

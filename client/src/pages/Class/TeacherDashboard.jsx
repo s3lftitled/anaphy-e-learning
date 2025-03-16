@@ -13,6 +13,7 @@ const TeacherDashboard = () => {
   const [loading, setLoading] = useState(true)
   const [activeClass, setActiveClass] = useState(null)
   const [showInviteModal, setShowInviteModal] = useState(false)
+  const [inviteMethod, setInviteMethod] = useState('email')
   const [inviteEmail, setInviteEmail] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
@@ -482,7 +483,7 @@ const TeacherDashboard = () => {
         )}
       </div>
       
-      {/* Invite Student Modal */}
+     {/* Invite Student Modal */}
       {showInviteModal && (
         <div className="modal-overlay">
           <div className="modal">
@@ -491,22 +492,52 @@ const TeacherDashboard = () => {
               <button className="close-btn" onClick={() => setShowInviteModal(false)}>×</button>
             </div>
             <div className="modal-body">
-              <form onSubmit={handleInviteStudent}>
-                <div className="form-group">
-                  <label>Student Email:</label>
-                  <input 
-                    type="email" 
-                    value={inviteEmail}
-                    onChange={(e) => setInviteEmail(e.target.value)}
-                    placeholder="Enter student email"
-                    required
-                  />
+              <div className="invite-tabs">
+                <button 
+                  className={`invite-tab-btn ${inviteMethod === 'email' ? 'active' : ''}`}
+                  onClick={() => setInviteMethod('email')}
+                >
+                  Via Email
+                </button>
+                <button 
+                  className={`invite-tab-btn ${inviteMethod === 'code' ? 'active' : ''}`}
+                  onClick={() => setInviteMethod('code')}
+                >
+                  Via Code
+                </button>
+              </div>
+              
+              {inviteMethod === 'email' ? (
+                <form onSubmit={handleInviteStudent}>
+                  <div className="form-group">
+                    <label>Student Email:</label>
+                    <input 
+                      type="email" 
+                      value={inviteEmail}
+                      onChange={(e) => setInviteEmail(e.target.value)}
+                      placeholder="Enter student email"
+                      required
+                    />
+                  </div>
+                  <div className="form-actions">
+                    <button type="button" className="cancel-btn" onClick={() => setShowInviteModal(false)}>Cancel</button>
+                    <button type="submit" className="submit-btn">Send Invitation</button>
+                  </div>
+                </form>
+              ) : (
+                <div className="class-code-section">
+                  <p className="code-instructions">Share this code with your students. They can join your class using this code.</p>
+                  <div className="class-code-display">
+                    <span>{activeClass.code}</span>
+                    <button 
+                      className="copy-btn" 
+                      onClick={() => {navigator.clipboard.writeText(activeClass.code); alert('Code copied to clipboard!');}}
+                    >
+                      Copy
+                    </button>
+                  </div>
                 </div>
-                <div className="form-actions">
-                  <button type="button" className="cancel-btn" onClick={() => setShowInviteModal(false)}>Cancel</button>
-                  <button type="submit" className="submit-btn">Send Invitation</button>
-                </div>
-              </form>
+              )}
             </div>
           </div>
         </div>
