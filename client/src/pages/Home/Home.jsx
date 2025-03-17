@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import AnatomyChatbot from '../../components/ChatbotComponent/Chatbot'
 import './Home.css'
 import { useUser } from '../../context/UserContext'
@@ -7,14 +7,105 @@ import Sidebar from '../../components/Sidebar/Sidebar'
 
 const Homepage = () => {
   const topics = [
-    { name: "Skeletal System", icon: "🦴" },
-    { name: "Muscular System", icon: "💪" },
-    { name: "Nervous System", icon: "🧠" },
-    { name: "Cardiovascular System", icon: "❤️" },
-    { name: "Respiratory System", icon: "🫁" }
+    { 
+      name: "Skeletal System", 
+      backgroundImage: "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTIzM3djYWl6bTNnajlxeTl3cm83YWJ1ZnBnazZrMnc0OGQ1Ym1ucSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4VEAg0IWR7gNa/giphy.gif",
+      backgroundPosition: '50% 10%',
+      backgroundSize: '150%',
+      textColor: 'white',
+    },
+    { 
+      name: "Muscular System",
+      backgroundImage: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWp4Z2NybXk4NmR1Nnd6bTMwbWIwbDdrOGVwMWMzeDZiM3k1eGZ5YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/C5gocDBDRdJ6g/giphy.gif",
+      backgroundPosition: '50% 5%',
+      backgroundSize: '150%',
+      textColor: 'white',
+    },
+    { 
+      name: "Nervous System",
+      backgroundImage: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDR0cXIycDRtanpmNmxtYndkYjlieGR6dHZwM2psZnM3dXF0amZybyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l3nSGQ045gEvvQFRm/giphy.gif",
+      backgroundPosition: '50% 50%',
+      backgroundSize: '150%',
+      textColor: 'white',
+    },
+    { 
+      name: "Cardiovascular System",
+      backgroundImage: "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExeGo4a2k3NTRpYTh4NGs1NmNna25wdXJoOHJqdm1wMWFia25zNDN2MSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/yeUxljCJjH1rW/giphy.gif",
+      backgroundPosition: '50% 50%',
+      backgroundSize: '120%',
+      textColor: 'white',
+    },
+    { 
+      name: "Respiratory System",
+      backgroundImage: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNXBuY2ttNzlhMGppeDVvcjRjazB3dTdlcWVoY3htdXFqeW85OWF4ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/g7teYpDDWjP7q/giphy.gif",
+      backgroundPosition: '50% 30%',
+      backgroundSize: '100%',
+      textColor: 'white',
+    },
+
+    { 
+      name: "Digestive System",
+      backgroundImage: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWl0azdkMXVkdGUzeWZiMzVjMzBzbGtramJsbXBya2xocmRrMG5ycyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/lckhIaarcbT20CXRDo/giphy.gif",
+      backgroundPosition: '50% 30%',
+      backgroundSize: '100%',
+      textColor: 'white',
+    },
+    { 
+      name: "Endocrine System",
+      backgroundImage: "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExOG5sNWF2cWo5enR6ODVoMXVlZDA4eHJuYnYxdGN2NHF0ajkxNHJ4aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/LyaGVgxlGYHrW2Do1A/giphy.gif",
+      backgroundPosition: '50% 20%',
+      backgroundSize: '100%',
+      textColor: 'white',
+    },
+    { 
+      name: "Immune System",
+      backgroundImage: "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZWZsbDgwYXgycTVwZWc0NHd3aXQ2YTRtOG03MzRrcXJ5bWNlY2Z1bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oGRFxviWGwk77MfE4/giphy.gif",
+      backgroundPosition: '50% 30%',
+      backgroundSize: '130%',
+      textColor: 'white',
+    }
   ]
   
   const { user } = useUser()
+  const scrollContainerRef = useRef(null)
+  const [isScrolling, setIsScrolling] = useState(false)
+  const [startX, setStartX] = useState(0)
+  const [scrollLeft, setScrollLeft] = useState(0)
+
+  const handleMouseDown = (e) => {
+    if (!scrollContainerRef.current) return
+    
+    setIsScrolling(true)
+    setStartX(e.pageX - scrollContainerRef.current.offsetLeft)
+    setScrollLeft(scrollContainerRef.current.scrollLeft)
+    scrollContainerRef.current.classList.add('grabbing')
+  }
+
+  const handleMouseUp = () => {
+    if (!scrollContainerRef.current) return
+    
+    setIsScrolling(false)
+    scrollContainerRef.current.classList.remove('grabbing')
+  }
+
+  const handleMouseMove = (e) => {
+    if (!isScrolling || !scrollContainerRef.current) return
+    
+    e.preventDefault()
+    const x = e.pageX - scrollContainerRef.current.offsetLeft
+    const walk = (x - startX) * 1.5 // Scroll speed multiplier
+    scrollContainerRef.current.scrollLeft = scrollLeft - walk
+  }
+
+  useEffect(() => {
+    document.addEventListener('mouseup', handleMouseUp)
+    document.addEventListener('mouseleave', handleMouseUp)
+    
+    return () => {
+      document.removeEventListener('mouseup', handleMouseUp)
+      document.removeEventListener('mouseleave', handleMouseUp)
+    }
+  }, [isScrolling])
  
   return (
     <div className="homepage">
@@ -39,15 +130,33 @@ const Homepage = () => {
         
         <h2 className="section-title">Body Systems</h2>
         
-        <div className="topics-grid">
-          {topics.map((topic, index) => (
-            <div key={index} className="topic-card">
-              <div className="topic-icon">{topic.icon}</div>
-              <div className="topic-info">
-                <h3 className="topic-title">{topic.name}</h3>
-              </div>
+        <div className="topics-container-wrapper">
+          <div 
+            className="topics-container" 
+            ref={scrollContainerRef}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+          >
+            <div className="topics-grid">
+              {topics.map((topic, index) => (
+                <div 
+                  key={index} 
+                  className="topic-card"
+                  style={{
+                    backgroundImage: `url(${topic.backgroundImage})`,
+                    backgroundSize: topic.backgroundSize || 'cover',
+                    backgroundPosition: topic.backgroundPosition || 'center',
+                    backgroundRepeat: 'no-repeat'
+                  }}
+                >
+                  <div className="topic-overlay" />
+                  <div className="topic-info">
+                    <h3 className="topic-title" style={{color: topic.textColor || 'white'}}>{topic.name}</h3>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </main>
     </div>

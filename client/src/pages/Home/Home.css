@@ -15,6 +15,7 @@
   --radius-lg: 24px;
 }
 
+
 .homepage {
   font-family: 'Inter', 'Segoe UI', sans-serif;
   background-color: var(--secondary);
@@ -33,6 +34,7 @@
   left: 0;
   right: 0;
   z-index: 1000;
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -151,7 +153,6 @@
   padding: 3rem;
   border-radius: var(--radius-lg);
   height: 200px;
-  width: 100%;
   margin-bottom: 2.5rem;
   display: flex;
   justify-content: space-between;
@@ -178,7 +179,7 @@
 }
 
 .home-title {
-  font-size: 2.9rem;
+  font-size: 2.5rem;
   font-weight: 800;
   line-height: 1.2;
   margin-bottom: 1rem;
@@ -193,7 +194,7 @@
 }
 
 .hero-subtitle {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   opacity: 0.9;
   margin-bottom: 1.5rem;
   max-width: 80%;
@@ -207,7 +208,6 @@
   color: var(--primary);
   font-weight: 600;
   font-size: 1rem;
-  cursor: pointer;
   transition: var(--transition);
   box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);
 }
@@ -234,8 +234,8 @@
 
 .pulse-effect {
   position: absolute;
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.1);
   z-index: 1;
@@ -267,18 +267,130 @@
   gap: 1.5rem;
 }
 
+
+.topics-container-wrapper {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.topics-container::-webkit-scrollbar {
+  display: none;
+}
+
 .topic-card {
-  background-color: var(--white);
-  padding: 1.5rem;
+  flex: 0 0 280px;
+  height: 180px;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
-  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+}
+
+.topic-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.2));
+  z-index: 1;
+}
+
+.topic-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem;
+  z-index: 2;
+}
+
+
+
+/* Also make sure your main content styles are correct */
+.main-content {
+ 
+  margin-left: 70px; 
+  margin-top: 60px; 
+  padding: 2rem;
+  max-width: calc(100% - 70px); 
+}
+.topics-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+
+.topics-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.topics-grid {
+  display: flex;
+  gap: 1.5rem;
+  padding: 0.5rem 0;
+  min-width: min-content;
+  width: max-content;
+
+}
+
+.topic-card {
+  flex: 0 0 280px;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-color: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
   display: flex;
   align-items: center;
   gap: 1rem;
   position: relative;
   overflow: hidden;
+}
+
+/* Make sure the text at the bottom is clearly visible */
+.topic-info {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+
+
+
+
+.topic-card:hover::before {
+  opacity: 1;
+}
+
+.topic-card[style*="background-image"]::before {
+  opacity: 0.3;
+}
+
+.topic-card[style*="background-image"]:hover::before {
+  opacity: 0.5;
+}
+
+
+
+.topic-icon {
+  font-size: 1.8rem;
+}
+
+.topic-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  position: relative;
+
 }
 
 @keyframes float {
