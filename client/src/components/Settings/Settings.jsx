@@ -230,7 +230,7 @@ const SettingsSidebar = ({ isOpen, onClose, userData }) => {
         
         {activeTab === 'security' && (
           <form onSubmit={handlePasswordSubmit} className="settings-form">
-            <div className="form-group">
+            <div className="settings-form-group">
               <label htmlFor="currentPassword">Current Password</label>
               <input 
                 type="password" 
@@ -242,7 +242,7 @@ const SettingsSidebar = ({ isOpen, onClose, userData }) => {
               />
             </div>
             
-            <div className="form-group">
+            <div className="settings-form-group">
               <label htmlFor="newPassword">New Password</label>
               <input 
                 type="password" 
@@ -256,7 +256,7 @@ const SettingsSidebar = ({ isOpen, onClose, userData }) => {
               <p className="field-note">Minimum 6 characters</p>
             </div>
             
-            <div className="form-group">
+            <div className="settings-form-group">
               <label htmlFor="confirmPassword">Confirm New Password</label>
               <input 
                 type="password" 
