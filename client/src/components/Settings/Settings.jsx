@@ -204,7 +204,7 @@ const SettingsSidebar = ({ isOpen, onClose, userData }) => {
               />
             </div>
             
-            <div className="form-group">
+            <div className="settings-form-group">
               <label htmlFor="email">Email Address</label>
               <input 
                 type="email" 
