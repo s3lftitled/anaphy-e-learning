@@ -112,7 +112,7 @@ const LandingPage = () => {
 </section>
       {/* Contact Us Section */}
       <section ref={contactRef} id="contact" className="contact-section">
-        <h1 className="section-title">Our Team</h1>
+        <h1 className="contact-section-title">Our Team</h1>
         <div className="contact-container">
           <div className="card">
             <div className="imageWrapper">
