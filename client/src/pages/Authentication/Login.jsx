@@ -52,10 +52,14 @@ const Login = () => {
         navigate('/home')
       }
     } catch (error) {
-      if (error.response && error.response.data) {
-        alert(error.response.data.message)
+      if (error.response) {
+        if (error.response.status === 429) {
+            alert('Too many requests. Please try again after 5 minutes');
+        } else {
+            alert(error.response.data?.message || 'An error occurred. Please try again.');
+        }
       } else {
-        alert('An error occurred. Please try again.')
+          alert('An error occurred. Please check your network connection and try again.');
       }
     }
   }

@@ -48,7 +48,15 @@ const Register = () => {
         navigate(`/verification/${registrationData.email}`)
       }
     } catch (error) {
-      alert(error.response?.data?.message || 'An error occurred. Please try again.')
+      if (error.response) {
+        if (error.response.status === 429) {
+            alert('Too many requests. Please try again after 5 minutes');
+        } else {
+            alert(error.response.data?.message || 'An error occurred. Please try again.');
+        }
+      } else {
+          alert('An error occurred. Please check your network connection and try again.');
+      }
     } finally {
       setIsLoading(false)
     }
