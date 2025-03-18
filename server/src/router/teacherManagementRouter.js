@@ -4,7 +4,7 @@ const TeacherManagementController = require('../controllers/teacherManagementCon
 const { verifyToken } = require('../middlewares/jsonWebTokens')
 
 router.post('/v1/create-teacher', verifyToken, TeacherManagementController.createTeacher)
-router.put('/v1/complete-teacher/:id/:token', verifyToken, TeacherManagementController.completeTeacher)
+router.put('/v1/complete-teacher/:id/:token', TeacherManagementController.completeTeacher)
 router.get('/v1/fetch-teachers', verifyToken, TeacherManagementController.fetchTeacher)
 router.delete('/v1/delete-teacher/:teacherId', verifyToken, TeacherManagementController.deleteTeacher)
 
