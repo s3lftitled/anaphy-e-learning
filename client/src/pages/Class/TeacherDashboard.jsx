@@ -90,12 +90,8 @@ const TeacherDashboard = () => {
     
     try {
       // Call API to invite student
-      const response = await fetch(`/api/classes/${activeClass.id}/invite`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email: inviteEmail })
+      const response = await privateAxios(`/api/classes/${activeClass.id}/invite`, {email: inviteEmail}, {
+        withCredentials: true
       })
       
       if (!response.ok) {

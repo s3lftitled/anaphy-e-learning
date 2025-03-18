@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import api from '../utils/api'
+import usePrivateApi from './usePrivateApi'
 
 export const useProgressTracking = (user, currentTopic, currentLesson, currentPage) => {
   const [userProgress, setUserProgress] = useState(null)
   const [completedContent, setCompletedContent] = useState([])
+  const privateAxios = usePrivateApi()
 
   // Fetch user progress data
   useEffect(() => {
@@ -11,7 +12,9 @@ export const useProgressTracking = (user, currentTopic, currentLesson, currentPa
       if (!user || !user.id) return
       
       try {
-        const progressResponse = await api.get(`progress/api/v1/get-progress/${user.id}`)
+        const progressResponse = await privateAxios.get(`progress/api/v1/get-progress/${user.id}`, {}, {
+          withCredentials: true
+        })
         const progressData = progressResponse.data
         setUserProgress(progressData.progress)
         
@@ -20,7 +23,9 @@ export const useProgressTracking = (user, currentTopic, currentLesson, currentPa
         if (progressData.progress && progressData.progress.topicsProgress) {
           // Use Promise.all to fetch all topic progresses in parallel
           const topicProgressPromises = progressData.progress.topicsProgress.map(
-            topicProgress => api.get(`progress/api/v1/get-progress/${user.id}/${topicProgress.topicId}`)
+            topicProgress => privateAxios.get(`progress/api/v1/get-progress/${user.id}/${topicProgress.topicId}`, {}, {
+              withCredentials: true
+            })
           )
           
           const topicProgressResults = await Promise.all(topicProgressPromises)
@@ -48,9 +53,9 @@ export const useProgressTracking = (user, currentTopic, currentLesson, currentPa
     
     try {      
       // Make API call to update progress
-      await api.post(`progress/api/v1/update-progress/${user.id}`, {
+      await privateAxios.post(`progress/api/v1/update-progress/${user.id}`, {
         quizResults: updatedProgress.quizResults
-      })
+      }, { withCredentials: true })
       
     } catch (err) {
       console.error('Error updating user progress:', err)
@@ -63,13 +68,13 @@ export const useProgressTracking = (user, currentTopic, currentLesson, currentPa
       try {
         // Only mark as completed if not already completed
         if (!completedContent.includes(contentId)) {
-          const response = await api.post('progress/api/v1/complete-content', {
+          const response = await privateAxios.post('progress/api/v1/complete-content', {
             userId: user.id,
             topicId: currentTopic._id,
             lessonId: currentLesson._id,
             contentId: contentId,
             contentType: 'page'
-          })
+          }, { withCredentials: true })
           
           if (response.status === 200) {
             // Update local completed content list

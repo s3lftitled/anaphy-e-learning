@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import api from '../utils/api'
+import usePrivateApi from './usePrivateApi'
 
 export const useLearningData = (user) => {
   const [topics, setTopics] = useState([])
@@ -8,20 +8,25 @@ export const useLearningData = (user) => {
   const [currentPage, setCurrentPage] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
+  const privateAxios = usePrivateApi()
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true)
       try {
         // Fetch topics
-        const topicsResponse = await api.get('topics/api/v1/fetch-topic-contents')
+        const topicsResponse = await privateAxios.get('topics/api/v1/fetch-topic-contents', {}, {
+          withCredentials: true
+        })
         const topicsData = topicsResponse.data
         setTopics(topicsData.topic || [])
 
         if (user && user.id) {
           try {
             console.log(`Fetching progress for user: ${user.id}`)
-            const progressResponse = await api.get(`progress/api/v1/get-progress/${user.id}`)
+            const progressResponse = await privateAxios.get(`progress/api/v1/get-progress/${user.id}`, {}, {
+              withCredentials: true
+            })
             const progressData = progressResponse.data
             
             // Set initial content based on last viewed
@@ -94,12 +99,12 @@ export const useLearningData = (user) => {
       if (user && user.id && currentTopic && currentLesson && currentPage) {
         try {
           // Save user progress
-          await api.post('progress/api/v1/save-progress', {
+          await privateAxios.post('progress/api/v1/save-progress', {
             userId: user.id,
             topicId: currentTopic._id,
             lessonId: currentLesson._id,
             contentId: currentPage._id
-          })
+          }, { withCredentials: true })
         } catch (err) {
           console.error('Error saving progress:', err)
         }

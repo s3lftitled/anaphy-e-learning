@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import api from '../../utils/api'
+import usePrivateApi from '../../hooks/usePrivateApi'
+import { useUser } from '../../context/UserContext'
 import './TeacherClassPage.css'
 
 const TeacherClassPage = () => {
@@ -9,6 +10,8 @@ const TeacherClassPage = () => {
   const [successMessage, setSuccessMessage] = useState('')
   const [classCode, setClassCode] = useState('')
   const [showSuccess, setShowSuccess] = useState(false)
+  const privateAxios = usePrivateApi()
+  const { user } = useUser()
 
   const handleCreateClass = async (e) => {
     e.preventDefault()
@@ -23,7 +26,9 @@ const TeacherClassPage = () => {
     }
     
     try {
-        const response = await api.post('class/api/v1/create-class/teacher/67c104496ae7ac9afec0bf0f', { className })
+        const response = await privateAxios.post(`class/api/v1/create-class/teacher/${user.id}`, { className }, {
+          withCredentials: true
+        })
 
         if (response.status === 201) {
           setTimeout(() => {
