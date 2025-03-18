@@ -1,9 +1,7 @@
 import { useState, useRef } from 'react'
-import api from '../../utils/api'
+import usePrivateApi from '../../hooks/usePrivateApi'
 import { X, Save, Upload, User, Key } from 'lucide-react'
 import './Settings.css'
-import { useUser } from '../../context/UserContext'
-import { UNSAFE_shouldHydrateRouteLoader } from 'react-router-dom'
 
 const SettingsSidebar = ({ isOpen, onClose, userData }) => {
   const fileInputRef = useRef(null);
@@ -11,7 +9,7 @@ const SettingsSidebar = ({ isOpen, onClose, userData }) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState(null)
   const [ base64Image, setBase64Image ] = useState('')
-  
+  const privateAxios = usePrivateApi()
   const [profileData, setProfileData] = useState({
     name: userData?.name || '',
     email: userData?.email || '',
@@ -69,10 +67,10 @@ const SettingsSidebar = ({ isOpen, onClose, userData }) => {
     setSubmitStatus(null)
 
     try {
-      const response = await api.put(`user/api/v1/update-profile/${userData.id}`, {
+      const response = await privateAxios.put(`user/api/v1/update-profile/${userData.id}`, {
         newName: profileData.name,
         base64Image: base64Image || null,
-      })
+      }, { withCredentials: true })
 
       if (response.status === 200) {
         setSubmitStatus({
@@ -106,11 +104,11 @@ const SettingsSidebar = ({ isOpen, onClose, userData }) => {
     setSubmitStatus(null)
 
     try {
-      const response = await api.put(`user/api/v1/change-password/${userData.id}`, {
+      const response = await privateAxios.put(`user/api/v1/change-password/${userData.id}`, {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
         newPasswordConfirmation: passwordData.confirmPassword 
-      })
+      },{ withCredentials: true })
 
       if (response.status === 200) {
         setPasswordData({

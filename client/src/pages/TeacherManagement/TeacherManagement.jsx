@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Home, Plus, Mail, User, Trash2, AlertCircle } from 'lucide-react'
 import FloatingHomeButton from '../../components/FloatingHomeButton/FloatingHomeButton'
-import api from '../../utils/api'
+import usePrivateApi from '../../hooks/usePrivateApi'
 import './TeacherManagement.css'
 
 const TeacherManagement = () => {
@@ -12,6 +12,7 @@ const TeacherManagement = () => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
   const [showAddConfirmation, setShowAddConfirmation] = useState(false)
   const [teacherToDelete, setTeacherToDelete] = useState(null)
+  const privateAxios = usePrivateApi()
 
   useEffect(() => {
     fetchTeachers()
@@ -19,7 +20,9 @@ const TeacherManagement = () => {
 
   const fetchTeachers = async () => {
     try {
-      const response = await api.get('teacher-management/api/v1/fetch-teachers')
+      const response = await privateAxios.get('teacher-management/api/v1/fetch-teachers', {}, {
+        withCredentials: true
+      })
       console.log(response)
       if (response.status === 200) {
         setTeachers(response.data.teachers)
@@ -43,7 +46,9 @@ const TeacherManagement = () => {
     setLoading(true)
     try {
       // Call the backend API to create the teacher account
-      const response = await api.post('teacher-management/api/v1/create-teacher', { email })
+      const response = await privateAxios.post('teacher-management/api/v1/create-teacher', { email }, {
+        withCredentials: true
+      })
 
       console.log(response)
       
@@ -68,7 +73,9 @@ const TeacherManagement = () => {
   const confirmDelete = async () => {
     if (teacherToDelete) {
       try {
-        const response = await api.delete(`teacher-management/api/v1/delete-teacher/${teacherToDelete._id}`)
+        const response = await privateAxios.delete(`teacher-management/api/v1/delete-teacher/${teacherToDelete._id}`, {}, {
+          withCredentials: true
+        })
         
         if (response.status === 200) {
           // Update the UI by filtering out the deleted teacher

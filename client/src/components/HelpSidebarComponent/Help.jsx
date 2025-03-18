@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import api from '../../utils/api'
+import usePrivateApi from '../../hooks/usePrivateApi'
 import { X, Send } from 'lucide-react'
 import './Help.css'
 
 const HelpSidebar = ({ isOpen, onClose }) => {
+  const privateAxios = usePrivateApi()
   const [formData, setFormData] = useState({
     type: 'Bug Report', // Default to bug report
     title: '',
@@ -28,7 +29,9 @@ const HelpSidebar = ({ isOpen, onClose }) => {
 
     try {
       // Using a private axios instance
-      const response = await api.post('issues/api/v1/submit-issue', formData)
+      const response = await privateAxios.post('issues/api/v1/submit-issue', formData, {
+        withCredentials: true
+      })
 
       if (response.status === 201) {
         // Reset form after successful submission

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import api from '../../utils/api'
+import usePrivateApi from "../../hooks/usePrivateApi"
 import { useNavigate, useLocation } from 'react-router-dom'
 import "./ConfirmationForm.css" // Import the CSS file for styling
 
@@ -12,6 +12,7 @@ const ConfirmationForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+  const privateAxios = usePrivateApi()
 
   // Extract id and token from query parameters
   const queryParams = new URLSearchParams(location.search)
@@ -34,11 +35,13 @@ const ConfirmationForm = () => {
 
     try {
       // Call the API to complete teacher account registration
-      const response = await api.put(
+      const response = await privateAxios.put(
         `teacher-management/api/v1/complete-teacher/${id}/${token}`,
         {
           name,
           password,
+        }, {
+          withCredentials: true
         }
       )
 
@@ -56,7 +59,7 @@ const ConfirmationForm = () => {
 
     } catch (err) {
       setError(err.response?.data?.message || "An error occurred. Please try again.");
-      setSuccess(""); // Reset success message
+      setSuccess("") // Reset success message
     }
   }
 
