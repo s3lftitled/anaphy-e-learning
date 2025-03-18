@@ -297,12 +297,61 @@
   }
 }
 
+/* Modified for full screen on smaller devices */
 @media (max-width: 576px) {
   .settings-sidebar {
-    width: calc(100% - 60px);
+    width: 100%;
+    left: -100%;
+    margin-top: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 1000; /* Ensure it's above everything else */
+  }
+  
+  .settings-sidebar.open {
+    left: 0;
+    margin-top: 0;
+  }
+  
+  .settings-sidebar-header {
+    padding: 1rem;
+  }
+  
+  .settings-tabs {
+    padding: 0;
+  }
+  
+  .settings-sidebar-content {
+    padding: 1rem;
   }
   
   .settings-sidebar.open ~ .main-content {
-    margin-left: 100%;
+    margin-left: 0;
+  }
+  
+  /* Improve profile picture and form layout for small screens */
+  .profile-picture {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .upload-text {
+    font-size: 0.8rem;
+  }
+  
+  .settings-form-group label {
+    font-size: 0.85rem;
+  }
+  
+  .settings-form-group input,
+  .settings-form-group select,
+  .settings-form-group textarea {
+    padding: 0.7rem 0.9rem;
+    font-size: 0.9rem;
+  }
+  
+  .submit-button-settings {
+    padding: 0.8rem 1.2rem;
+    font-size: 0.95rem;
   }
 }

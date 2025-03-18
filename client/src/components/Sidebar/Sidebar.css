@@ -1,3 +1,4 @@
+/* Base Sidebar Styles */
 .sidebar {
   position: fixed;
   left: 0;
@@ -15,6 +16,13 @@
 }
 
 .sidebar-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sidebar-bottom {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -65,4 +73,77 @@
 
 .sidebar-button:hover .sidebar-tooltip {
   opacity: 1;
+}
+
+/* Mobile Navigation Bar */
+.mobile-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background-color: var(--white);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  z-index: 900;
+  padding: 0 1rem;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.mobile-nav-content {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
+.mobile-nav-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--text-light);
+}
+
+.mobile-nav-button.active {
+  color: var(--primary);
+}
+
+.mobile-nav-label {
+  font-size: 0.7rem;
+  margin-top: 0.25rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+  /* Hide the sidebar completely */
+  .sidebar {
+    display: none;
+  }
+  
+  /* Show mobile navigation */
+  .mobile-nav {
+    display: block;
+  }
+  
+  /* Adjust main content padding to account for bottom nav */
+  main {
+    padding-bottom: 70px;
+  }
+}
+
+/* Small tablets and large phones */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .sidebar {
+    width: 60px;
+  }
+  
+  .sidebar-button {
+    width: 42px;
+    height: 42px;
+  }
 }

@@ -5,7 +5,7 @@ const AnatomyChatbot = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState([
     { id: 1, text: "Hi there! I'm your Anatomy AI Assistant. Ask me any questions about human anatomy, body systems, or medical terminology.", sender: 'bot' }
-  ]);
+  ])
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const messagesEndRef = useRef(null)

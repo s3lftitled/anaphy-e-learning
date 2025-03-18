@@ -188,12 +188,31 @@
   }
 }
 
+/* Modified for full screen on smaller devices */
 @media (max-width: 576px) {
   .help-sidebar {
-    width: calc(100% - 60px);
+    width: 100%;
+    left: -100%;
+    margin-top: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 1000; /* Ensure it's above everything else */
+  }
+  
+  .help-sidebar.open {
+    left: 0;
+    margin-top: 0;
+  }
+  
+  .help-sidebar-header {
+    padding: 1rem;
+  }
+  
+  .help-sidebar-content {
+    padding: 1rem;
   }
   
   .help-sidebar.open ~ .main-content {
-    margin-left: 100%;
+    margin-left: 0;
   }
 }

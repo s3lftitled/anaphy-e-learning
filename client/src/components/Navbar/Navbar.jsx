@@ -23,17 +23,6 @@ const Navbar = ({ user }) => {
           <div className="logo-underline"></div>
         </div>
         
-        <div className={`search-container ${searchActive ? 'active' : ''}`}>
-          <Search className="search-icon" size={18} />
-          <input
-            type="search"
-            placeholder="Search anatomy topics..."
-            className="search-input"
-            onFocus={() => setSearchActive(true)}
-            onBlur={() => setSearchActive(false)}
-          />
-        </div>
-        
         <div 
           className="user-profile"
           onClick={(e) => {

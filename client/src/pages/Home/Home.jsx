@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import AnatomyChatbot from '../../components/ChatbotComponent/Chatbot'
 import './Home.css'
 import { useUser } from '../../context/UserContext'
@@ -13,6 +14,8 @@ const Homepage = () => {
       backgroundPosition: '50% 10%',
       backgroundSize: '150%',
       textColor: 'white',
+      modelSrc: "https://human.biodigital.com/viewer/?id=production/maleAdult/skeleton_muscles/skeleton_all&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false",
+      slug: "skeletal"
     },
     { 
       name: "Muscular System",
@@ -20,6 +23,8 @@ const Homepage = () => {
       backgroundPosition: '50% 5%',
       backgroundSize: '150%',
       textColor: 'white',
+      modelSrc: "https://human.biodigital.com/viewer/?id=production/maleAdult/skeleton_muscles/muscular_system&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false",
+      slug: "muscular"
     },
     { 
       name: "Nervous System",
@@ -27,6 +32,8 @@ const Homepage = () => {
       backgroundPosition: '50% 50%',
       backgroundSize: '150%',
       textColor: 'white',
+      modelSrc: "https://human.biodigital.com/viewer/?id=production/maleAdult/brain/brain&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false",
+      slug: "nervous"
     },
     { 
       name: "Cardiovascular System",
@@ -34,6 +41,8 @@ const Homepage = () => {
       backgroundPosition: '50% 50%',
       backgroundSize: '120%',
       textColor: 'white',
+      modelSrc: "https://human.biodigital.com/viewer/?id=62TW&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=M1lvI&paid=o_18063d15",
+      slug: "cardiovascular"
     },
     { 
       name: "Respiratory System",
@@ -41,14 +50,17 @@ const Homepage = () => {
       backgroundPosition: '50% 30%',
       backgroundSize: '100%',
       textColor: 'white',
+      modelSrc: "https://human.biodigital.com/viewer/?id=production/maleAdult/respiratory_digestive/respiratory_system&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false",
+      slug: "respiratory"
     },
-
     { 
       name: "Digestive System",
       backgroundImage: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWl0azdkMXVkdGUzeWZiMzVjMzBzbGtramJsbXBya2xocmRrMG5ycyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/lckhIaarcbT20CXRDo/giphy.gif",
       backgroundPosition: '50% 30%',
       backgroundSize: '100%',
       textColor: 'white',
+      modelSrc: "https://human.biodigital.com/viewer/?id=production/maleAdult/respiratory_digestive/digestive_system&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false",
+      slug: "digestive"
     },
     { 
       name: "Endocrine System",
@@ -56,6 +68,8 @@ const Homepage = () => {
       backgroundPosition: '50% 20%',
       backgroundSize: '100%',
       textColor: 'white',
+      modelSrc: "https://human.biodigital.com/viewer/?id=production/maleAdult/endocrine/endocrine_system&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false",
+      slug: "endocrine"
     },
     { 
       name: "Immune System",
@@ -63,10 +77,13 @@ const Homepage = () => {
       backgroundPosition: '50% 30%',
       backgroundSize: '130%',
       textColor: 'white',
+      modelSrc: "https://human.biodigital.com/viewer/?id=production/maleAdult/immune_lymph/lymphatic_system&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false",
+      slug: "immune"
     }
   ]
   
   const { user } = useUser()
+  const navigate = useNavigate()
   const scrollContainerRef = useRef(null)
   const [isScrolling, setIsScrolling] = useState(false)
   const [startX, setStartX] = useState(0)
@@ -95,6 +112,15 @@ const Homepage = () => {
     const x = e.pageX - scrollContainerRef.current.offsetLeft
     const walk = (x - startX) * 1.5 // Scroll speed multiplier
     scrollContainerRef.current.scrollLeft = scrollLeft - walk
+  }
+
+  const handleTopicClick = (topic) => {
+    // Navigate to the model view page with the selected topic
+    navigate(`/system/${topic.slug}`, { 
+      state: { 
+        topic: topic 
+      } 
+    })
   }
 
   useEffect(() => {
@@ -146,8 +172,10 @@ const Homepage = () => {
                     backgroundImage: `url(${topic.backgroundImage})`,
                     backgroundSize: topic.backgroundSize || 'cover',
                     backgroundPosition: topic.backgroundPosition || 'center',
-                    backgroundRepeat: 'no-repeat'
+                    backgroundRepeat: 'no-repeat',
+                    cursor: 'pointer'
                   }}
+                  onClick={() => handleTopicClick(topic)}
                 >
                   <div className="topic-overlay" />
                   <div className="topic-info">

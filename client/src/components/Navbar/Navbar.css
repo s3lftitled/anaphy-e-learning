@@ -18,69 +18,32 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap; /* Allow wrapping on very small screens */
 }
 
 .logo {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  padding: 0.5rem 0;
 }
 
 .logo-text {
   font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: 1px;
-  color: var(--primary, #4a6cf7);
+  color: var(--primary, #0c4160);
 }
 
 .logo-underline {
   width: 50%;
   height: 3px;
-  background: linear-gradient(90deg, var(--primary, #4a6cf7), var(--accent, #ff7a50));
+  background: linear-gradient(90deg, var(--primary, #0c4160), var(--accent, #4fc3f7));
   border-radius: 2px;
   margin-top: 4px;
 }
 
-.search-container {
-  position: relative;
-  width: 40%;
-  max-width: 500px;
-  transition: all 0.2s ease;
-  border-radius: 8px;
-  background-color: var(--secondary, #f3f4f6);
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-}
-
-.search-container.active {
-  box-shadow: 0 0 0 2px rgba(74, 108, 247, 0.2);
-  background-color: #ffffff;
-}
-
-.search-icon {
-  position: absolute;
-  left: 1rem;
-  color: var(--text-light, #6b7280);
-  pointer-events: none;
-}
-
-.search-input {
-  width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.5rem;
-  border: none;
-  background-color: transparent;
-  font-size: 0.95rem;
-  color: var(--text, #1f2937);
-  outline: none;
-}
-
-.search-input::placeholder {
-  color: var(--text-light, #6b7280);
-  opacity: 0.8;
-}
-
-/* Improved user profile section */
+/* User profile section */
 .user-profile {
   display: flex;
   align-items: center;
@@ -93,10 +56,9 @@
 }
 
 .user-profile:hover {
-  background-color: var(--secondary, #f3f4f6);
+  background-color: var(--secondary, #f5f5f5);
 }
 
-/* Enhanced avatar styling */
 .user-avatar-wrapper {
   position: relative;
 }
@@ -106,7 +68,7 @@
   height: 42px;
   border-radius: 50%;
   overflow: hidden;
-  background-color: var(--primary-light, rgba(74, 108, 247, 0.1));
+  background-color: var(--primary-light, #1a5a80);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   border: 3px solid #ffffff;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -147,10 +109,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary, #4a6cf7);
+  color: var(--white);
   font-weight: 600;
   font-size: 16px;
-  background-color: var(--primary-light, rgba(74, 108, 247, 0.1));
 }
 
 /* User info section */
@@ -161,20 +122,20 @@
 
 .user-name {
   font-weight: 600;
-  color: var(--text, #1f2937);
+  color: var(--text, #333);
   font-size: 0.9rem;
   white-space: nowrap;
 }
 
 .user-role {
   font-size: 0.75rem;
-  color: var(--text-light, #6b7280);
+  color: var(--text-light, #666);
   white-space: nowrap;
 }
 
 /* Dropdown styling */
 .dropdown-arrow {
-  color: var(--text-light, #6b7280);
+  color: var(--text-light, #666);
   transition: transform 0.2s ease;
 }
 
@@ -209,18 +170,18 @@
 .dropdown-item {
   padding: 0.75rem 1rem;
   font-size: 0.9rem;
-  color: var(--text, #1f2937);
+  color: var(--text, #333);
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .dropdown-item:hover {
-  background-color: var(--secondary, #f3f4f6);
+  background-color: var(--secondary, #f5f5f5);
 }
 
 .dropdown-divider {
   height: 1px;
-  background-color: var(--secondary, #f3f4f6);
+  background-color: var(--secondary, #f5f5f5);
   margin: 0.25rem 0;
 }
 
@@ -228,14 +189,14 @@
   color: #ef4444;
 }
 
-/* Responsive design */
+/* Enhanced responsive breakpoints */
 @media (max-width: 768px) {
-  .user-info {
-    display: none;
+  .search-container {
+    width: 50%;
   }
   
-  .search-container {
-    width: 60%;
+  .user-info {
+    display: none;
   }
   
   .dropdown-arrow {
@@ -243,9 +204,13 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
   .navbar {
     padding: 0.5rem 1rem;
+  }
+  
+  .nav-content {
+    justify-content: space-between;
   }
   
   .logo-text {
@@ -253,11 +218,36 @@
   }
   
   .search-container {
-    width: 50%;
+    order: 3;
+    width: 100%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
   }
   
   .user-avatar {
     width: 36px;
     height: 36px;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 380px) {
+  .logo {
+    min-width: 100px;
+  }
+  
+  .user-profile {
+    padding: 0.25rem;
+  }
+  
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+    border-width: 2px;
+  }
+  
+  .user-dropdown {
+    width: 150px;
+    right: -10px;
   }
 }
