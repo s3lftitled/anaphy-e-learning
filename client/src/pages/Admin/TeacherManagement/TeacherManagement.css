@@ -14,6 +14,9 @@
 .nav-content {
   max-width: 1200px;
   margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .logo {
@@ -25,15 +28,73 @@
   font-weight: 500;
 }
 
+.mobile-menu-button {
+  display: none;
+  cursor: pointer;
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.mobile-menu.open {
+  transform: translateX(0);
+}
+
+.mobile-menu-items {
+  background-color: #0a2d4a;
+  width: 80%;
+  height: 100%;
+  max-width: 300px;
+  padding: 2rem 1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mobile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.mobile-menu-item.active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 .admin-content {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-.content-header h1 {
-  color: #0a2d4a;
+.content-header {
+  position: relative;
+  overflow: hidden;
+  padding: 2rem;
+  background-color: #0a2d4a;
+  border-radius: 8px;
   margin-bottom: 2rem;
+}
+
+.content-header h1 {
+  position: relative;
+  z-index: 2;
+  color: white;
+  margin: 0;
   font-size: 2rem;
 }
 
@@ -52,9 +113,14 @@
 }
 
 .add-teacher-form {
+  width: 100%;
+}
+
+.form-row {
   display: flex;
   gap: 1rem;
   align-items: flex-start;
+  width: 100%;
 }
 
 .input-group {
@@ -71,12 +137,13 @@
 }
 
 .input-group input {
-  width: 92%;
+  width: 100%;
   padding: 0.75rem 1rem 0.75rem 2.75rem;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
   font-size: 1rem;
   transition: border-color 0.2s;
+  box-sizing: border-box;
 }
 
 .input-group input:focus {
@@ -97,6 +164,7 @@
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.2s;
+  white-space: nowrap;
 }
 
 .add-button:hover {
@@ -144,6 +212,11 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  word-break: break-word;
+}
+
+.email-text {
+  word-break: break-word;
 }
 
 .status-badge {
@@ -151,6 +224,7 @@
   border-radius: 9999px;
   font-size: 0.875rem;
   font-weight: 500;
+  display: inline-block;
 }
 
 .status-badge.active {
@@ -171,6 +245,9 @@
   cursor: pointer;
   transition: color 0.2s;
   border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .delete-button:hover {
@@ -178,21 +255,63 @@
   background-color: #fee2e2;
 }
 
-/* Blob effect in the header */
-.content-header {
-  position: relative;
-  overflow: hidden;
-  padding: 2rem;
-  background-color: #0a2d4a;
-  border-radius: 8px;
-  margin-bottom: 2rem;
+.mobile-cards-container {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
-.content-header h1 {
-  position: relative;
-  z-index: 2;
-  color: white;
-  margin: 0;
+.teacher-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.teacher-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.teacher-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-left: 1.5rem;
+}
+
+.status-row, .date-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.detail-label {
+  font-weight: 500;
+  color: #4b5563;
+  min-width: 4rem;
+}
+
+.teacher-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.teacher-card .delete-button {
+  padding: 0.5rem 0.75rem;
+}
+
+.no-teachers-message {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
 }
 
 /* Modal Styles */
@@ -297,23 +416,95 @@
   background-color: #43a047;
 }
 
+.error-message {
+  color: #e53935;
+  margin-top: 1rem;
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .admin-content {
     padding: 1rem;
   }
-
-  .add-teacher-form {
+  
+  .mobile-menu-button {
+    display: block;
+  }
+  
+  .mobile-menu {
+    display: block;
+  }
+  
+  .content-header {
+    padding: 1.5rem;
+  }
+  
+  .content-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .add-teacher-section, .teachers-list-section {
+    padding: 1.5rem;
+  }
+  
+  .form-row {
     flex-direction: column;
   }
-
+  
   .add-button {
     width: 100%;
     justify-content: center;
+    margin-top: 0.5rem;
   }
-
-  .teachers-table th:nth-child(3),
-  .teachers-table td:nth-child(3) {
+  
+  .table-container {
     display: none;
+  }
+  
+  .mobile-cards-container {
+    display: flex;
+  }
+  
+  .hide-on-mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-nav {
+    padding: 0.75rem 1rem;
+  }
+  
+  .admin-content {
+    padding: 0.75rem;
+  }
+  
+  .logo span {
+    font-size: 1rem;
+  }
+  
+  .content-header {
+    padding: 1.25rem;
+  }
+  
+  .content-header h1 {
+    font-size: 1.25rem;
+  }
+  
+  .add-teacher-section, .teachers-list-section {
+    padding: 1.25rem;
+  }
+  
+  .teacher-mgmt-form-container h2, .teachers-list-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .input-group input {
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+  }
+  
+  .confirmation-modal {
+    width: 90%;
   }
 }

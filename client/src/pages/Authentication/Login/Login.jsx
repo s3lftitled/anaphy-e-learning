@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
-import api from '../../utils/api'
-import useAuth from '../../hooks/useAuth'
+import api from '../../../utils/api'
+import useAuth from '../../../hooks/useAuth'
 import './Login.css'
 
 

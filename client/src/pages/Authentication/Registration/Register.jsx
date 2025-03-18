@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
-import api from '../../utils/api'
+import api from '../../../utils/api'
 import './Register.css'
 
 const Register = () => {

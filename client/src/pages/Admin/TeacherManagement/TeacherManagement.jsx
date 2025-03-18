@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Home, Plus, Mail, User, Trash2, AlertCircle } from 'lucide-react'
-import FloatingHomeButton from '../../components/FloatingHomeButton/FloatingHomeButton'
-import usePrivateApi from '../../hooks/usePrivateApi'
+import { Home, Plus, Mail, User, Trash2, AlertCircle, Menu, X } from 'lucide-react'
+import FloatingHomeButton from '../../../components/FloatingHomeButton/FloatingHomeButton'
+import usePrivateApi from '../../../hooks/usePrivateApi'
 import './TeacherManagement.css'
 
 const TeacherManagement = () => {
@@ -114,19 +114,26 @@ const TeacherManagement = () => {
             <div className="teacher-mgmt-form-container">
               <h2>Add New Teacher</h2>
               <form onSubmit={handleSubmit} className="add-teacher-form">
-                <div className="input-group">
-                  <Mail className="input-icon" size={20} />
-                  <input
-                    type="email"
-                    placeholder="Enter teacher's email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
+                <div className="form-row">
+                  <div className="input-group">
+                    <Mail className="input-icon" size={20} />
+                    <input
+                      type="email"
+                      placeholder="Enter teacher's email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <button type="submit" className="add-button" disabled={loading}>
+                    {loading ? 'Adding...' : (
+                      <>
+                        <Plus size={20} /> 
+                        <span className="button-text">Add Teacher</span>
+                      </>
+                    )}
+                  </button>
                 </div>
-                <button type="submit" className="add-button" disabled={loading}>
-                  {loading ? 'Adding...' : <><Plus size={20} /> Add Teacher</>}
-                </button>
               </form>
               {error && <p className="error-message">{error}</p>}
             </div>
@@ -141,7 +148,7 @@ const TeacherManagement = () => {
                   <tr>
                     <th>Email</th>
                     <th>Status</th>
-                    <th>Date Added</th>
+                    <th className="hide-on-mobile">Date Added</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -156,7 +163,7 @@ const TeacherManagement = () => {
                         <td>
                           <div className="teacher-email">
                             <User size={16} />
-                            {teacher.email}
+                            <span className="email-text">{teacher.email}</span>
                           </div>
                         </td>
                         <td>
@@ -164,11 +171,12 @@ const TeacherManagement = () => {
                             {teacher.status}
                           </span>
                         </td>
-                        <td>{new Date(teacher.createdAt).toLocaleString()}</td>
+                        <td className="hide-on-mobile">{new Date(teacher.createdAt).toLocaleString()}</td>
                         <td>
                           <button 
                             className="delete-button"
                             onClick={() => handleDeleteClick(teacher)}
+                            aria-label="Delete teacher"
                           >
                             <Trash2 size={16} />
                           </button>
@@ -178,6 +186,46 @@ const TeacherManagement = () => {
                   )}
                 </tbody>
               </table>
+            </div>
+            
+            {/* Mobile Card View */}
+            <div className="mobile-cards-container">
+              {teachers.length === 0 ? (
+                <div className="no-teachers-message">No teachers available</div>
+              ) : (
+                teachers.map(teacher => (
+                  <div key={teacher.id} className="teacher-card">
+                    <div className="teacher-card-content">
+                      <div className="teacher-email">
+                        <User size={16} />
+                        <span className="email-text">{teacher.email}</span>
+                      </div>
+                      <div className="teacher-card-details">
+                        <div className="status-row">
+                          <span className="detail-label">Status:</span>
+                          <span className={`status-badge ${teacher.status.toLowerCase()}`}>
+                            {teacher.status}
+                          </span>
+                        </div>
+                        <div className="date-row">
+                          <span className="detail-label">Added:</span>
+                          <span>{new Date(teacher.createdAt).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="teacher-card-actions">
+                      <button 
+                        className="delete-button"
+                        onClick={() => handleDeleteClick(teacher)}
+                        aria-label="Delete teacher"
+                      >
+                        <Trash2 size={16} />
+                        <span>Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
