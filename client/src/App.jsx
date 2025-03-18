@@ -5,15 +5,15 @@ import { UserProvider } from './context/UserContext.jsx'
 import { AppProvider } from './context/UserContext.jsx'
 import './App.css'
 
-const Login = lazy(() => import('./pages/Authentication/Login'))
-const Register = lazy(() => import('./pages/Authentication/Register'))
+const Login = lazy(() => import('./pages/Authentication/Login/Login'))
+const Register = lazy(() => import('./pages/Authentication/Registration/Register'))
 const LandingPage = lazy(() => import('./pages/Landing/LandingPage'))
-const Verification = lazy(() => import('./pages/Authentication/Verification'))
+const Verification = lazy(() => import('./pages/Authentication/Verification/Verification'))
 const Homepage = lazy(() => import('./pages/Home/Home'))
-const TeacherManagement = lazy(() => import('./pages/TeacherManagement/TeacherManagement'))
+const TeacherManagement = lazy(() => import('./pages/Admin/TeacherManagement/TeacherManagement.jsx'))
 const ConfirmationForm = lazy(() => import('./components/Confirmation/ConfirmationForm'))
-const TeacherClassPage = lazy(() => import('./pages/Class/TeacherClassPage'))
-const TeacherDashboard = lazy(() => import('./pages/Class/TeacherDashboard'))
+const TeacherClassPage = lazy(() => import('./pages/Teacher/TeacherClassPage.jsx'))
+const TeacherDashboard = lazy(() => import('./pages/Teacher/TeacherDashboard.jsx'))
 const PersistLogin = lazy(() => import('./components/PersistLogin'))
 const CreateTopic = lazy(() => import('./pages/Content/CreateTopic.jsx'))
 const CreateLesson = lazy(() => import('./pages/Content/CreateLesson.jsx'))
@@ -21,6 +21,8 @@ const CreateMultiplePages = lazy(() => import('./pages/Content/CreateMultiplePag
 const ELearningPage = lazy(() => import('./pages/E-Learning/E-LearningPage.jsx'))
 const NotFound = lazy(() => import('./pages/NotFound/NotFound.jsx'))
 const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard/AdminDashboard.jsx'))
+const SystemModelPage =  lazy(() => import('./pages/Home/SystemModel.jsx'))
+const StudentClass = lazy(() => import('./pages/Teacher/StudentClass.jsx'))
 
 const App = () => {
   return (
@@ -37,6 +39,8 @@ const App = () => {
             <Route path='/create-lesson' element={<CreateLesson/>} />
             <Route path='/create-multiple-pages' element={<CreateMultiplePages/>} />
             <Route path='/admin-dashboard' element={<AdminDashboard/>} />
+            <Route path="/system/:slug" element={<SystemModelPage />} />
+            <Route path='/confirm-teacher-account' element={<ConfirmationForm />} />
             <Route path='/*' element={<NotFound />} />
             <Route 
               element={
@@ -47,10 +51,10 @@ const App = () => {
                 </AppProvider>
               }
             >
+               <Route path='/student-class' element={<StudentClass />} />
               <Route path='/e-learning' element={<ELearningPage />} />
               <Route path='/home' element={<Homepage />} />
               <Route path='/teacher-management' element={<TeacherManagement />} />
-              <Route path='/confirm-teacher-account' element={<ConfirmationForm />} />
               <Route path='/teacher-class-page' element={<TeacherClassPage />} />
               <Route path='/teacher-dashboard' element={<TeacherDashboard />} />
             </Route>
