@@ -15,7 +15,7 @@ router.get('/v1/fetch-pending-approvals/:classId', verifyToken, ClassController.
 router.put('/v1/accept-pending-approval/:classId/:studentId', verifyToken, ClassController.acceptPendingApprovals)
 router.delete('/v1/reject-pending-approval/:classId/:studentId', verifyToken, ClassController.rejectPendingApprovalRequest)
 router.post('/v1/create-class-announcement/:teacherId/:classId', verifyToken, ClassController.createClassAnnouncement)
-router.get('/v1/fetch-announcements/:teacherId/:classId', verifyToken, ClassController.fetchClassAnnouncements)
+router.get('/v1/fetch-announcements/:classId', verifyToken, ClassController.fetchClassAnnouncements)
 router.get('/v1/fetch-joined-classes/:studentId', verifyToken, ClassController.fetchStudentJoinedClasses)
 
 module.exports = router

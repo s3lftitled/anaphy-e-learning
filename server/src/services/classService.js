@@ -278,16 +278,15 @@ const acceptPendingApprovalsService = async (classId, userId) => {
     let studentUpdated = false
     classData.students.forEach(s => {
       if (s.status === 'pending' && s.student.equals(student._id)) {
-        s.status === 'joined'
+        s.status = 'joined'
         studentUpdated = true
       } 
     })
+
     await classData.save()
 
-    appAssert(studentUpdated, 'Student is not in pending list', HTTP_STATUS.BAD_REQUEST)
-
-
-    if (studentUpdated) {
+    appAssert(studentUpdated, 'Student is not in pending list', HTTP_STATUS.BAD_REQUEST)   
+     if (studentUpdated) { 
       student.joinedClasses.push(classData._id)
       await student.save()
     }
@@ -348,24 +347,14 @@ const createClassAnnouncementService = async (teacherId, classId, title, message
   }
 }
 
-const fetchClassAnnouncementsService = async (teacherId, classId) => {
+const fetchClassAnnouncementsService = async ( classId) => {
   try {
-    validateRequiredParams(teacherId, classId)
+    validateRequiredParams( classId)
 
-    appAssert(validator.isMongoId(teacherId), 'Invalid teacher id', HTTP_STATUS.BAD_REQUEST)
     appAssert(validator.isMongoId(classId), 'Invalid class id', HTTP_STATUS.BAD_REQUEST)
-
-    const teacher = await TeacherModel.findById(teacherId)
-    appAssert(teacher, 'Teacher is not found', HTTP_STATUS.NOT_FOUND)
 
     const classData = await ClassModel.findById(classId)
     appAssert(classData, 'Class is not found', HTTP_STATUS.NOT_FOUND)
-
-    appAssert(
-      classData.teacher.equals(teacher._id), 
-      'You dont have any permission to fetch the announcements in this class',
-      HTTP_STATUS.FORBIDDEN
-    )
 
     return classData.announcements
   } catch (error) {
@@ -387,7 +376,7 @@ const fetchStudentJoinedClassesService = async (studentId) => {
 
     const joinedClasses = await Promise.all(
       student.joinedClasses.map(async (c) => {
-        return ClassModel.findById(c._id)
+        return ClassModel.findById(c._id).populate('teacher', 'name')
       })
     )
 

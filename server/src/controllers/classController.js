@@ -153,9 +153,9 @@ class ClassController {
   }
 
   async fetchClassAnnouncements(req, res, next) {
-    const { teacherId, classId } = req.params
+    const { classId } = req.params
     try {
-      const announcements = await fetchClassAnnouncementsService(teacherId, classId)
+      const announcements = await fetchClassAnnouncementsService(classId)
 
       res.status(HTTP_STATUS.OK).json({ announcements })
     } catch (error) {
