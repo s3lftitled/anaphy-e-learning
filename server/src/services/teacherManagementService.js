@@ -46,7 +46,7 @@ const completeTeacherAccount = async (id, token, name, password) => {
   try {
     validateRequiredParams(id, token, name, password)
 
-    appAssert(validator.isMongoId(userId), 'Invalid teacher ID format', HTTP_STATUS.BAD_REQUEST)
+    appAssert(validator.isMongoId(id), 'Invalid teacher ID format', HTTP_STATUS.BAD_REQUEST)
 
     const teacher = await TeacherModel.findOne({ _id: id, confirmationToken: token })
     appAssert(teacher, 'Invalid or expired token', HTTP_STATUS.BAD_REQUEST)
