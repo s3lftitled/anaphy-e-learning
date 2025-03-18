@@ -28,8 +28,13 @@ const userSchema = new mongoose.Schema({
     }
   ],
 
-  // Joined classes
-  joinedClasses: [{ type: mongoose.Schema.Types.ObjectId, ref: "ClassModel" }]
+   // Joined classes with joinedAt date
+   joinedClasses: [
+    {
+      classId: { type: mongoose.Schema.Types.ObjectId, ref: "ClassModel" },
+      joinedAt: { type: Date, default: Date.now }
+    }
+  ]
 })
 
 module.exports = mongoose.model("UserModel", userSchema)
