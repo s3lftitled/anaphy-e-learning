@@ -56,7 +56,10 @@ export const useProgressTracking = (user, currentTopic, currentLesson, currentPa
       await privateAxios.post(`progress/api/v1/update-progress/${user.id}`, {
         quizResults: updatedProgress.quizResults
       }, { withCredentials: true })
-      
+    
+      await privateAxios.post(`user/api/v1/record-quiz-score/${user.id}`, { 
+        quizResults: updatedProgress.quizResults
+      }, { withCredentials: true })
     } catch (err) {
       console.error('Error updating user progress:', err)
       console.error('Error details:', err.response ? err.response.data : err.message)

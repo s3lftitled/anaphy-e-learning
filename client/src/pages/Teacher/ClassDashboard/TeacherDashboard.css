@@ -963,6 +963,168 @@
   background-color: var(--primary-light, rgba(74, 108, 247, 0.1));
 }
 
+/* Student Grades Modal Styles */
+.student-grades-modal {
+  min-width: 700px;
+  max-width: 90%;
+  max-height: 90vh;
+}
+
+.grades-loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+.empty-grades {
+  text-align: center;
+  padding: 30px;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.grades-summary {
+  background-color: #f9fafb;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.grade-average-card {
+  background: linear-gradient(135deg, #55B8FF 0%, #32A7EF 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 120px;
+  box-shadow: 0 4px 12px rgba(85, 184, 255, 0.3);
+}
+
+.grade-average-value {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.grade-average-label {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.grades-summary-details {
+  flex: 1;
+  margin-left: 30px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.summary-label {
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.summary-value {
+  font-weight: 600;
+  color: #111827;
+}
+
+.grades-list h3 {
+  margin: 0 0 15px;
+  font-size: 1.1rem;
+  color: #05293f;
+}
+
+.grades-table {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.grades-table-header {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr 1fr 1fr 1.2fr;
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.grades-table-header .grades-col {
+  padding: 12px 15px;
+}
+
+.grades-table-body {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.grades-table-row {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr 1fr 1fr 1.2fr;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.grades-table-row:last-child {
+  border-bottom: none;
+}
+
+.grades-table-row:hover {
+  background-color: #f9fafb;
+}
+
+.grades-table-row .grades-col {
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+}
+
+.status.passed {
+  color: #10B981;
+  font-weight: 500;
+}
+
+.status.failed {
+  color: #EF4444;
+  font-weight: 500;
+}
+
+/* Make view grades button more noticeable */
+.action-icon.view-btn {
+  background: none;
+  color: #55B8FF;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px;
+  margin-right: 5px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.action-icon.view-btn:hover {
+  background-color: rgba(85, 184, 255, 0.1);
+  transform: scale(1.15);
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }

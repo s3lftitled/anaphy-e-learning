@@ -29,6 +29,10 @@ const TeacherDashboard = () => {
   const [joinRequests, setJoinRequests] = useState([])
   const [announcementTitle, setAnnouncementTitle] = useState('')
   const [announcementContent, setAnnouncementContent] = useState('')
+  const [showGradesModal, setShowGradesModal] = useState(false)
+  const [selectedStudent, setSelectedStudent] = useState(null)
+  const [studentGrades, setStudentGrades] = useState(null)
+  const [gradesLoading, setGradesLoading] = useState(false)
   const navigate = useNavigate()
 
   // Fetch classes data from API
@@ -260,6 +264,36 @@ const TeacherDashboard = () => {
     }
   }
 
+  // Function to fetch and show student grades
+  const handleViewGrades = async (studentName, studentEmail) => {
+    setSelectedStudent({ name: studentName, email: studentEmail })
+    setGradesLoading(true)
+    setShowGradesModal(true)
+    
+    try {
+      // Replace with your actual API endpoint
+      const response = await privateAxios.get(`user/api/v1/fetch-student-grades/${studentEmail}`, {
+        withCredentials: true
+      })
+      
+      setStudentGrades(response.data.grades)
+      setGradesLoading(false)
+    } catch (error) {
+      console.error("Error fetching student grades:", error)
+      setGradesLoading(false)
+      alert("Failed to load student grades. Please try again.")
+    }
+  }
+
+  // Function to calculate average grade
+  const calculateAverageGrade = (grades) => {
+    if (!grades || grades.length === 0) return 0
+    
+    const totalPercentage = grades.reduce((sum, grade) => sum + grade.percentage, 0)
+    return (totalPercentage / grades.length).toFixed(1)
+  }
+
+
   const getStatusClass = (status) => {
     switch(status) {
       case 'joined': return 'status-joined'
@@ -456,10 +490,16 @@ const TeacherDashboard = () => {
                           {student.lastActive ? new Date(student.lastActive).toLocaleDateString() : 'Never'}
                         </div>
                         <div className="col-actions">
-                          <button className="action-icon view-btn">👁️</button>
-                          <button className="action-icon email-btn">✉️</button>
-                          <button className="action-icon remove-btn">❌</button>
-                        </div>
+                        <button 
+                          className="action-icon view-btn" 
+                          title="View Grades"
+                          onClick={() => handleViewGrades(student.name, student.email)}
+                        >
+                          📊
+                        </button>
+                        <button className="action-icon email-btn" title="Contact Student">✉️</button>
+                        <button className="action-icon remove-btn" title="Remove Student">❌</button>
+                      </div>
                       </div>
                     ))
                   ) : (
@@ -658,6 +698,91 @@ const TeacherDashboard = () => {
           </div>
         </div>
       )}
+
+      {/* Student Grades Modal */}
+    {showGradesModal && (
+      <div className="modal-overlay">
+        <div className="modal student-grades-modal">
+          <div className="modal-header">
+            <h2>{selectedStudent?.name}'s Grades</h2>
+            <button className="close-btn" onClick={() => setShowGradesModal(false)}>×</button>
+          </div>
+          <div className="modal-body">
+            {gradesLoading ? (
+              <div className="grades-loading">Loading grades...</div>
+            ) : studentGrades && studentGrades?.length > 0 ? (
+              <>
+                <div className="grades-summary">
+                  <div className="grade-average-card">
+                    <div className="grade-average-value">
+                      {calculateAverageGrade(studentGrades)}%
+                    </div>
+                    <div className="grade-average-label">Average Score</div>
+                  </div>
+                  <div className="grades-summary-details">
+                    <div className="summary-item">
+                      <span className="summary-label">Total Quizzes:</span>
+                      <span className="summary-value">{studentGrades.length}</span>
+                    </div>
+                    <div className="summary-item">
+                      <span className="summary-label">Passed:</span>
+                      <span className="summary-value">
+                        {studentGrades.filter(grade => grade.passed).length}
+                      </span>
+                    </div>
+                    <div className="summary-item">
+                      <span className="summary-label">Failed:</span>
+                      <span className="summary-value">
+                        {studentGrades.filter(grade => !grade.passed).length}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="grades-list">
+                  <h3>Assessment History</h3>
+                  <div className="grades-table">
+                    <div className="grades-table-header">
+                      <div className="grades-col quiz-title">Quiz</div>
+                      <div className="grades-col score">Score</div>
+                      <div className="grades-col percentage">Percentage</div>
+                      <div className="grades-col status">Status</div>
+                      <div className="grades-col date">Date</div>
+                    </div>
+                    <div className="grades-table-body">
+                      {studentGrades.map(grade => (
+                        <div key={grade._id} className="grades-table-row">
+                          <div className="grades-col quiz-title">{grade.quiz.title}</div>
+                          <div className="grades-col score">
+                            {grade.score} / {grade.totalPoints}
+                          </div>
+                          <div className="grades-col percentage">
+                            {grade.percentage}%
+                          </div>
+                          <div className={`grades-col status ${grade.passed ? 'passed' : 'failed'}`}>
+                            {grade.passed ? 'Passed' : 'Failed'}
+                          </div>
+                          <div className="grades-col date">
+                            {new Date(grade.completedAt).toLocaleDateString()}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="empty-grades">
+                <p>This student hasn't completed any assessments yet.</p>
+              </div>
+            )}
+          </div>
+          <div className="modal-footer">
+            <button className="btn" onClick={() => setShowGradesModal(false)}>Close</button>
+          </div>
+        </div>
+      </div>
+    )}
       <FloatingHomeButton />
     </div>
   )

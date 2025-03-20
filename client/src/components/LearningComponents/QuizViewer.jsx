@@ -133,11 +133,11 @@ const QuizViewer = ({ quiz, onComplete, userProgress, updateUserProgress }) => {
       }
   
       // Call hook's update function
-      updateUserProgress(updatedProgress);
+      updateUserProgress(updatedProgress)
     }
   
     if (onComplete) {
-      onComplete(calculatedResults);
+      onComplete(calculatedResults)
     }
   }
 
@@ -412,12 +412,6 @@ const QuizViewer = ({ quiz, onComplete, userProgress, updateUserProgress }) => {
             <p>Completed on: {formatDate(previousAttempt.completedAt)}</p>
           )}
         </div>
-        <button className="retake-quiz-button" onClick={() => {
-          setPreviousAttempt(null)
-          setCurrentQuestionIndex(0)
-        }}>
-          Retake Quiz
-        </button>
       </div>
     )
   }
