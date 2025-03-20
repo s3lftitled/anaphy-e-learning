@@ -12,8 +12,8 @@ const Verification = lazy(() => import('./pages/Authentication/Verification/Veri
 const Homepage = lazy(() => import('./pages/Home/Home'))
 const TeacherManagement = lazy(() => import('./pages/Admin/TeacherManagement/TeacherManagement.jsx'))
 const ConfirmationForm = lazy(() => import('./components/Confirmation/ConfirmationForm'))
-const TeacherClassPage = lazy(() => import('./pages/Teacher/TeacherClassPage.jsx'))
-const TeacherDashboard = lazy(() => import('./pages/Teacher/TeacherDashboard.jsx'))
+const CreateClassPage = lazy(() => import('./pages/Teacher/CreateClass/CreateClass.jsx'))
+const TeacherDashboard = lazy(() => import('./pages/Teacher/ClassDashboard/TeacherDashboard.jsx'))
 const PersistLogin = lazy(() => import('./components/PersistLogin'))
 const CreateTopic = lazy(() => import('./pages/Content/CreateTopic.jsx'))
 const CreateLesson = lazy(() => import('./pages/Content/CreateLesson.jsx'))
@@ -22,7 +22,7 @@ const ELearningPage = lazy(() => import('./pages/E-Learning/E-LearningPage.jsx')
 const NotFound = lazy(() => import('./pages/NotFound/NotFound.jsx'))
 const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard/AdminDashboard.jsx'))
 const SystemModelPage =  lazy(() => import('./pages/Home/SystemModel.jsx'))
-const StudentClass = lazy(() => import('./pages/Teacher/StudentClass.jsx'))
+const StudentClass = lazy(() => import('./pages/Student/StudentClass.jsx'))
 
 const App = () => {
   return (
@@ -51,11 +51,11 @@ const App = () => {
                 </AppProvider>
               }
             >
-               <Route path='/student-class' element={<StudentClass />} />
+               <Route path='/student-classes' element={<StudentClass />} />
               <Route path='/e-learning' element={<ELearningPage />} />
               <Route path='/home' element={<Homepage />} />
               <Route path='/teacher-management' element={<TeacherManagement />} />
-              <Route path='/teacher-class-page' element={<TeacherClassPage />} />
+              <Route path='/create-class-page' element={<CreateClassPage />} />
               <Route path='/teacher-dashboard' element={<TeacherDashboard />} />
             </Route>
           </Routes>
