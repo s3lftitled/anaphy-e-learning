@@ -27,13 +27,22 @@ const userSchema = new mongoose.Schema({
       requestedAt: { type: Date, default: Date.now }
     }
   ],
-
    // Joined classes with joinedAt date
    joinedClasses: [
     {
       classId: { type: mongoose.Schema.Types.ObjectId, ref: "ClassModel" },
       joinedAt: { type: Date, default: Date.now }
     }
+  ],
+  grades: [ 
+   {
+     quiz: { type: mongoose.Schema.Types.ObjectId, ref: 'QuizModel' },
+      score: Number,
+      totalPoints: Number,
+      percentage: Number,
+      passed: Boolean,
+      completedAt: Date,
+   }
   ]
 })
 

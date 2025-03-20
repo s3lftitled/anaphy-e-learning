@@ -2,6 +2,8 @@ const {
   fetchUserDataService,
   updateProfileService,
   changePasswordService,
+  recordQuizScoreService,
+  fetchUserGradesService,
 } = require('../services/userService')
 const HTTP_STATUS = require('../constants/httpConstants')
 const logger = require('../logger/logger')
@@ -40,6 +42,31 @@ class UserController {
       res.status(HTTP_STATUS.OK).json({ message: 'Password changed succesfully' })
     } catch (error) {
       logger.error(`Error changing password - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async recordQuizScore(req, res, next) {
+    const { userId } = req.params
+    const { quizResults } = req.body
+    try {
+      await recordQuizScoreService(userId, quizResults)
+
+      res.status(HTTP_STATUS.OK).json({ message: 'Score recorded succesfully' })
+    } catch (error) {
+      logger.error(`Error recording quiz score - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async fetchUserGrades(req, res, next) {
+    const { userEmail } = req.params
+    try {
+      const grades = await fetchUserGradesService(userEmail)
+
+      res.status(HTTP_STATUS.OK).json({ grades })
+    } catch (error) {
+      logger.error(`Error fetching grades - ${error.message}`)
       next(error)
     }
   }

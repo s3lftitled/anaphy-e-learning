@@ -145,8 +145,62 @@ const changePasswordService = async (userId, currentPassword, newPassword, newPa
   }
 }
 
+const recordQuizScoreService =  async (userId, quizResults) => {
+  try {
+    validateRequiredParams(userId, quizResults)
+    
+    appAssert(validator.isMongoId(userId), 'Invalid user ID format', HTTP_STATUS.BAD_REQUEST)
+
+    const user = await UserModel.findById(userId)
+
+    appAssert(user, 'User is not found', HTTP_STATUS.NOT_FOUND)
+
+    const quizResult = Array.isArray(quizResults) ? quizResults[0] : quizResults
+    appAssert(quizResult, 'Quiz result is not found', HTTP_STATUS.NOT_FOUND)
+    appAssert(quizResults, 'Quiz results is not found', HTTP_STATUS.NOT_FOUND)
+
+    const gradeEntry = {
+      quiz: quizResult.quiz,
+      score: quizResult.score,
+      totalPoints: quizResult.totalPoints,
+      percentage: quizResult.percentage,
+      passed: quizResult.passed,
+      completedAt: quizResult.completedAt
+    }
+    
+    user.grades.push(gradeEntry)
+
+    await user.save()
+  } catch (error) {
+    throw error
+  }
+}
+
+const fetchUserGradesService = async (userEmail) => {
+  try {
+    validateRequiredParams(userEmail)
+    
+    appAssert(validator.isEmail(userEmail), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)
+    
+    const user = await UserModel.findOne({ email: userEmail })
+      .populate({
+        path: 'grades.quiz',
+        select: 'title' // This will populate the quiz titles
+      })
+    
+    appAssert(user, 'User is not found', HTTP_STATUS.NOT_FOUND)
+    
+    return user.grades
+    
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   fetchUserDataService, 
   updateProfileService,
   changePasswordService,
+  recordQuizScoreService,
+  fetchUserGradesService,
 }
