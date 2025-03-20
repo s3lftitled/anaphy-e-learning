@@ -126,7 +126,7 @@ const Sidebar = ({ user }) => {
           { user.role === 'student' && 
             <button 
               className={`mobile-nav-button ${activeSidebarItem === 'classes' ? 'active' : ''}`}
-              onClick={() => handleNavigation('/classes', 'classes')}
+              onClick={() => handleNavigation('/student-classes', 'classes')}
             >
               <GraduationCap size={20} />
               <span className="mobile-nav-label">Classes</span>
