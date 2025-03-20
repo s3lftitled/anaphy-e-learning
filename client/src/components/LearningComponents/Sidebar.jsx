@@ -23,7 +23,7 @@ const Sidebar = ({
   }
 
   return (
-    <div className={`sidebar ${sidebarExpanded ? 'expanded' : 'collapsed'}`}>
+    <div className={`learning-sidebar ${sidebarExpanded ? 'expanded' : 'collapsed'}`}>
       <div className="sidebar-toggle" onClick={toggleSidebar}>
         {sidebarExpanded ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
       </div>
