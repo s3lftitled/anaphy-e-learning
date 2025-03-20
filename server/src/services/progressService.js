@@ -321,7 +321,14 @@ const updateUserProgressService = async (userId, quizResults) => {
 
     // Update fields, including quizResults if provided
     if (quizResults) {
-      userProgress.quizResults = quizResults
+      // Check if quizResults is an array or single object
+      if (Array.isArray(quizResults)) {
+        // Add all new quiz results to the existing array
+        userProgress.quizResults.push(...quizResults)
+      } else {
+        // Add the single quiz result to the existing array
+        userProgress.quizResults.push(quizResults)
+      }
     }
 
     await userProgress.save()
