@@ -93,16 +93,6 @@ const TeacherManagement = () => {
   return (
     <>
       <div className="admin-container">
-        {/* Navigation */}
-        <nav className="admin-nav">
-          <div className="nav-content">
-            <div className="logo">
-              <Home size={24} />
-              <span>Admin Dashboard</span>
-            </div>
-          </div>
-        </nav>
-
         {/* Main Content */}
         <div className="admin-content">
           <div className="content-header">
