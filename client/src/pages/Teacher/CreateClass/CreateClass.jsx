@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import usePrivateApi from '../../hooks/usePrivateApi'
-import { useUser } from '../../context/UserContext'
-import './TeacherClassPage.css'
+import usePrivateApi from '../../../hooks/usePrivateApi'
+import { useUser } from '../../../context/UserContext'
+import './CreateClass.css'
 
-const TeacherClassPage = () => {
+const CreateClassPage = () => {
   const [className, setClassName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -150,4 +150,4 @@ const TeacherClassPage = () => {
   )
 }
 
-export default TeacherClassPage
+export default CreateClassPage

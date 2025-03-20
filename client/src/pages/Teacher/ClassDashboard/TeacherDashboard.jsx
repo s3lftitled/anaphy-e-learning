@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { User } from 'lucide-react'
-import { getUserInitials } from '../../utils/getUserInitials'
-import { useUser } from '../../context/UserContext'
+import { getUserInitials } from '../../../utils/getUserInitials'
+import { useUser } from '../../../context/UserContext'
 import './TeacherDashboard.css'
-import usePrivateApi from '../../hooks/usePrivateApi'
-import FloatingHomeButton from '../../components/FloatingHomeButton/FloatingHomeButton'
+import usePrivateApi from '../../../hooks/usePrivateApi'
+import FloatingHomeButton from '../../../components/FloatingHomeButton/FloatingHomeButton'
 
 const TeacherDashboard = () => {
   // State for classes data
@@ -135,7 +135,7 @@ const TeacherDashboard = () => {
     if (!activeClass) return
 
     try {
-      const response = await privateAxios.get(`/class/api/v1/fetch-announcements/${user.id}/${activeClass.id}`, {
+      const response = await privateAxios.get(`/class/api/v1/fetch-announcements/${activeClass.id}`, {
         withCredentials: true
       })
       
@@ -324,7 +324,7 @@ const TeacherDashboard = () => {
         
         <div className="sidebar-header">
           <h3>My Classes</h3>
-          <button className="new-class-btn" onClick={() => window.location.href = '/teacher-class-page'}>+</button>
+          <button className="new-class-btn" onClick={() => window.location.href = '/create-class-page'}>+</button>
         </div>
         
         <div className="classes-list">
