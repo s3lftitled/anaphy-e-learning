@@ -1,4 +1,4 @@
-.navbar {
+.home-navbar {
   background-color: var(--white, #ffffff);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   padding: 0.1rem 1.3rem;
@@ -10,9 +10,10 @@
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   font-family: 'Inter', sans-serif;
+  height: 4rem;
 }
 
-.nav-content {
+.home-nav-content {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
@@ -205,11 +206,11 @@
 }
 
 @media (max-width: 576px) {
-  .navbar {
+  .home-navbar {
     padding: 0.5rem 1rem;
   }
   
-  .nav-content {
+  .home-nav-content {
     justify-content: space-between;
   }
   

@@ -16,8 +16,8 @@ const Navbar = ({ user }) => {
   }, [])
 
   return (
-    <nav className="navbar">
-      <div className="nav-content">
+    <nav className="home-navbar">
+      <div className="home-nav-content">
         <div className="logo">
           <span className="logo-text">ANATOMY</span>
           <div className="logo-underline"></div>
