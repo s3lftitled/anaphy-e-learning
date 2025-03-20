@@ -23,6 +23,7 @@ const fetchUserDataService = async (userId) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        joinedClasses: user.joinedClasses || []
       }
     }
 
