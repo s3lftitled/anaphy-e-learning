@@ -6,6 +6,7 @@ import ContentViewer from '../../components/LearningComponents/ContentViewer'
 import LoadingIndicator from '../../components/LearningComponents/LoadingIndicator'
 import ErrorMessage from '../../components/LearningComponents/ErrorMessage'
 import FloatingHomeButton from '../../components/FloatingHomeButton/FloatingHomeButton'
+import EmptyLearningState  from '../../components/LearningComponents/EmptyLearningState'
 import { useLearningData } from '../../hooks/useLearningData'
 import { useProgressTracking } from '../../hooks/useProgressTracking'
 import { useNavigation } from '../../hooks/useNavigation'
@@ -61,6 +62,10 @@ const ELearningPage = () => {
   if (error) return <ErrorMessage message={error} />
 
   const progress = calculateProgress()
+
+  if (user.joinedClasses <= 0 ) {
+    return <EmptyLearningState />
+  }
 
   return (
     <>
