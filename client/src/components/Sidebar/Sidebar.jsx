@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HelpSidebar from '../../components/HelpSidebarComponent/Help'
 import SettingsSidebar from '../../components/Settings/Settings'
-import { Home, HelpCircle, Settings, Users, BookOpen, GraduationCap } from 'lucide-react'
+import { Home, HelpCircle, Settings, Users, BookOpen, BookOpenCheck, GraduationCap, LayoutDashboard } from 'lucide-react'
 import './Sidebar.css'
 
 const Sidebar = ({ user }) => {
@@ -48,34 +48,57 @@ const Sidebar = ({ user }) => {
         <div className="sidebar-top">
           <button 
             className={`sidebar-button ${activeSidebarItem === 'home' ? 'active' : ''}`}
-            onClick={() => handleNavigation('/', 'home')}
+            onClick={() => handleNavigation('/home', 'home')}
           >
             <Home size={20} />
             <span className="sidebar-tooltip">Home</span>
           </button>
           
-          <button 
-            className={`sidebar-button ${activeSidebarItem === 'classes' ? 'active' : ''}`}
-            onClick={() => handleNavigation('/classes', 'classes')}
-          >
-            <GraduationCap size={20} />
-            <span className="sidebar-tooltip">Classes</span>
-          </button>
+          { user.role  === 'student'  &&   
+            <button 
+              className={`sidebar-button ${activeSidebarItem === 'classes' ? 'active' : ''}`}
+              onClick={() => handleNavigation('/student-classes', 'classes')}
+            >
+              <GraduationCap size={20} />
+              <span className="sidebar-tooltip">Classes</span>
+            </button>
+          }
           
-          <button 
-            className={`sidebar-button ${activeSidebarItem === 'teacher-dashboard' ? 'active' : ''}`}
-            onClick={() => handleNavigation('/teacher-dashboard', 'teacher-dashboard')}
-          >
-            <BookOpen size={20} />
-            <span className="sidebar-tooltip">Teacher Dashboard</span>
-          </button>
+          { user.role === 'teacher' &&  
+            <button 
+              className={`sidebar-button ${activeSidebarItem === 'teacher-dashboard' ? 'active' : ''}`}
+              onClick={() => handleNavigation('/teacher-dashboard', 'teacher-dashboard')}
+            >
+              <BookOpen size={20} />
+              <span className="sidebar-tooltip">Teacher Dashboard</span>
+            </button>
+          }
           
+          { user.role === 'admin'  &&  
+            <>
+              <button 
+                className={`sidebar-button ${activeSidebarItem === 'admin-dashboard' ? 'active' : ''}`}
+                onClick={() => handleNavigation('/admin-dashboard', 'admin-dashboard')}
+              >
+                <LayoutDashboard size={20} />
+                <span className="sidebar-tooltip">Admin Dashboard</span>
+              </button>
+              <button 
+                className={`sidebar-button ${activeSidebarItem === 'teacher-management' ? 'active' : ''}`}
+                onClick={() => handleNavigation('/teacher-management', 'teacher-management')}
+              >
+                <Users size={20} />
+                <span className="sidebar-tooltip">Teacher Management</span>
+              </button>
+            </>
+          }
+
           <button 
-            className={`sidebar-button ${activeSidebarItem === 'teacher-management' ? 'active' : ''}`}
-            onClick={() => handleNavigation('/teacher-management', 'teacher-management')}
+            className={`sidebar-button ${activeSidebarItem === 'e-learning' ? 'active' : ''}`}
+            onClick={() => handleNavigation('/e-learning', 'e-learning')}
           >
-            <Users size={20} />
-            <span className="sidebar-tooltip">Teacher Management</span>
+            <BookOpenCheck size={20} />
+            <span className="sidebar-tooltip">E-Learning</span>
           </button>
         </div>
 
@@ -100,29 +123,53 @@ const Sidebar = ({ user }) => {
       {/* Mobile Bottom Navigation */}
       <nav className="mobile-nav">
         <div className="mobile-nav-content">
+          { user.role === 'student' && 
+            <button 
+              className={`mobile-nav-button ${activeSidebarItem === 'classes' ? 'active' : ''}`}
+              onClick={() => handleNavigation('/classes', 'classes')}
+            >
+              <GraduationCap size={20} />
+              <span className="mobile-nav-label">Classes</span>
+            </button>
+          }
+          
+          { user.role === 'teacher' &&
+            <button 
+              className={`mobile-nav-button ${activeSidebarItem === 'teacher-dashboard' ? 'active' : ''}`}
+              onClick={() => handleNavigation('/teacher-dashboard', 'teacher-dashboard')}
+            >
+              <BookOpen size={20} />
+              <span className="mobile-nav-label">Dashboard</span>
+            </button>
+          }
+          
+          { user.role === 'admin' && 
+            <>
+              <button 
+                className={`mobile-nav-button ${activeSidebarItem === 'admin-dashboard' ? 'active' : ''}`}
+                onClick={() => handleNavigation('/admin-dashboard', 'admin-dashboard')}
+              >
+                <LayoutDashboard size={20} />
+                <span className="mobile-nav-label">Admin</span>
+              </button>
+              <button 
+                className={`mobile-nav-button ${activeSidebarItem === 'teacher-management' ? 'active' : ''}`}
+                onClick={() => handleNavigation('/teacher-management', 'teacher-management')}
+              >
+                <Users size={20} />
+                <span className="mobile-nav-label">Teachers</span>
+              </button>
+            </>
+          }
+
           <button 
-            className={`mobile-nav-button ${activeSidebarItem === 'classes' ? 'active' : ''}`}
-            onClick={() => handleNavigation('/classes', 'classes')}
+            className={`mobile-nav-button ${activeSidebarItem === 'e-learning' ? 'active' : ''}`}
+            onClick={() => handleNavigation('/e-learning', 'e-learning')}
           >
-            <GraduationCap size={20} />
-            <span className="mobile-nav-label">Classes</span>
+            <BookOpenCheck size={20} />
+            <span className="mobile-nav-label">E-Learning</span>
           </button>
           
-          <button 
-            className={`mobile-nav-button ${activeSidebarItem === 'teacher-dashboard' ? 'active' : ''}`}
-            onClick={() => handleNavigation('/teacher-dashboard', 'teacher-dashboard')}
-          >
-            <BookOpen size={20} />
-            <span className="mobile-nav-label">Dashboard</span>
-          </button>
-          
-          <button 
-            className={`mobile-nav-button ${activeSidebarItem === 'teacher-management' ? 'active' : ''}`}
-            onClick={() => handleNavigation('/teacher-management', 'teacher-management')}
-          >
-            <Users size={20} />
-            <span className="mobile-nav-label">Teachers</span>
-          </button>
           
           <button 
             className={`mobile-nav-button ${activeSidebarItem === 'help' ? 'active' : ''}`}
