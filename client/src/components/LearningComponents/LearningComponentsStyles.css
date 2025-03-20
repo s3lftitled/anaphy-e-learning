@@ -17,19 +17,20 @@
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 24px;
+  --primary-font: 'Inter', 'Segoe UI', sans-serif;
 }
 
 .e-learning-page {
   display: flex;
   height: 100vh;
-  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-family: var(--primary-font);
   background-color: var(--secondary);
   color: var(--text);
   margin-top: 50px;
 }
 
 /* Sidebar Styles */
-.sidebar {
+.learning-sidebar {
   background-color: var(--white);
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
@@ -40,12 +41,12 @@
   overflow: hidden;
 }
 
-.sidebar.expanded {
+.learning-sidebar.expanded {
   min-width: 280px;
   max-width: 280px;
 }
 
-.sidebar.collapsed {
+.learning-sidebar.collapsed {
   min-width: 70px;
   max-width: 70px;
 }
@@ -100,11 +101,11 @@
   flex: 1;
 }
 
-.sidebar.collapsed .sidebar-content {
+.learning-sidebar.collapsed .sidebar-content {
   display: none;
 }
 
-.sidebar h3 {
+.learning-sidebar h3 {
   color: var(--primary);
   font-size: 1.1rem;
   margin-bottom: 1rem;
@@ -379,7 +380,7 @@
 
 /* Media Queries */
 @media (max-width: 768px) {
-  .sidebar.expanded {
+  .learning-sidebar.expanded {
     position: fixed;
     top: 0;
     bottom: 0;
@@ -901,6 +902,128 @@
   background-color: var(--error-light);
   border-radius: var(--radius-md);
   margin: 30px;
+}
+
+/* EmptyLearningState.css */
+.empty-learning-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 50px); /* Accounting for navbar */
+  background-color: var(--secondary);
+  padding: 2rem;
+}
+
+.empty-learning-card {
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 3rem 2rem;
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.empty-learning-icon {
+  font-size: 64px;
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+}
+
+.empty-learning-title {
+  color: var(--primary);
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+  font-family: var(--primary-font);
+}
+
+.empty-learning-description {
+  color: var(--text-light);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.empty-learning-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.empty-learning-btn-primary {
+  background-color: var(--primary);
+  color: var(--white);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.empty-learning-btn-primary:hover {
+  background-color: var(--primary-light);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.empty-learning-btn-secondary {
+  background-color: transparent;
+  color: var(--primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  border: 1px solid var(--primary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.empty-learning-btn-secondary:hover {
+  background-color: rgba(12, 65, 96, 0.05);
+  transform: translateY(-2px);
+}
+
+.empty-learning-help {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .empty-learning-actions {
+    flex-direction: column;
+  }
+  
+  .empty-learning-btn-primary,
+  .empty-learning-btn-secondary {
+    width: 100%;
+  }
+  
+  .empty-learning-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .empty-learning-title {
+    font-size: 1.5rem;
+  }
 }
 
 /* Responsive adjustments */
