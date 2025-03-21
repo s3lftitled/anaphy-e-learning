@@ -180,12 +180,6 @@
   background-color: var(--secondary, #f5f5f5);
 }
 
-.dropdown-divider {
-  height: 1px;
-  background-color: var(--secondary, #f5f5f5);
-  margin: 0.25rem 0;
-}
-
 .dropdown-item.logout {
   color: #ef4444;
 }

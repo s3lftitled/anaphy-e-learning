@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Search, User, ChevronDown } from 'lucide-react'
 import './Navbar.css'
 import { getUserInitials } from '../../utils/getUserInitials'
+import usePrivateApi from '../../hooks/usePrivateApi'
 
 const Navbar = ({ user }) => { 
   const [searchActive, setSearchActive] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
-
+  const privateAxios = usePrivateApi()
+  const navigate = useNavigate()
   
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -14,6 +17,18 @@ const Navbar = ({ user }) => {
     document.addEventListener('click', handleClickOutside)
     return () => document.removeEventListener('click', handleClickOutside)
   }, [])
+
+  const handleLogout = async () => {
+    try {
+      const response = await privateAxios.delete('auth/api/v1/log-out')
+
+      if (response.status === 200) {
+        navigate('/login')
+      }
+    } catch (error) {
+      alert('Error logging out')
+    }
+  }
 
   return (
     <nav className="home-navbar">
@@ -59,10 +74,7 @@ const Navbar = ({ user }) => {
           
           {showDropdown && (
             <div className="user-dropdown">
-              <div className="dropdown-item">Profile</div>
-              <div className="dropdown-item">Settings</div>
-              <div className="dropdown-divider"></div>
-              <div className="dropdown-item logout">Sign out</div>
+              <div className="dropdown-item logout" onClick={handleLogout}>Sign out</div>
             </div>
           )}
         </div>
