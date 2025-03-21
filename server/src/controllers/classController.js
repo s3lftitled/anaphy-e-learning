@@ -12,6 +12,7 @@ const {
   createClassAnnouncementService,
   fetchClassAnnouncementsService,
   fetchStudentJoinedClassesService,
+  removeStudentService,
 } = require('../services/classService')
 const HTTP_STATUS = require('../constants/httpConstants')
 const logger = require('../logger/logger')
@@ -172,6 +173,18 @@ class ClassController {
       res.status(HTTP_STATUS.OK).json({ joinedClasses })
     } catch (error) {
       logger.error(`Error fetching student joined classes - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async removeStudent(req, res, next) {
+    const { classId, studentId } = req.params
+    try { 
+      await removeStudentService(classId, studentId)
+
+      res.status(HTTP_STATUS.OK).json({ message: 'Student removed succesfully' })
+    } catch (error) {
+      logger.error(`Error removing student - ${error.message}`)
       next(error)
     }
   }

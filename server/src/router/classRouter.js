@@ -17,5 +17,6 @@ router.delete('/v1/reject-pending-approval/:classId/:studentId', verifyToken, Cl
 router.post('/v1/create-class-announcement/:teacherId/:classId', verifyToken, ClassController.createClassAnnouncement)
 router.get('/v1/fetch-announcements/:classId', verifyToken, ClassController.fetchClassAnnouncements)
 router.get('/v1/fetch-joined-classes/:studentId', verifyToken, ClassController.fetchStudentJoinedClasses)
+router.delete('/v1/remove-student/:classId/:studentId', ClassController.removeStudent)
 
 module.exports = router

@@ -387,6 +387,36 @@ const fetchStudentJoinedClassesService = async (studentId) => {
   }
 }
 
+const removeStudentService = async (classId, studentId) => {
+  try {
+    validateRequiredParams(classId, studentId)
+
+    appAssert(validator.isMongoId(classId), 'Invalid class id format', HTTP_STATUS.BAD_REQUEST)
+    appAssert(validator.isMongoId(studentId), 'Invalid user id format', HTTP_STATUS.BAD_REQUEST)
+
+    const classData = await ClassModel.findById(classId)
+    appAssert(classData, 'Class is not found', HTTP_STATUS.NOT_FOUND)
+
+    const student = await UserModel.findById(studentId)
+    appAssert(student, 'Student is not found', HTTP_STATUS.NOT_FOUND)
+
+    const updatedClassStudents = classData.students.filter(s => {
+      s.student === student._id
+    })
+
+    classData.students = updatedClassStudents
+    await classData.save()
+
+    const updatedStudentClasses = student.joinedClasses.filter(s => {
+      s._id === classData._id
+    })
+    student.joinedClasses = updatedStudentClasses
+    await student.save()
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   createClassService,
   acceptInvitationService,
@@ -401,4 +431,5 @@ module.exports = {
   createClassAnnouncementService,
   fetchClassAnnouncementsService,
   fetchStudentJoinedClassesService,
+  removeStudentService,
 }
