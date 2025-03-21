@@ -57,18 +57,25 @@ class EmailUtil {
 
   async sendMessageToStudent(teacherEmail, studentEmail, subject, message) {
     try {
-
       const mailOptions = {
-        from: teacherEmail,
+        from: process.env.USER,
         to: studentEmail,
+        cc: teacherEmail,  // Adding teacher's email as CC
         subject: subject,
-        html: `<p>${message}</p>`
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px;">
+            <p>${message}</p>
+            <hr>
+            <p style="color: #666; font-size: 12px;">This message was sent by ${teacherEmail}</p>
+          </div>
+        `
       }
-
+  
       await this.transporter.sendMail(mailOptions)
+      return { success: true }
     } catch (error) {
-      logger.error('Error sending confirmation email:', error)
-      throw new Error('Failed to send confirmation email.')
+      logger.error('Error sending message to student:', error)
+      throw new Error('Failed to send message to student.')
     }
   }
 }
