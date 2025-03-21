@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import HelpSidebar from '../../components/HelpSidebarComponent/Help'
 import SettingsSidebar from '../../components/Settings/Settings'
-import { Home, HelpCircle, Settings, Users, BookOpen, BookOpenCheck, GraduationCap, LayoutDashboard } from 'lucide-react'
+import { Home, HelpCircle, Settings, Users, BookOpen, BookOpenCheck, GraduationCap, LayoutDashboard, AlertTriangle } from 'lucide-react'
 import './Sidebar.css'
 
 const Sidebar = ({ user }) => {
@@ -90,6 +90,13 @@ const Sidebar = ({ user }) => {
                 <Users size={20} />
                 <span className="sidebar-tooltip">Teacher Management</span>
               </button>
+              <button 
+                className={`sidebar-button ${activeSidebarItem === 'issue-fetching' ? 'active' : ''}`}
+                onClick={() => handleNavigation('/issues', 'issue-fetching')}
+              >
+                <AlertTriangle size={20} />
+                <span className="sidebar-tooltip">Issue Fetching</span>
+              </button>
             </>
           }
 
@@ -158,6 +165,13 @@ const Sidebar = ({ user }) => {
               >
                 <Users size={20} />
                 <span className="mobile-nav-label">Teachers</span>
+              </button>
+              <button 
+                className={`mobile-nav-button ${activeSidebarItem === 'issue-fetching' ? 'active' : ''}`}
+                onClick={() => handleNavigation('/issues', 'issue-fetching')}
+              >
+                <AlertTriangle size={20} />
+                <span className="mobile-nav-label">Issues</span>
               </button>
             </>
           }
