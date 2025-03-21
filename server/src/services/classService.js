@@ -53,22 +53,21 @@ const createClassService = async (userRole, teacherId, className) => {
   }
 }
 
-const inviteStudentService = async (userRole, teacherId, studentId, classId) => {
+const inviteStudentService = async (teacherId, studentEmail, classId) => {
   try {
-    validateRequiredParams(userRole, teacherId, studentId, classId)
-    appAssert(userRole === "teacher", "Permission denied", HTTP_STATUS.FORBIDDEN)
-    appAssert(validator.isMongoId(teacherId) && validator.isMongoId(studentId) && validator.isMongoId(classId),
+    validateRequiredParams(teacherId, studentEmail, classId)
+    appAssert(validator.isMongoId(teacherId) && validator.isEmail(studentEmail) && validator.isMongoId(classId),
               "Invalid IDs", HTTP_STATUS.BAD_REQUEST)
 
     const classData = await ClassModel.findById(classId)
     appAssert(classData, "Class not found", HTTP_STATUS.NOT_FOUND)
     appAssert(classData.teacher.toString() === teacherId, "Not your class", HTTP_STATUS.FORBIDDEN)
 
-    const student = await UserModel.findById(studentId)
+    const student = await UserModel.findOne({ email: studentEmail })
     appAssert(student, "Student not found", HTTP_STATUS.NOT_FOUND)
 
     // Check if student is already in the class
-    const existingStudent = classData.students.find(s => s.student.toString() === studentId && s.status === "joined")
+    const existingStudent = classData.students.find(s => s.student.toString() === student._id && s.status === "joined")
     appAssert(!existingStudent, "Student is already in the class", HTTP_STATUS.BAD_REQUEST)
 
     // Check if student already has an invite
@@ -76,14 +75,14 @@ const inviteStudentService = async (userRole, teacherId, studentId, classId) => 
     appAssert(!existingInvite, "Student already invited", HTTP_STATUS.BAD_REQUEST)
 
     // Add invitation to both class and student
-    const studentIndex = classData.students.findIndex(s => s.student.toString() === studentId)
+    const studentIndex = classData.students.findIndex(s => s.student.toString() === student._id)
 
     if (studentIndex !== -1) {
         // Student exists, update their status
         classData.students[studentIndex].status = "invited"
     } else {
         // Student does not exist, add them
-        classData.students.push({ student: studentId, status: "invited" })
+        classData.students.push({ student: student._id, status: "invited" })
     }
 
     student.invitations.push({ classId, classCode: classData.code, status: "invited" })
@@ -91,6 +90,7 @@ const inviteStudentService = async (userRole, teacherId, studentId, classId) => 
     await classData.save()
     await student.save()
 
+    return student
   } catch (error) {
     throw(error)
   }

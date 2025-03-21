@@ -32,11 +32,12 @@ class ClassController {
   }
 
   async inviteStudent(req, res, next) {
-    const { userRole, teacherId, studentId, classId } = req.params
+    const { teacherId, classId } = req.params
+    const { studentEmail } = req.body
     try {
-      await inviteStudentService(userRole, teacherId, studentId, classId)
+      const studentData = await inviteStudentService(teacherId, studentEmail, classId)
 
-      res.status(HTTP_STATUS.CREATED).json({ message: 'Student invited succesfully' })
+      res.status(HTTP_STATUS.CREATED).json({ studentData, message: 'Student invited succesfully' })
     } catch (error) {
       logger.error(`Student invitation error - ${error.message}`)
       next(error)
