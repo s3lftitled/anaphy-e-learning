@@ -33,7 +33,15 @@ const TeacherDashboard = () => {
   const [selectedStudent, setSelectedStudent] = useState(null)
   const [studentGrades, setStudentGrades] = useState(null)
   const [gradesLoading, setGradesLoading] = useState(false)
+  const [subject, setSubject] = useState('')
+  const [message, setMessage] = useState('')
+  const [showEmailModal, setShowEmailModal] = useState(false)
+  const [emailStudent, setEmailStudent] = useState(null)
   const navigate = useNavigate()
+  
+  // New state for Remove Student confirmation modal
+  const [showRemoveStudentModal, setShowRemoveStudentModal] = useState(false)
+  const [studentToRemove, setStudentToRemove] = useState(null)
 
   // Fetch classes data from API
   useEffect(() => {
@@ -258,6 +266,9 @@ const TeacherDashboard = () => {
       }
       
       alert(`Student ${action === 'accept' ? 'accepted' : 'rejected'} successfully!`)
+
+      // Update join requests list
+      setJoinRequests(joinRequests.filter(req => req.student._id !== requestId))
     } catch (error) {
       console.error(`Error ${action}ing join request:`, error)
       alert(`Failed to ${action} student. Please try again.`)
@@ -282,6 +293,85 @@ const TeacherDashboard = () => {
       console.error("Error fetching student grades:", error)
       setGradesLoading(false)
       alert("Failed to load student grades. Please try again.")
+    }
+  }
+
+  // Updated Remove Student functions
+  const showRemoveConfirmation = (student) => {
+    setStudentToRemove(student)
+    setShowRemoveStudentModal(true)
+  }
+
+  const handleRemoveStudent = async () => {
+    if (!studentToRemove || !activeClass) return
+    
+    try {
+      const response = await privateAxios.delete(`class/api/v1/remove-student/${activeClass.id}/${studentToRemove.id}`, {
+        withCredentials: true
+      })
+
+      if (response.status === 200 || response.status === 204) {
+        // Update state by removing the student
+        const updatedStudents = activeClass.students.filter(
+          student => student.id !== studentToRemove.id
+        )
+        
+        // Update active class
+        const updatedClass = {
+          ...activeClass,
+          students: updatedStudents
+        }
+        
+        // Update classes array
+        const updatedClasses = classes.map(c => 
+          c.id === activeClass.id ? updatedClass : c
+        )
+        
+        setClasses(updatedClasses)
+        setActiveClass(updatedClass)
+        
+        // Close modal and reset
+        setShowRemoveStudentModal(false)
+        setStudentToRemove(null)
+        
+        alert("Student removed successfully!")
+      } else {
+        throw new Error(`API returned status ${response.status}`)
+      }
+    } catch (error) {
+      console.error("Error removing student:", error)
+      alert("Failed to remove student. Please try again.")
+    }
+  }
+
+  const handleEmailStudent = (student) => {
+    setEmailStudent(student)
+    setSubject('')
+    setMessage('')
+    setShowEmailModal(true)
+  }
+
+  const handleSendEmail = async (e) => {
+    e.preventDefault()
+    if (!emailStudent || !subject || !message) return
+    
+    try {
+      const response = await privateAxios.post(`/user/api/v1/send-message-to-student/${user.id}/${emailStudent.id}`, {
+        subject,
+        message
+      }, {
+        withCredentials: true
+      })
+      
+      if (response.status === 200) {
+        alert("Message sent successfully!")
+        setShowEmailModal(false)
+      } else {
+        throw new Error(`API returned status ${response.status}`)
+      }
+    } catch (error) {
+      console.error("Error sending email:", error)
+      alert("Failed to send message. Please try again.")
     }
   }
 
@@ -490,16 +580,28 @@ const TeacherDashboard = () => {
                           {student.lastActive ? new Date(student.lastActive).toLocaleDateString() : 'Never'}
                         </div>
                         <div className="col-actions">
-                        <button 
-                          className="action-icon view-btn" 
-                          title="View Grades"
-                          onClick={() => handleViewGrades(student.name, student.email)}
-                        >
-                          📊
-                        </button>
-                        <button className="action-icon email-btn" title="Contact Student">✉️</button>
-                        <button className="action-icon remove-btn" title="Remove Student">❌</button>
-                      </div>
+                          <button 
+                            className="action-icon view-btn" 
+                            title="View Grades"
+                            onClick={() => handleViewGrades(student.name, student.email)}
+                          >
+                            📊
+                          </button>
+                          <button 
+                              className="action-icon email-btn" 
+                              title="Contact Student"
+                              onClick={() => handleEmailStudent(student)}
+                            >
+                              ✉️
+                          </button>
+                          <button 
+                            className="action-icon remove-btn" 
+                            title="Remove Student"
+                            onClick={() => showRemoveConfirmation(student)}
+                          >
+                            ❌
+                          </button>
+                        </div>
                       </div>
                     ))
                   ) : (
@@ -700,89 +802,161 @@ const TeacherDashboard = () => {
       )}
 
       {/* Student Grades Modal */}
-    {showGradesModal && (
-      <div className="modal-overlay">
-        <div className="modal student-grades-modal">
-          <div className="modal-header">
-            <h2>{selectedStudent?.name}'s Grades</h2>
-            <button className="close-btn" onClick={() => setShowGradesModal(false)}>×</button>
-          </div>
-          <div className="modal-body">
-            {gradesLoading ? (
-              <div className="grades-loading">Loading grades...</div>
-            ) : studentGrades && studentGrades?.length > 0 ? (
-              <>
-                <div className="grades-summary">
-                  <div className="grade-average-card">
-                    <div className="grade-average-value">
-                      {calculateAverageGrade(studentGrades)}%
+      {showGradesModal && (
+        <div className="modal-overlay">
+          <div className="modal student-grades-modal">
+            <div className="modal-header">
+              <h2>{selectedStudent?.name}'s Grades</h2>
+              <button className="close-btn" onClick={() => setShowGradesModal(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              {gradesLoading ? (
+                <div className="grades-loading">Loading grades...</div>
+              ) : studentGrades && studentGrades?.length > 0 ? (
+                <>
+                  <div className="grades-summary">
+                    <div className="grade-average-card">
+                      <div className="grade-average-value">
+                        {calculateAverageGrade(studentGrades)}%
+                      </div>
+                      <div className="grade-average-label">Average Score</div>
                     </div>
-                    <div className="grade-average-label">Average Score</div>
+                    <div className="grades-summary-details">
+                      <div className="summary-item">
+                        <span className="summary-label">Total Quizzes:</span>
+                        <span className="summary-value">{studentGrades.length}</span>
+                      </div>
+                      <div className="summary-item">
+                        <span className="summary-label">Passed:</span>
+                        <span className="summary-value">
+                          {studentGrades.filter(grade => grade.passed).length}
+                        </span>
+                      </div>
+                      <div className="summary-item">
+                        <span className="summary-label">Failed:</span>
+                        <span className="summary-value">
+                          {studentGrades.filter(grade => !grade.passed).length}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="grades-summary-details">
-                    <div className="summary-item">
-                      <span className="summary-label">Total Quizzes:</span>
-                      <span className="summary-value">{studentGrades.length}</span>
-                    </div>
-                    <div className="summary-item">
-                      <span className="summary-label">Passed:</span>
-                      <span className="summary-value">
-                        {studentGrades.filter(grade => grade.passed).length}
-                      </span>
-                    </div>
-                    <div className="summary-item">
-                      <span className="summary-label">Failed:</span>
-                      <span className="summary-value">
-                        {studentGrades.filter(grade => !grade.passed).length}
-                      </span>
+                  
+                  <div className="grades-list">
+                    <h3>Assessment History</h3>
+                    <div className="grades-table">
+                      <div className="grades-table-header">
+                        <div className="grades-col quiz-title">Quiz</div>
+                        <div className="grades-col score">Score</div>
+                        <div className="grades-col percentage">Percentage</div>
+                        <div className="grades-col status">Status</div>
+                        <div className="grades-col date">Date</div>
+                      </div>
+                      <div className="grades-table-body">
+                        {studentGrades.map(grade => (
+                          <div key={grade._id} className="grades-table-row">
+                            <div className="grades-col quiz-title">{grade.quiz.title}</div>
+                            <div className="grades-col score">
+                              {grade.score} / {grade.totalPoints}
+                            </div>
+                            <div className="grades-col percentage">
+                              {grade.percentage}%
+                            </div>
+                            <div className={`grades-col status ${grade.passed ? 'passed' : 'failed'}`}>
+                              {grade.passed ? 'Passed' : 'Failed'}
+                            </div>
+                            <div className="grades-col date">
+                              {new Date(grade.completedAt).toLocaleDateString()}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
+                </>
+              ) : (
+                <div className="empty-grades">
+                  <p>No grades available for this student.</p>
                 </div>
-                
-                <div className="grades-list">
-                  <h3>Assessment History</h3>
-                  <div className="grades-table">
-                    <div className="grades-table-header">
-                      <div className="grades-col quiz-title">Quiz</div>
-                      <div className="grades-col score">Score</div>
-                      <div className="grades-col percentage">Percentage</div>
-                      <div className="grades-col status">Status</div>
-                      <div className="grades-col date">Date</div>
-                    </div>
-                    <div className="grades-table-body">
-                      {studentGrades.map(grade => (
-                        <div key={grade._id} className="grades-table-row">
-                          <div className="grades-col quiz-title">{grade.quiz.title}</div>
-                          <div className="grades-col score">
-                            {grade.score} / {grade.totalPoints}
-                          </div>
-                          <div className="grades-col percentage">
-                            {grade.percentage}%
-                          </div>
-                          <div className={`grades-col status ${grade.passed ? 'passed' : 'failed'}`}>
-                            {grade.passed ? 'Passed' : 'Failed'}
-                          </div>
-                          <div className="grades-col date">
-                            {new Date(grade.completedAt).toLocaleDateString()}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <div className="empty-grades">
-                <p>This student hasn't completed any assessments yet.</p>
-              </div>
-            )}
-          </div>
-          <div className="modal-footer">
-            <button className="btn" onClick={() => setShowGradesModal(false)}>Close</button>
+              )}
+            </div>
+            <div className="modal-footer">
+              <button className="btn" onClick={() => setShowGradesModal(false)}>Close</button>
+            </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
+
+      {/* Remove Student Confirmation Modal */}
+      {showRemoveStudentModal && (
+        <div className="modal-overlay">
+          <div className="modal confirmation-modal">
+            <div className="modal-header">
+              <h2>Remove Student</h2>
+              <button className="close-btn" onClick={() => setShowRemoveStudentModal(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              <p className="confirmation-message">
+                Are you sure you want to remove <strong>{studentToRemove?.name}</strong> from this class?
+                This action cannot be undone.
+              </p>
+            </div>
+            <div className="modal-footer">
+              <button 
+                className="cancel-btn" 
+                onClick={() => setShowRemoveStudentModal(false)}
+              >
+                Cancel
+              </button>
+              <button 
+                className="danger-btn" 
+                onClick={handleRemoveStudent}
+              >
+                Remove Student
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Email Student Modal */}
+      {showEmailModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h2>Contact {emailStudent?.name}</h2>
+              <button className="close-btn" onClick={() => setShowEmailModal(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={handleSendEmail}>
+                <div className="form-group">
+                  <label>Subject:</label>
+                  <input 
+                    type="text" 
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    placeholder="Enter subject"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Message:</label>
+                  <textarea 
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Enter your message"
+                    rows="5"
+                    required
+                  />
+                </div>
+                <div className="form-actions">
+                  <button type="button" className="cancel-btn" onClick={() => setShowEmailModal(false)}>Cancel</button>
+                  <button type="submit" className="submit-btn">Send Message</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Floating home button */}
       <FloatingHomeButton />
     </div>
   )
