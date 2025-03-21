@@ -25,12 +25,12 @@ const ConfirmationForm = () => {
 
     if (!name || !password || !confirmPassword) {
       setError("All fields are required.")
-      return;
+      return
     }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match.")
-      return;
+      return
     }
 
     try {
