@@ -9,7 +9,6 @@ const VALID_TYPES = ['Question', 'Feature Request', 'Bug Report', 'Other']
 
 const saveIssueService = async (type, title, description, email) => {
   try {
-    console.log(type, title, description, email)
     // Validate all required parameters are present
     validateRequiredParams({ type, title, description, email })
 
@@ -41,12 +40,20 @@ const saveIssueService = async (type, title, description, email) => {
     // Return the saved issue with its generated _id
     return savedIssue
   } catch(error) {
-    // Log the error for debugging purposes
-    console.error('Error in saveIssueService:', error.message)
+    throw error
+  }
+}
+
+const fetchIssuesService = async () => {
+  try {
+     const issues = await IssueModel.find({})
+     return  issues
+  } catch (error) {
     throw error
   }
 }
 
 module.exports = {
   saveIssueService,
+  fetchIssuesService,
 }
