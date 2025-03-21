@@ -102,15 +102,15 @@ const TeacherDashboard = () => {
     
     try {
       // Call API to invite student
-      const response = await privateAxios(`/api/classes/${activeClass.id}/invite`, {email: inviteEmail}, {
+      const response = await privateAxios.post(`class/api/v1/invite-student/${user.id}/${activeClass.id}`, {studentEmail: inviteEmail}, {
         withCredentials: true
       })
       
-      if (!response.ok) {
+      if (!response.status === 200) {
         throw new Error(`API request failed with status ${response.status}`)
       }
       
-      const data = await response.json()
+      const data = response.data.studentData
       
       // Update the local state with the newly invited student
       const newStudent = {
@@ -137,8 +137,15 @@ const TeacherDashboard = () => {
       setInviteEmail('')
       setShowInviteModal(false)
     } catch (error) {
-      console.error("Error inviting student:", error)
-      alert("Failed to invite student. Please try again.")
+      if (error.response) {
+        if (error.response.status === 429) {
+            alert('Too many requests. Please try again after 5 minutes')
+        } else {
+            alert(error.response.data?.message || 'An error occurred. Please try again.')
+        }
+      } else {
+          alert('An error occurred. Please check your network connection and try again.')
+      }
     }
   }
 
