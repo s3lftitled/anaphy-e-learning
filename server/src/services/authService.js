@@ -200,9 +200,19 @@ const changePassword = async ( userId, currentPassword, newPassword, newPassword
   }
 }
 
+const logOutService = async (res) => {
+  try {
+    validateRequiredParams({ res })
+    res.clearCookie('refreshToken')
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   registerUser,
   logIn,
   verifyEmail,
   changePassword,
+  logOutService,
 }

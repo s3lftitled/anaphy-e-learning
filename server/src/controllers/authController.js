@@ -2,7 +2,8 @@ const {
   registerUser, 
   verifyEmail, 
   logIn, 
-  changePassword 
+  changePassword,
+  logOutService, 
 } = require('../services/authService')
 const HTTP_STATUS = require('../constants/httpConstants')
 const logger = require('../logger/logger')
@@ -60,6 +61,17 @@ class AuthController {
       next(error)
     }
   } 
+
+  async logOut(_, res, next) {
+    try {
+      await logOutService(res)
+
+      res.status(HTTP_STATUS.OK).json({ message: 'Logged out succesfully' })
+    } catch (error) {
+      logger.error(`Error logging out - ${error.message}`)
+      next(error)
+    }
+  }
 } 
 
 module.exports = new AuthController()
