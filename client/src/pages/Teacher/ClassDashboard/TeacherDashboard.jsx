@@ -859,7 +859,7 @@ const TeacherDashboard = () => {
                               {grade.score} / {grade.totalPoints}
                             </div>
                             <div className="grades-col percentage">
-                              {grade.percentage}%
+                              {grade.percentage.toFixed(1)}%
                             </div>
                             <div className={`grades-col status ${grade.passed ? 'passed' : 'failed'}`}>
                               {grade.passed ? 'Passed' : 'Failed'}
