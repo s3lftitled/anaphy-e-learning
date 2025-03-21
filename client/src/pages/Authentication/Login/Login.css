@@ -3,6 +3,7 @@
   height: 100vh;
   background: #100E24;
   overflow: hidden;
+  position: relative; /* Needed for absolute positioning of glow elements */
 }
 
 .login .glow {
@@ -14,25 +15,28 @@
 .login .glow-1 {
   width: 313.85px;
   height: 630.15px;
-  left: 1594.91px;
-  top: 82px;
   background: #32A7EF;
+  /* Responsive positioning adjustments */
+  top: 5%;
+  right: -10%;
 }
 
 .login .glow-2 {
   width: 571.47px;
   height: 565.25px;
-  left: 1269.15px;
-  top: -28px;
   background: #55B8FF;
+  /* Responsive positioning adjustments */
+  top: -10%;
+  right: -20%;
 }
 
 .login .glow-3 {
   width: 313.85px;
   height: 630.15px;
-  left: 1593.38px;
-  top: 104px;
   background: #99D8FF;
+  /* Responsive positioning adjustments */
+  top: 8%;
+  right: -5%;
 }
 
 .login-nav .nav-link {
@@ -60,13 +64,13 @@
   color: #100E24; 
   border-radius: 5px;
   padding: 12px 16px;
-  font-size: 1.2remrem;
+  font-size: 1.2rem;
 }
 
 .login-form-container {
-  position: relative;
+  position: absolute;
   font-family: 'Inter', sans-serif;
-  top: 45%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background:  #100E24;
@@ -78,7 +82,7 @@
   height: 480px;
   border:5px solid #1DAAB1;
   margin-left: 400px;
-  margin-top: 50px;
+  margin-top: 20px;
 }
 
 .login-form-container h2 {
@@ -105,9 +109,9 @@
 .login-input-group {
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 100%; /* Make input group responsive */
+  max-width: 380px; /* Limit width */
   margin-bottom: 25px;
-  
 }
 
 .login-input-group label {
@@ -139,10 +143,12 @@
 }
 
 .login-img {
+  width: 690px;
   position: absolute;
-  right: 800px;
-  height: 100vh;
-  opacity: 0.8;
+  right: 730px;
+  bottom: -60px;
+  height: 123vh;
+  opacity: 0.6;
 }  
 
 .login-options {
@@ -178,4 +184,67 @@
   display: flex;
   justify-content: center;
   margin-left: 15px;
+}
+
+/* Responsive Area */
+@media (max-width:  576px) {
+  .login-nav button, .login-nav .nav-link{
+    margin-right: 10px;
+    font-size: 1rem;
+  }
+  
+  .login-img {
+    display: none;
+  }
+
+  .login-form-container {
+    max-width: 800px; 
+    padding: 20px;
+    margin-left: 0%;
+  } 
+
+  .login .glow-1, .login .glow-2, .login .glow-3{
+    right: -30%;
+  }
+}
+  
+@media (min-width: 577px) and (max-width: 991px) {
+  .login-nav button, .login-nav .nav-link{
+    margin-right: 10px;
+    font-size: 1rem;
+  }
+  
+  .login-img {
+    right: 530px;
+  }
+
+  .login-form-container {
+    max-width: 350px;
+    padding: 20px;
+    margin-left: 20%;
+  } 
+
+  .login .glow-1, .login .glow-2, .login .glow-3{
+    right: -30%;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .login-nav button, .login-nav .nav-link{
+    margin-right: 50px;
+    font-size: 1rem;
+  }
+
+  .login-img {
+    right: 635px;
+  }
+
+  .login-form-container{
+    width: 35%;
+    margin-left: 300px;
+  }
+
+  .login .glow-1, .login .glow-2, .login .glow-3{
+    right: -300%;
+  }
 }

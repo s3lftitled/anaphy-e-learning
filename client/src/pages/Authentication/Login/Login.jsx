@@ -72,9 +72,7 @@ const Login = () => {
 
       <nav className="login-nav">
         <button className="login-button" href="">Login</button>
-        <Link className='nav-link' href="">About</Link>
-        <Link className='nav-link' href="">Contact</Link>
-        <Link className='nav-link' href="">Home</Link>
+        <Link className='nav-link' to="/">Home</Link>  
       </nav>
 
       <div className="login-form-container">
