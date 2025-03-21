@@ -145,8 +145,10 @@ const changePasswordService = async (userId, currentPassword, newPassword, newPa
   }
 }
 
-const recordQuizScoreService =  async (userId, quizResults) => {
+
+const recordQuizScoreService = async (userId, quizResults) => {
   try {
+    console.log(quizResults)
     validateRequiredParams(userId, quizResults)
     
     appAssert(validator.isMongoId(userId), 'Invalid user ID format', HTTP_STATUS.BAD_REQUEST)
@@ -154,23 +156,38 @@ const recordQuizScoreService =  async (userId, quizResults) => {
     const user = await UserModel.findById(userId)
 
     appAssert(user, 'User is not found', HTTP_STATUS.NOT_FOUND)
-
-    const quizResult = Array.isArray(quizResults) ? quizResults[0] : quizResults
-    appAssert(quizResult, 'Quiz result is not found', HTTP_STATUS.NOT_FOUND)
     appAssert(quizResults, 'Quiz results is not found', HTTP_STATUS.NOT_FOUND)
 
-    const gradeEntry = {
-      quiz: quizResult.quiz,
-      score: quizResult.score,
-      totalPoints: quizResult.totalPoints,
-      percentage: quizResult.percentage,
-      passed: quizResult.passed,
-      completedAt: quizResult.completedAt
+    // Process array of quiz results or single quiz result
+    const quizResultsArray = Array.isArray(quizResults) ? quizResults : [quizResults]
+    
+    // Get existing quiz IDs from user's grades
+    const existingQuizIds = user.grades.map(grade => grade.quiz.toString())
+    
+    // Filter out quizzes that have already been recorded
+    const newQuizResults = quizResultsArray.filter(result => 
+      !existingQuizIds.includes(result.quiz.toString())
+    )
+    
+    // Add only new quiz results to user's grades
+    for (const quizResult of newQuizResults) {
+      const gradeEntry = {
+        quiz: quizResult.quiz,
+        score: quizResult.score,
+        totalPoints: quizResult.totalPoints,
+        percentage: quizResult.percentage,
+        passed: quizResult.passed,
+        completedAt: quizResult.completedAt || new Date()
+      }
+      
+      user.grades.push(gradeEntry)
+    }
+
+    if (newQuizResults.length > 0) {
+      await user.save()
     }
     
-    user.grades.push(gradeEntry)
-
-    await user.save()
+    return user;
   } catch (error) {
     throw error
   }

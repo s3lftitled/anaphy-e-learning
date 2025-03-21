@@ -321,13 +321,21 @@ const updateUserProgressService = async (userId, quizResults) => {
 
     // Update fields, including quizResults if provided
     if (quizResults) {
-      // Check if quizResults is an array or single object
+      // Get array of quiz IDs that are already in userProgress
+      const existingQuizIds = userProgress.quizResults.map(result => result.quiz.toString())
+      
+      // Filter out quiz results that already exist based on quiz ID
+      let newQuizResults = []
+      
       if (Array.isArray(quizResults)) {
-        // Add all new quiz results to the existing array
-        userProgress.quizResults.push(...quizResults)
-      } else {
-        // Add the single quiz result to the existing array
-        userProgress.quizResults.push(quizResults)
+        newQuizResults = quizResults.filter(result => !existingQuizIds.includes(result.quiz.toString()))
+      } else if (!existingQuizIds.includes(quizResults.quiz.toString())) {
+        newQuizResults = [quizResults]
+      }
+      
+      // Only add new quiz results
+      if (newQuizResults.length > 0) {
+        userProgress.quizResults.push(...newQuizResults)
       }
     }
 
@@ -337,6 +345,7 @@ const updateUserProgressService = async (userId, quizResults) => {
     throw error
   }
 }
+
 
 module.exports = {
   saveUserProgressService,
