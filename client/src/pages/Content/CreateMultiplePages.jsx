@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import usePrivateApi from '../../hooks/usePrivateApi'
 import './styles.css'
 
 const CreateMultiplePages = () => {
@@ -10,11 +10,14 @@ const CreateMultiplePages = () => {
   const [pages, setPages] = useState([{ title: '', content: '', link: '', order: 1 }])
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const privateAxios = usePrivateApi()
 
   useEffect(() => {
     const fetchTopics = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/topics/api/v1/fetch-all-topics')
+        const response = await privateAxios.get('http://localhost:5000/topics/api/v1/fetch-all-topics', {}, {
+          withCredentials: true
+        })
         setTopics(response.data.data)
       } catch (err) {
         setError('Error fetching topics')
@@ -27,7 +30,9 @@ const CreateMultiplePages = () => {
     if (!topicId) return
     const fetchLessons = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/topics/api/v1/fetch-topic-lessons/${topicId}`);
+        const response = await privateAxios.get(`http://localhost:5000/topics/api/v1/fetch-topic-lessons/${topicId}`, {}, {
+          withCredentials: true
+        })
         setLessons(response.data.topicLessons)
       } catch (err) {
         setError('Error fetching lessons')
@@ -69,7 +74,9 @@ const CreateMultiplePages = () => {
         return setError('All page fields are required')
       }
       
-      const response = await axios.post(`http://localhost:5000/pages/api/v1/create-multiple-pages/${lessonId}`, { pages, lessonId })
+      const response = await privateAxios.post(`http://localhost:5000/pages/api/v1/create-multiple-pages/${lessonId}`, { pages, lessonId }, {
+        withCredentials: true
+      })
       if (response.status)
         setSuccess('Pages created successfully!');
         setPages([{ title: '', content: '', link: '', order: 1 }])

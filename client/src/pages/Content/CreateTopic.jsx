@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import axios from 'axios'
+import usePrivateApi from '../../hooks/usePrivateApi'
 import './styles.css'
 
 const CreateTopic = () => {
@@ -7,6 +7,7 @@ const CreateTopic = () => {
   const [description, setDescription] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const privateAxios = usePrivateApi()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -27,7 +28,9 @@ const CreateTopic = () => {
         return setError('Topic description cannot be longer than 600 characters')
       }
       
-      const response = await axios.post('http://localhost:5000/topics/api/v1/create-topic', { name, description })
+      const response = await privateAxios.post('http://localhost:5000/topics/api/v1/create-topic', { name, description }, {
+        withCredentials: true
+      })
       
       if (response.status === 201) {
         setSuccess('Topic created successfully!')

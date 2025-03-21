@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import usePrivateApi from '../../hooks/usePrivateApi'
 import './styles.css'
 
 const CreateLesson = () => {
@@ -10,11 +10,14 @@ const CreateLesson = () => {
   const [topics, setTopics] = useState([])
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const privateAxios = usePrivateApi()
 
   useEffect(() => {
     const fetchTopics = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/topics/api/v1/fetch-all-topics')
+        const response = await privateAxios.get('http://localhost:5000/topics/api/v1/fetch-all-topics', {}, {
+          withCredentials: true
+        })
         console.log(response)
         setTopics(response.data.data)
       } catch (err) {
@@ -36,12 +39,12 @@ const CreateLesson = () => {
         return setError('All fields are required')
       }
       
-      const response = await axios.post(`http://localhost:5000/lessons/api/v1/create-lesson/${topicId}`, {
+      const response = await privateAxios.post(`http://localhost:5000/lessons/api/v1/create-lesson/${topicId}`, {
         title,
         topicId,
         description,
         order: parseInt(order)
-      })
+      }, { withCredentials: true })
       
       setSuccess('Lesson created successfully!');
       setTitle('')
