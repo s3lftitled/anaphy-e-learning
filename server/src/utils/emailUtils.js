@@ -54,6 +54,23 @@ class EmailUtil {
       throw new Error('Failed to send confirmation email.')
     }
   }
+
+  async sendMessageToStudent(teacherEmail, studentEmail, subject, message) {
+    try {
+
+      const mailOptions = {
+        from: teacherEmail,
+        to: studentEmail,
+        subject: subject,
+        html: `<p>${message}</p>`
+      }
+
+      await this.transporter.sendMail(mailOptions)
+    } catch (error) {
+      logger.error('Error sending confirmation email:', error)
+      throw new Error('Failed to send confirmation email.')
+    }
+  }
 }
 
 module.exports = new EmailUtil()

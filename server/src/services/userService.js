@@ -7,6 +7,7 @@ const { validateRequiredParams } = require('../utils/paramsValidator')
 const { appAssert } = require('../utils/appAssert')
 const HTTP_STATUS = require('../constants/httpConstants')
 const sharp = require('sharp')
+const EmailUtil = require('../utils/emailUtils')
 
 const fetchUserDataService = async (userId) => {
   try {
@@ -187,7 +188,7 @@ const recordQuizScoreService = async (userId, quizResults) => {
       await user.save()
     }
     
-    return user;
+    return user
   } catch (error) {
     throw error
   }
@@ -214,10 +215,30 @@ const fetchUserGradesService = async (userEmail) => {
   }
 }
 
+const sendMessageToStudentService = async (teacherId, studentId, subject, message) => {
+  try {
+    validateRequiredParams(teacherId, studentId, subject, message)
+
+    appAssert(validator.isMongoId(teacherId), 'Invalid class id format', HTTP_STATUS.BAD_REQUEST)
+    appAssert(validator.isMongoId(studentId), 'Invalid user id format', HTTP_STATUS.BAD_REQUEST)
+
+    const teacher = await TeacherModel.findById(teacherId)
+    appAssert(teacher, 'Teacher is not found', HTTP_STATUS.NOT_FOUND)
+
+    const student = await UserModel.findById(studentId)
+    appAssert(student, 'Student is not found', HTTP_STATUS.NOT_FOUND)
+ 
+    await EmailUtil.sendMessageToStudent(teacher.email, student.email, subject, message)
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   fetchUserDataService, 
   updateProfileService,
   changePasswordService,
   recordQuizScoreService,
   fetchUserGradesService,
+  sendMessageToStudentService,
 }

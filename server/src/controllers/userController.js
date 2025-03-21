@@ -4,6 +4,7 @@ const {
   changePasswordService,
   recordQuizScoreService,
   fetchUserGradesService,
+  sendMessageToStudentService,
 } = require('../services/userService')
 const HTTP_STATUS = require('../constants/httpConstants')
 const logger = require('../logger/logger')
@@ -67,6 +68,19 @@ class UserController {
       res.status(HTTP_STATUS.OK).json({ grades })
     } catch (error) {
       logger.error(`Error fetching grades - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async sendMessageToStudent (req, res, next) {
+    const { teacherId, studentId } = req.params
+    const { subject, message } = req.body
+    try {
+      await sendMessageToStudentService(teacherId, studentId, subject, message)
+
+      res.status(HTTP_STATUS.OK).json({ message: 'Email sent succesfully' })
+    } catch (error) {
+      logger.error(`Error sending message - ${error.message}`)
       next(error)
     }
   }
