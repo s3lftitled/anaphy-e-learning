@@ -23,6 +23,7 @@ const NotFound = lazy(() => import('./pages/NotFound/NotFound.jsx'))
 const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard/AdminDashboard.jsx'))
 const SystemModelPage =  lazy(() => import('./pages/Home/SystemModel.jsx'))
 const StudentClass = lazy(() => import('./pages/Student/StudentClass.jsx'))
+const Issues = lazy(() => import('./pages/Admin/IssuesPage/Issues.jsx'))
 
 const App = () => {
   return (
@@ -51,7 +52,8 @@ const App = () => {
                 </AppProvider>
               }
             >
-               <Route path='/student-classes' element={<StudentClass />} />
+              <Route path='/issues' element={<Issues />} />
+              <Route path='/student-classes' element={<StudentClass />} />
               <Route path='/e-learning' element={<ELearningPage />} />
               <Route path='/home' element={<Homepage />} />
               <Route path='/teacher-management' element={<TeacherManagement />} />
