@@ -4,12 +4,14 @@ import { Search, User, ChevronDown } from 'lucide-react'
 import './Navbar.css'
 import { getUserInitials } from '../../utils/getUserInitials'
 import usePrivateApi from '../../hooks/usePrivateApi'
+import useAuth from '../../hooks/useAuth'
 
 const Navbar = ({ user }) => { 
   const [searchActive, setSearchActive] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
   const privateAxios = usePrivateApi()
   const navigate = useNavigate()
+  const { setAuth } = useAuth()
   
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -23,6 +25,7 @@ const Navbar = ({ user }) => {
       const response = await privateAxios.delete('auth/api/v1/log-out')
 
       if (response.status === 200) {
+        setAuth({ accessToken: null})
         navigate('/login')
       }
     } catch (error) {
