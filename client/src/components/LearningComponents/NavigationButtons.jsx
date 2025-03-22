@@ -8,7 +8,7 @@ const NavigationButtons = ({ isCompleted, onPrevious, onNext }) => {
         onClick={onNext}
         className={isCompleted ? 'completed-btn' : ''}
       >
-        {isCompleted ? 'Next' : 'Complete & Continue'}
+        {isCompleted ? 'Next' : 'Complete'}
       </button>
     </div>
   )
