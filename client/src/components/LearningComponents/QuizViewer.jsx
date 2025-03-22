@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './LearningComponentsStyles.css'
 
 const QuizViewer = ({ quiz, onComplete, userProgress, updateUserProgress }) => {
@@ -9,11 +9,15 @@ const QuizViewer = ({ quiz, onComplete, userProgress, updateUserProgress }) => {
   const [quizSubmitted, setQuizSubmitted] = useState(false)
   const [results, setResults] = useState(null)
   const [previousAttempt, setPreviousAttempt] = useState(null)
+  const [warningAcknowledged, setWarningAcknowledged] = useState(false)
+  const [tabSwitchCount, setTabSwitchCount] = useState(0)
+  const [showTabWarning, setShowTabWarning] = useState(false)
+  const tabFocusRef = useRef(true)
+  const maxTabSwitches = 1 
 
   // Check if the user has already completed this quiz
   useEffect(() => {
-    console.log(userProgress.quizResults, quiz)
-    if (userProgress && userProgress.quizResults, quiz) {
+    if (userProgress && userProgress.quizResults && quiz) {
       const existingResult = userProgress.quizResults.find(
         result => result.quiz === quiz._id
       )
@@ -21,10 +25,44 @@ const QuizViewer = ({ quiz, onComplete, userProgress, updateUserProgress }) => {
       if (existingResult) {
         setPreviousAttempt(existingResult)
       }
-
-      console.log(previousAttempt)
     }
   }, [userProgress, quiz])
+
+  // Add tab visibility detection
+  useEffect(() => {
+    if (currentQuestionIndex === -1 || showResults || quizSubmitted) return
+
+    const handleVisibilityChange = () => {
+      if (document.hidden && tabFocusRef.current) {
+        tabFocusRef.current = false
+        setTabSwitchCount(prev => prev + 1)
+        setShowTabWarning(true)
+        
+        // Auto-submit immediately after first tab switch
+        if (tabSwitchCount >= maxTabSwitches - 1) {
+          handleSubmitQuiz()
+        }
+      } else if (!document.hidden) {
+        tabFocusRef.current = true
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    
+    // Detect browser close/refresh attempts
+    const handleBeforeUnload = (e) => {
+      e.preventDefault()
+      e.returnValue = 'Are you sure you want to leave? This quiz will be automatically submitted if you leave.'
+      return e.returnValue
+    }
+    
+    window.addEventListener('beforeunload', handleBeforeUnload)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [currentQuestionIndex, showResults, quizSubmitted, tabSwitchCount])
 
   // Timer effect - only start when quiz actually begins (not during intro)
   useEffect(() => {
@@ -60,6 +98,14 @@ const QuizViewer = ({ quiz, onComplete, userProgress, updateUserProgress }) => {
     }
   }
 
+  const handleAcknowledgeWarning = () => {
+    setWarningAcknowledged(true)
+  }
+
+  const handleDismissTabWarning = () => {
+    setShowTabWarning(false)
+  }
+
   const handleSubmitQuiz = () => {
     setQuizSubmitted(true)
     const calculatedResults = calculateScore()
@@ -78,7 +124,8 @@ const QuizViewer = ({ quiz, onComplete, userProgress, updateUserProgress }) => {
         passed: calculatedResults.passed,
         percentage: calculatedResults.percentage,
         totalPoints: calculatedResults.totalPoints,
-        completedAt: new Date()
+        completedAt: new Date(),
+        tabSwitches: tabSwitchCount, // Record number of tab switches
       }
   
       // Check if this quiz was already taken
@@ -210,6 +257,39 @@ const QuizViewer = ({ quiz, onComplete, userProgress, updateUserProgress }) => {
   const totalQuestions = quiz.questions.length
   const isLastQuestion = questionNumber === totalQuestions
 
+  const renderWarningModal = () => (
+    <div className="warning-modal-overlay">
+      <div className="warning-modal">
+        <h2>⚠️ Important Quiz Rules</h2>
+        <div className="warning-content">
+          <p>Please read and acknowledge the following rules before starting the quiz:</p>
+          <ul>
+            <li><strong>Do not switch tabs or windows</strong> while taking this quiz.</li>
+            <li><strong>Do not close this browser window</strong> until you've submitted the quiz.</li>
+            <li>The quiz will be <strong>automatically submitted</strong> if you switch tabs even once.</li>
+          </ul>
+          <p>Violating these rules may result in the quiz being automatically submitted with your current answers.</p>
+        </div>
+        <button className="warning-button" onClick={handleAcknowledgeWarning}>
+          I understand and agree to these rules
+        </button>
+      </div>
+    </div>
+  )
+
+  const renderTabSwitchWarning = () => (
+    <div className="tab-warning-overlay">
+      <div className="tab-warning-modal">
+        <h3>⚠️ Tab Switch Detected</h3>
+        <p>You have switched tabs or minimized the window.</p>
+        <p>This is against quiz rules. The quiz will be automatically submitted.</p>
+        <button className="warning-button" onClick={handleDismissTabWarning}>
+          I understand
+        </button>
+      </div>
+    </div>
+  )
+
   const renderQuestion = () => {
     if (!currentQuestion) return null
 
@@ -322,6 +402,12 @@ const QuizViewer = ({ quiz, onComplete, userProgress, updateUserProgress }) => {
           <p className={passed ? "passed-message" : "failed-message"}>
             {passed ? "Congratulations! You passed the quiz." : "You didn't meet the passing score. Review the material and try again."}
           </p>
+          
+          {tabSwitchCount > 0 && (
+            <p className="tab-switch-notice">
+              Tab switches detected: {tabSwitchCount}
+            </p>
+          )}
         </div>
         
         <div className="questions-review">
@@ -402,7 +488,7 @@ const QuizViewer = ({ quiz, onComplete, userProgress, updateUserProgress }) => {
     
     return (
       <div className="previous-results">
-        <h3>Previous Quiz Attempt</h3>
+        <h3>Quiz Attempt</h3>
         <div className="previous-score">
           <p>Score: {previousAttempt.score.toFixed(1)} out of {previousAttempt.totalPoints} points ({previousAttempt.percentage.toFixed(1)}%)</p>
           <p className={previousAttempt.passed ? "passed-message" : "failed-message"}>
@@ -411,29 +497,48 @@ const QuizViewer = ({ quiz, onComplete, userProgress, updateUserProgress }) => {
           {previousAttempt.completedAt && (
             <p>Completed on: {formatDate(previousAttempt.completedAt)}</p>
           )}
+          {previousAttempt.tabSwitches > 0 && (
+            <p>Tab switches: {previousAttempt.tabSwitches}</p>
+          )}
         </div>
       </div>
     )
   }
 
-  const renderQuizIntro = () => (
-    <div className="quiz-intro">
-      <p>{quiz.description}</p>
-      <div className="quiz-meta">
-        <p><strong>Time limit:</strong> {quiz.timeLimit} minutes</p>
-        <p><strong>Passing score:</strong> {quiz.passingScore}%</p>
-        <p><strong>Total questions:</strong> {quiz.questions.length}</p>
-      </div>
-      
-      {previousAttempt ? (
-        renderPreviousResults()
-      ) : (
-        <button className="start-quiz-btn" onClick={() => setCurrentQuestionIndex(0)}>
+  const renderQuizIntro = () => {
+    return previousAttempt ? (
+      <>
+        {renderPreviousResults()}
+      </>
+    ) : (
+      <div className="quiz-intro">
+        <p>{quiz.description}</p>
+        <div className="quiz-meta">
+          <p><strong>Time limit:</strong> {quiz.timeLimit} minutes</p>
+          <p><strong>Passing score:</strong> {quiz.passingScore}%</p>
+          <p><strong>Total questions:</strong> {quiz.questions.length}</p>
+        </div>
+        
+        <div className="quiz-rules">
+          <h3>⚠️ Important Rules</h3>
+          <ul>
+            <li>Do not switch tabs or windows during the quiz</li>
+            <li>Do not close your browser until you've submitted</li>
+            <li>The quiz will be automatically submitted after a single tab switch</li>
+          </ul>
+        </div>
+        
+        <button 
+          className="start-quiz-btn" 
+          onClick={() => !warningAcknowledged ? null : setCurrentQuestionIndex(0)}
+        >
           Start Quiz
         </button>
-      )}
-    </div>
-  )
+        
+        {!warningAcknowledged && renderWarningModal()}
+      </div>
+    )
+  }
 
   const renderProgressBar = () => {
     const progress = (questionNumber / totalQuestions) * 100
@@ -459,11 +564,18 @@ const QuizViewer = ({ quiz, onComplete, userProgress, updateUserProgress }) => {
         <>
           <div className="quiz-header">
             <h2>{quiz.title}</h2>
-            {quiz.timeLimit > 0 && (
-              <div className="timer-container">
-                Time remaining: {formatTime(timeLeft)}
-              </div>
-            )}
+            <div className="quiz-status-info">
+              {quiz.timeLimit > 0 && (
+                <div className="timer-container">
+                  Time remaining: {formatTime(timeLeft)}
+                </div>
+              )}
+              {tabSwitchCount > 0 && (
+                <div className="tab-switch-counter">
+                  Tab switches: {tabSwitchCount}/{maxTabSwitches}
+                </div>
+              )}
+            </div>
           </div>
           
           {renderProgressBar()}
@@ -495,6 +607,8 @@ const QuizViewer = ({ quiz, onComplete, userProgress, updateUserProgress }) => {
               </button>
             )}
           </div>
+          
+          {showTabWarning && renderTabSwitchWarning()}
         </>
       )}
     </div>
