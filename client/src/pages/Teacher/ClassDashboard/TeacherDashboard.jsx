@@ -22,6 +22,7 @@ const TeacherDashboard = () => {
   const [error, setError] = useState(null)
   const privateAxios = usePrivateApi()
   const { setAuth } = useAuth()
+  const { refetchUser } = useUser()
   
   // New state for announcements and join requests
   const [showAnnouncementsModal, setShowAnnouncementsModal] = useState(false)
@@ -157,6 +158,7 @@ const TeacherDashboard = () => {
 
       if (response.status === 200) {
         setAuth({ accessToken: null})
+        refetchUser()
         navigate('/login')
       }
     } catch (error) {

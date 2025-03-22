@@ -5,6 +5,7 @@ import './Navbar.css'
 import { getUserInitials } from '../../utils/getUserInitials'
 import usePrivateApi from '../../hooks/usePrivateApi'
 import useAuth from '../../hooks/useAuth'
+import { useUser } from '../../context/UserContext'
 
 const Navbar = ({ user }) => { 
   const [searchActive, setSearchActive] = useState(false)
@@ -12,6 +13,7 @@ const Navbar = ({ user }) => {
   const privateAxios = usePrivateApi()
   const navigate = useNavigate()
   const { setAuth } = useAuth()
+  const { refetchUser } = useUser()
   
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -26,6 +28,7 @@ const Navbar = ({ user }) => {
 
       if (response.status === 200) {
         setAuth({ accessToken: null})
+        refetchUser()
         navigate('/login')
       }
     } catch (error) {
