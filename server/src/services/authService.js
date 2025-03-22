@@ -139,6 +139,8 @@ const logIn = async (email, password) => {
     }
     appAssert(user, 'No user is associated with that email', HTTP_STATUS.BAD_REQUEST)
 
+    appAssert(user.verificationCode === null, 'Please verify your email first', HTTP_STATUS.FORBIDDEN)
+
     // Check if the password is correct (using PasswordUtil class)
     const isPasswordCorrect = await PasswordUtil.comparePassword(password, user.password)
     appAssert(isPasswordCorrect, 'Incorrect password, please try again', HTTP_STATUS.BAD_REQUEST)

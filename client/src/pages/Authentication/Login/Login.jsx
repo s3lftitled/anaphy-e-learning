@@ -51,13 +51,18 @@ const Login = () => {
       }
     } catch (error) {
       if (error.response) {
-        if (error.response.status === 429) {
-            alert('Too many requests. Please try again after 5 minutes')
+        const { status, data } = error.response
+    
+        if (status === 429) {
+            alert('Too many requests. Please try again after 5 minutes.');
+        } else if (status === 403) {
+            alert('Please verify your email first.');
+            navigate(`/verification/${loginData.email}`);
         } else {
-            alert(error.response.data?.message || 'An error occurred. Please try again.')
+            alert(data?.message || 'An error occurred. Please try again.');
         }
       } else {
-          alert('An error occurred. Please check your network connection and try again.')
+          alert('An error occurred. Please check your network connection and try again.');
       }
     }
   }
