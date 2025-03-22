@@ -6,7 +6,7 @@ import ContentViewer from '../../components/LearningComponents/ContentViewer'
 import LoadingIndicator from '../../components/LearningComponents/LoadingIndicator'
 import ErrorMessage from '../../components/LearningComponents/ErrorMessage'
 import FloatingHomeButton from '../../components/FloatingHomeButton/FloatingHomeButton'
-import EmptyLearningState  from '../../components/LearningComponents/EmptyLearningState'
+import EmptyLearningState from '../../components/LearningComponents/EmptyLearningState'
 import { useLearningData } from '../../hooks/useLearningData'
 import { useProgressTracking } from '../../hooks/useProgressTracking'
 import { useNavigation } from '../../hooks/useNavigation'
@@ -52,6 +52,7 @@ const ELearningPage = () => {
     currentPage,
     setCurrentPage,
     markContentAsCompleted,
+    completedContent, // Pass completedContent to useNavigation
   )
 
   const toggleSidebar = () => {
@@ -63,7 +64,7 @@ const ELearningPage = () => {
 
   const progress = calculateProgress()
 
-  if (user.joinedClasses <= 0 ) {
+  if (user.joinedClasses <= 0) {
     return <EmptyLearningState />
   }
 
@@ -96,7 +97,7 @@ const ELearningPage = () => {
           isContentCompleted={contentId => completedContent.includes(contentId)}
           markContentAsCompleted={markContentAsCompleted}
           userProgress={userProgress} 
-          updateUserProgress={updateUserProgress} 
+          updateUserProgress={updateUserProgress}  
         />
 
         <FloatingHomeButton />
