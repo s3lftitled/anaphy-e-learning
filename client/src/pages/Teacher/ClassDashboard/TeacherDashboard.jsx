@@ -6,6 +6,7 @@ import { useUser } from '../../../context/UserContext'
 import './TeacherDashboard.css'
 import usePrivateApi from '../../../hooks/usePrivateApi'
 import FloatingHomeButton from '../../../components/FloatingHomeButton/FloatingHomeButton'
+import useAuth from '../../../hooks/useAuth'
 
 const TeacherDashboard = () => {
   // State for classes data
@@ -20,6 +21,7 @@ const TeacherDashboard = () => {
   const { user } = useUser()
   const [error, setError] = useState(null)
   const privateAxios = usePrivateApi()
+  const { setAuth } = useAuth()
   
   // New state for announcements and join requests
   const [showAnnouncementsModal, setShowAnnouncementsModal] = useState(false)
@@ -146,6 +148,19 @@ const TeacherDashboard = () => {
       } else {
           alert('An error occurred. Please check your network connection and try again.')
       }
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      const response = await privateAxios.delete('auth/api/v1/log-out')
+
+      if (response.status === 200) {
+        setAuth({ accessToken: null})
+        navigate('/login')
+      }
+    } catch (error) {
+      alert('Error logging out')
     }
   }
 
@@ -481,7 +496,7 @@ const TeacherDashboard = () => {
         </div>
         
         <div className="sidebar-footer">
-          <button className="sidebar-btn">Sign Out</button>
+          <button className="sidebar-btn" onClick={handleLogout}>Sign Out</button>
         </div>
       </div>
       
