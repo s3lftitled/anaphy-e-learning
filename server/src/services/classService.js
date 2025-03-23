@@ -90,16 +90,41 @@ const inviteStudentService = async (teacherId, studentEmail, classId) => {
     await classData.save()
     await student.save()
 
-    return student
+    const studentData = {
+      _id: student._id,
+      name: student.name,
+      email: student.email,
+      status: 'invited',
+    }
+
+    return studentData
   } catch (error) {
     throw(error)
   }
 }
 
-const acceptInvitationService = async (userRole, studentId, classId) => {
+const fetchClassInvitationsService = async (studentId) => {
   try {
-    validateRequiredParams(userRole, studentId, classId)
-    appAssert(userRole === "student", "Permission denied", HTTP_STATUS.FORBIDDEN)
+    validateRequiredParams(studentId)
+    
+    appAssert(validator.isMongoId(studentId), 'Invalid id format', HTTP_STATUS.BAD_REQUEST)
+
+    const student = await UserModel.findById(studentId).populate({
+      path: 'invitations.classId',
+      select: 'name'
+    })
+
+    appAssert(student, 'Student is not found', HTTP_STATUS.NOT_FOUND)
+
+    return student.invitations
+  } catch (error) {
+    throw(error)
+  }
+}
+
+const acceptInvitationService = async (studentId, classId) => {
+  try {
+    validateRequiredParams(studentId, classId)
     appAssert(validator.isMongoId(studentId) && validator.isMongoId(classId), "Invalid IDs", HTTP_STATUS.BAD_REQUEST)
 
     const classData = await ClassModel.findById(classId)
@@ -129,10 +154,9 @@ const acceptInvitationService = async (userRole, studentId, classId) => {
   }
 }
 
-const rejectInvitationService = async (userRole, studentId, classId) => {
+const rejectInvitationService = async (studentId, classId) => {
   try {
-    validateRequiredParams(userRole, studentId, classId)
-    appAssert(userRole === "student", "Permission denied", HTTP_STATUS.FORBIDDEN)
+    validateRequiredParams(studentId, classId)
     appAssert(validator.isMongoId(studentId) && validator.isMongoId(classId), "Invalid IDs", HTTP_STATUS.BAD_REQUEST)
 
     const student = await UserModel.findById(studentId)
@@ -400,17 +424,11 @@ const removeStudentService = async (classId, studentId) => {
     const student = await UserModel.findById(studentId)
     appAssert(student, 'Student is not found', HTTP_STATUS.NOT_FOUND)
 
-    const updatedClassStudents = classData.students.filter(s => {
-      s.student === student._id
-    })
-
-    classData.students = updatedClassStudents
+    // Correct filter logic with explicit return
+    classData.students = classData.students.filter(s => s.student.toString() !== student._id.toString())
     await classData.save()
 
-    const updatedStudentClasses = student.joinedClasses.filter(s => {
-      s._id === classData._id
-    })
-    student.joinedClasses = updatedStudentClasses
+    student.joinedClasses = student.joinedClasses.filter(s => s._id.toString() !== classData._id.toString())
     await student.save()
   } catch (error) {
     throw error
@@ -419,6 +437,7 @@ const removeStudentService = async (classId, studentId) => {
 
 module.exports = {
   createClassService,
+  fetchClassInvitationsService,
   acceptInvitationService,
   rejectInvitationService,
   inviteStudentService,

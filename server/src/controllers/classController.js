@@ -1,5 +1,6 @@
 const {
   createClassService,
+  fetchClassInvitationsService,
   acceptInvitationService,
   rejectInvitationService,
   inviteStudentService,
@@ -31,6 +32,18 @@ class ClassController {
     }
   }
 
+  async fetchClassInvites(req, res, next) {
+    const { studentId } = req.params
+    try {
+      const studentInvitations = await fetchClassInvitationsService(studentId)
+
+      res.status(HTTP_STATUS.OK).json({ studentInvitations })
+    } catch (error) {
+      logger.error(`Error fetching class invitations - ${error.message}`)
+      next(error)
+    }
+  }
+
   async inviteStudent(req, res, next) {
     const { teacherId, classId } = req.params
     const { studentEmail } = req.body
@@ -45,9 +58,9 @@ class ClassController {
   }
 
   async acceptInvite(req, res, next) {
-    const { userRole, studentId, classId} = req.params
+    const { studentId, classId} = req.params
     try {
-      await acceptInvitationService(userRole, studentId, classId)
+      await acceptInvitationService(studentId, classId)
 
       res.status(HTTP_STATUS.OK).json({ message: 'Class joined succesfully' })
     } catch (error) {
@@ -57,9 +70,9 @@ class ClassController {
   }
 
   async rejectInvite(req, res, next) {
-    const { userRole, studentId, classId} = req.params
+    const { studentId, classId} = req.params
     try {
-      await rejectInvitationService(userRole, studentId, classId)
+      await rejectInvitationService( studentId, classId)
 
       res.status(HTTP_STATUS.OK).json({ message: 'Invitation rejected succesfully' })
     } catch (error) {
