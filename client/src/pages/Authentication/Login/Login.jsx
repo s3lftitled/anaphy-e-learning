@@ -109,7 +109,7 @@ const Login = () => {
 
           <div className="recaptcha-container">
             <ReCAPTCHA
-              sitekey="6Lfl_9QqAAAAAAFX9cr264UKhJVVRXlawTuXD-y0"
+              sitekey="6Lduc_0qAAAAAE3tj3C9pTiylE4BypZT2bK0TSgd"
               onChange={handleCaptchaChange}
             />
           </div>
