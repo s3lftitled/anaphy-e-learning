@@ -11,7 +11,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
 
   // Redirect to authentication if there's no access token
   if (!auth?.accessToken) {
-    return <Navigate to="/auth" />
+    return <Navigate to="/login" />
   }
 
   // Redirect to home if user role is not allowed
