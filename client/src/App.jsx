@@ -24,6 +24,8 @@ const AdminDashboard = lazy(() => import('./pages/Admin/AdminDashboard/AdminDash
 const SystemModelPage =  lazy(() => import('./pages/Home/SystemModel.jsx'))
 const StudentClass = lazy(() => import('./pages/Student/StudentClass.jsx'))
 const Issues = lazy(() => import('./pages/Admin/IssuesPage/Issues.jsx'))
+const ProtectedRoute = lazy(() => import('./components/ProtectedRoute.jsx'))
+const UnauthorizedPage = lazy(() => import('./pages/Unauthorized/Unauthorized.jsx'))
 
 const App = () => {
   return (
@@ -36,13 +38,8 @@ const App = () => {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/verification/:email' element={<Verification />} />
-            <Route path='/create-topic' element={<CreateTopic/>} />
-            <Route path='/create-lesson' element={<CreateLesson/>} />
-            <Route path='/create-multiple-pages' element={<CreateMultiplePages/>} />
-            <Route path='/admin-dashboard' element={<AdminDashboard/>} />
-            <Route path="/system/:slug" element={<SystemModelPage />} />
-            <Route path='/confirm-teacher-account' element={<ConfirmationForm />} />
             <Route path='/*' element={<NotFound />} />
+
             <Route 
               element={
                 <AppProvider>
@@ -52,13 +49,31 @@ const App = () => {
                 </AppProvider>
               }
             >
-              <Route path='/issues' element={<Issues />} />
-              <Route path='/student-classes' element={<StudentClass />} />
-              <Route path='/e-learning' element={<ELearningPage />} />
-              <Route path='/home' element={<Homepage />} />
-              <Route path='/teacher-management' element={<TeacherManagement />} />
-              <Route path='/create-class-page' element={<CreateClassPage />} />
-              <Route path='/teacher-dashboard' element={<TeacherDashboard />} />
+              <Route element={<ProtectedRoute allowedRoles={'admin'} /> }>
+                <Route path='/issues' element={<Issues />} />
+                <Route path='/teacher-management' element={<TeacherManagement />} />
+                <Route path='/admin-dashboard' element={<AdminDashboard/>} />
+                <Route path='/create-topic' element={<CreateTopic/>} />
+                <Route path='/create-lesson' element={<CreateLesson/>} />
+                <Route path='/create-multiple-pages' element={<CreateMultiplePages/>} />
+              </Route>
+
+              <Route element={<ProtectedRoute allowedRoles={'teacher'} />}>
+                <Route path='/teacher-dashboard' element={<TeacherDashboard />} />
+                <Route path='/create-class-page' element={<CreateClassPage />} />
+                <Route path='/confirm-teacher-account' element={<ConfirmationForm />} />
+              </Route>
+
+              <Route element={<ProtectedRoute allowedRoles={'student'} />}>
+                <Route path='/student-classes' element={<StudentClass />} />
+              </Route>
+              
+              <Route element={<ProtectedRoute allowedRoles={['admin', 'student', 'teacher']} />}>
+                <Route path='/e-learning' element={<ELearningPage />} />
+                <Route path='/home' element={<Homepage />} />        
+                <Route path="/system/:slug" element={<SystemModelPage />} />
+                <Route path='/unauthorized' element={<UnauthorizedPage />} />
+              </Route>
             </Route>
           </Routes>
         </Suspense>
