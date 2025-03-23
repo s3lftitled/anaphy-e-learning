@@ -20,7 +20,6 @@
   background-color: var(--secondary);
   color: var(--text);
   padding: 2rem;
-  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   margin: 0 auto;
   display: flex;
@@ -173,7 +172,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 60vh;
+  height: 100vh;
+  width: 100%;
+  background-color: var(--secondary);
 }
 
 .loading-spinner {
