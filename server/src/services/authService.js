@@ -10,8 +10,10 @@ const sanitizeHtml = require('sanitize-html')
 const { validateRequiredParams } = require('../utils/paramsValidator')
 const { appAssert } = require('../utils/appAssert')
 const { generateTokens } = require('../middlewares/jsonWebTokens')
+const { generateResetToken, sendResetPasswordEmail } = require('../utils/passwordResetUtils')
 const logger = require('../logger/logger')
 const axios = require('axios')
+const passwordUtils = require('../utils/passwordUtils')
 
 const CAPTCHA_SECRET = process.env.CAPTCHA_SECRET
 
@@ -213,10 +215,78 @@ const logOutService = async (res) => {
   }
 }
 
+const forgotPasswordService = async (email) => {
+  try {
+    validateRequiredParams(email)
+
+    appAssert(validator.isEmail(email), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)
+    // Check if user exists with the provided email
+    let user = await UserModel.findOne({ email: email })
+
+    if (!user) {
+      user = await TeacherModel.findOne({ email: email })
+    }
+
+    appAssert(user, 'User is not found', HTTP_STATUS.NOT_FOUND)
+
+    // Generate reset token
+    const resetToken = generateResetToken(user)
+
+    // Save the reset token to the user object
+    user.resetPasswordToken = resetToken
+    await user.save()
+
+    // Send reset password email
+    await sendResetPasswordEmail(email, resetToken)
+  } catch (error) {
+    throw error
+  }
+}
+
+const resetPasswordService = async (resetToken, newPassword, newPasswordConfirmation) => {
+  try {
+    console.log(resetToken)
+    validateRequiredParams(resetToken, newPassword, newPasswordConfirmation)
+    // Find user by reset token
+    let user = await UserModel.findOne({ resetPasswordToken: resetToken })
+
+    if (!user) {
+      user = await TeacherModel.findOne({ resetPasswordToken: resetToken })
+    }
+
+    appAssert(user, 'Invalid or expired token', HTTP_STATUS.BAD_REQUEST)
+
+    // Check if reset token has expired
+    appAssert(user.resetPasswordExpires > Date.now(), 'Reset token has expired', HTTP_STATUS.BAD_REQUEST) 
+
+    // Check if passwords are matched
+    appAssert(newPassword === newPasswordConfirmation, 'Passwords dont match', HTTP_STATUS.BAD_REQUEST) 
+
+    // Validate and sanitize password
+    appAssert(newPassword.length >= 8, 'Password must be at least 8 characters long', HTTP_STATUS.BAD_REQUEST)
+
+    const sanitizedPassword = sanitizeHtml(newPassword.trim())  // Sanitize to remove potentially harmful HTML
+
+    // Hash the new password
+    const hashedPassword = await passwordUtils.hashPassword(sanitizedPassword)
+
+    // Update user's password
+    user.password = hashedPassword
+    // Clear reset token and expiration time
+    user.resetPasswordToken = undefined
+    user.resetPasswordExpires = undefined
+    await user.save()
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   registerUser,
   logIn,
   verifyEmail,
   changePassword,
   logOutService,
+  forgotPasswordService,
+  resetPasswordService,
 }

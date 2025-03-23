@@ -4,6 +4,8 @@ const {
   logIn, 
   changePassword,
   logOutService, 
+  forgotPasswordService,
+  resetPasswordService,
 } = require('../services/authService')
 const HTTP_STATUS = require('../constants/httpConstants')
 const logger = require('../logger/logger')
@@ -69,6 +71,31 @@ class AuthController {
       res.status(HTTP_STATUS.OK).json({ message: 'Logged out succesfully' })
     } catch (error) {
       logger.error(`Error logging out - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async forgotPassword(req, res, next) {
+    const { email } = req.body
+    try {
+      await forgotPasswordService(email)
+
+      res.status(HTTP_STATUS.OK).json({ message: 'Password reset instruction has been sent to the email'})
+    } catch (error) {
+      logger.error(`Error forgotting password - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async resetPassword(req, res, next) {
+    const { resetToken } = req.params
+    const { newPassword, newPasswordConfirmation } = req.body
+    try {
+      await resetPasswordService(resetToken, newPassword, newPasswordConfirmation)
+
+      res.status(HTTP_STATUS.OK).json({ message: 'Password reset succesfully' })
+    } catch (error) {
+      logger.error(`Error resetting password - ${error.message}`)
       next(error)
     }
   }

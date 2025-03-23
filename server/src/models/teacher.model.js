@@ -9,7 +9,9 @@ const teacherSchema = new mongoose.Schema({
   role: { type: String, default: 'teacher'},
   classes: [{ type: mongoose.Schema.Types.ObjectId, ref: "ClassModel" }],
   confirmationToken: { type: String }, // Store token for verification
-  tokenExpires: { type: Date } // Set expiration time for security
+  tokenExpires: { type: Date }, // Set expiration time for security
+  resetPasswordToken: { type: String, default: undefined},
+  resetPasswordExpires: { type: Date, default: undefined },
 })
 
 module.exports = mongoose.model('TeacherModel', teacherSchema)

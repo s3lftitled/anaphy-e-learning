@@ -169,14 +169,14 @@
   cursor: pointer;
 }
 
-.signup-prompt {
+.signup-prompt, .forgot-password-prompt {
   margin-top: 24px;
   margin-left: 110px;
   color: #ffff;
   cursor: pointer;
 }
 
-.signup-prompt:hover {
+.signup-prompt:hover, .forgot-password-prompt:hover {
   text-decoration: underline;
 }
 
