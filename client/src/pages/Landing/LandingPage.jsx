@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import './LandingPage.css'
 
@@ -8,36 +8,101 @@ const LandingPage = () => {
   const aboutRef = useRef(null)
   const contactRef = useRef(null)
 
+  const [isNavOpen, setIsNavOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
   // Function to scroll to a section
   const scrollToSection = (elementRef) => {
     elementRef.current.scrollIntoView({ behavior: 'smooth' })
+    if (isMobile) {
+      setIsNavOpen(false) // Close nav after selection only on mobile
+    }
   }
+  
+   // Track window size to determine if mobile view
+   useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    
+    // Initial check
+    handleResize()
+    
+    // Add event listener
+    window.addEventListener('resize', handleResize)
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   return (
     <div className='landing-container'>
       <div className="scrollable-page">
-      {/* Navigation Bar */}
-      <div className="landing-nav-bar">
+      {/* Floating Nav Toggle Button - Only visible on mobile */}
+      {isMobile && (
         <button 
-          className="landing-nav-link" 
-          onClick={() => scrollToSection(homeRef)}
+          className={`floating-nav-toggle ${isNavOpen ? 'active' : ''}`} 
+          onClick={() => setIsNavOpen(!isNavOpen)}
+          aria-label="Toggle navigation menu"
         >
-          Home
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
-        <button 
-          className="landing-nav-link" 
-          onClick={() => scrollToSection(aboutRef)}
-        >
-          About
-        </button>
-        <button 
-          className="landing-nav-link" 
-          onClick={() => scrollToSection(contactRef)}
-        >
-          Contact
-        </button>
-        <Link className="landing-nav-login" to="/login">Login</Link>
-      </div>
+      )}
+
+      {/* Navigation Bar - Different structure based on screen size */}
+      {isMobile ? (
+        // Mobile Floating Navigation
+        <div className={`floating-nav ${isNavOpen ? 'open' : ''}`}>
+          <button 
+            className="floating-nav-link" 
+            onClick={() => scrollToSection(homeRef)}
+          >
+            Home
+          </button>
+          <button 
+            className="floating-nav-link" 
+            onClick={() => scrollToSection(aboutRef)}
+          >
+            About
+          </button>
+          <button 
+            className="floating-nav-link" 
+            onClick={() => scrollToSection(contactRef)}
+          >
+            Contact
+          </button>
+          <Link className="floating-nav-login" to="/login">Login</Link>
+        </div>
+      ) : (
+        // Desktop Traditional Navigation
+        <div className="landing-nav-bar">
+          <button 
+            className="landing-nav-link" 
+            onClick={() => scrollToSection(homeRef)}
+          >
+            Home
+          </button>
+          <button 
+            className="landing-nav-link" 
+            onClick={() => scrollToSection(aboutRef)}
+          >
+            About
+          </button>
+          <button 
+            className="landing-nav-link" 
+            onClick={() => scrollToSection(contactRef)}
+          >
+            Contact
+          </button>
+          <Link className="landing-nav-login" to="/login">Login</Link>
+        </div>
+      )}
+     
+      {/* REMOVING DUPLICATE NAVIGATION BAR */}
 
       {/* Landing Page Section */}
       <section ref={homeRef} id="home" className="landing-section">
@@ -60,56 +125,56 @@ const LandingPage = () => {
 
       {/* About Us Section */}
       <section ref={aboutRef} id="about" className="about-section">
-  <div className="aboutus">
-    <h1>ABOUT US</h1>
-    <p className="about-description">
-      This project will help nursing students at Panpacific University 
-      develop their understanding of human anatomy and physiology, by 
-      aligning with several Sustainable Development Goals such as SDG 
-      3: Good Health and Well-Being, SDG 4: Quality Education, and SDG 
-      9: Industry, Innovation and Infrastructure.
-    </p>
-  </div>
+        <div className="aboutus">
+          <h1>ABOUT US</h1>
+          <p className="about-description">
+            This project will help nursing students at Panpacific University 
+            develop their understanding of human anatomy and physiology, by 
+            aligning with several Sustainable Development Goals such as SDG 
+            3: Good Health and Well-Being, SDG 4: Quality Education, and SDG 
+            9: Industry, Innovation and Infrastructure.
+          </p>
+        </div>
 
-  {/* Bubbles */}
-  <div className="bubble" style={{ width: '100px', height: '100px', top: '10%', left: '5%' }}></div>
-  <div className="bubble" style={{ width: '150px', height: '150px', top: '20%', right: '10%' }}></div>
-  <div className="bubble" style={{ width: '120px', height: '120px', bottom: '15%', left: '20%' }}></div>
+        {/* Bubbles */}
+        <div className="bubble" style={{ width: '100px', height: '100px', top: '10%', left: '5%' }}></div>
+        <div className="bubble" style={{ width: '150px', height: '150px', top: '20%', right: '10%' }}></div>
+        <div className="bubble" style={{ width: '120px', height: '120px', bottom: '15%', left: '20%' }}></div>
 
-  <div className="sdg-container"> 
-    <div className="sdg-card">
-      <div className="sdg-icon">
-        <img src="Sdg3.png" alt="Health Icon" className="sdg-icon-img" />
-      </div>
-      <h2>SDG 3: GOOD HEALTH AND WELL-BEING</h2>
-      <div className="sdg-description">
-        <p>The project directly contributes to this by assisting with the 
-        development of future nurses, who are going to be important in 
-        the provision of health services in the future</p>
-      </div>
-    </div>
-    
-    <div className="sdg-card">
-      <div className="sdg-icon">
-        <img src="sdg4.png" alt="Education Icon" className="sdg-icon-img" />
-      </div>
-      <h2>SDG 4: QUALITY EDUCATION</h2>
-      <div className="sdg-description">
-        <p>Ensure inclusive and equitable quality education and promote lifelong learning opportunities for all.</p>
-      </div>
-    </div>
-    
-    <div className="sdg-card">
-      <div className="sdg-icon">
-        <img src="sdg9.png" alt="Innovation Icon" className="sdg-icon-img" />
-      </div>
-      <h2>SDG 9: INDUSTRY, INNOVATION AND INFRASTRUCTURE</h2>
-      <div className="sdg-description">
-        <p>Using technology and innovation to enhance educational outcomes and prepare students for future healthcare challenges.</p>
-      </div>
-    </div>
-  </div>
-</section>
+        <div className="sdg-container"> 
+          <div className="sdg-card">
+            <div className="sdg-icon">
+              <img src="Sdg3.png" alt="Health Icon" className="sdg-icon-img" />
+            </div>
+            <h2>SDG 3: GOOD HEALTH AND WELL-BEING</h2>
+            <div className="sdg-description">
+              <p>The project directly contributes to this by assisting with the 
+              development of future nurses, who are going to be important in 
+              the provision of health services in the future</p>
+            </div>
+          </div>
+          
+          <div className="sdg-card">
+            <div className="sdg-icon">
+              <img src="sdg4.png" alt="Education Icon" className="sdg-icon-img" />
+            </div>
+            <h2>SDG 4: QUALITY EDUCATION</h2>
+            <div className="sdg-description">
+              <p>Ensure inclusive and equitable quality education and promote lifelong learning opportunities for all.</p>
+            </div>
+          </div>
+          
+          <div className="sdg-card">
+            <div className="sdg-icon">
+              <img src="sdg9.png" alt="Innovation Icon" className="sdg-icon-img" />
+            </div>
+            <h2>SDG 9: INDUSTRY, INNOVATION AND INFRASTRUCTURE</h2>
+            <div className="sdg-description">
+              <p>Using technology and innovation to enhance educational outcomes and prepare students for future healthcare challenges.</p>
+            </div>
+          </div>
+        </div>
+      </section>
       {/* Contact Us Section */}
       <section ref={contactRef} id="contact" className="contact-section">
         <h1 className="contact-section-title">Our Team</h1>
@@ -187,4 +252,3 @@ const LandingPage = () => {
 }
 
 export default LandingPage
-
