@@ -108,46 +108,48 @@ const TeacherDashboard = () => {
       const response = await privateAxios.post(`class/api/v1/invite-student/${user.id}/${activeClass.id}`, {studentEmail: inviteEmail}, {
         withCredentials: true
       })
-      
-      if (!response.status === 200) {
-        throw new Error(`API request failed with status ${response.status}`)
-      }
-      
-      const data = response.data.studentData
-      
-      // Update the local state with the newly invited student
-      const newStudent = {
-        id: data.student._id,
-        name: data.student.name,
-        email: data.student.email,
-        status: 'invited',
-        lastActive: null
-      }
 
-      // Update the active class with the new student
-      const updatedClass = {
-        ...activeClass,
-        students: [...activeClass.students, newStudent]
+      if (response.status === 201) {
+        const studentData = response?.data?.studentData
+        
+        // Update the local state with the newly invited student
+        const newStudent = {
+          id: studentData._id,
+          name: studentData.name,
+          email: studentData.email,
+          status: 'invited',
+          lastActive: null
+        }
+  
+        // Update the active class with the new student
+        const updatedClass = {
+          ...activeClass,
+          students: [...activeClass.students, newStudent]
+        }
+  
+        // Update classes array
+        const updatedClasses = classes.map(c => 
+          c.id === activeClass.id ? updatedClass : c
+        )
+  
+        setClasses(updatedClasses)
+        setActiveClass(updatedClass)
+        setInviteEmail('')
+        setShowInviteModal(false)
       }
-
-      // Update classes array
-      const updatedClasses = classes.map(c => 
-        c.id === activeClass.id ? updatedClass : c
-      )
-
-      setClasses(updatedClasses)
-      setActiveClass(updatedClass)
-      setInviteEmail('')
-      setShowInviteModal(false)
     } catch (error) {
       if (error.response) {
         if (error.response.status === 429) {
-            alert('Too many requests. Please try again after 5 minutes')
+          alert('Too many requests. Please try again after 5 minutes')
         } else {
-            alert(error.response.data?.message || 'An error occurred. Please try again.')
+          alert(error.response.data?.message || 'An error occurred. Please try again.')
         }
+      } else if (error.request) {
+        console.error("Error request:", error.request)
+        alert('Request was made but no response was received. Please check your connection.')
       } else {
-          alert('An error occurred. Please check your network connection and try again.')
+        console.error("Error message:", error.message)
+        alert(`Error: ${error.message || 'An unknown error occurred'}`)
       }
     }
   }
