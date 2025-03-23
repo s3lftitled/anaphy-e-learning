@@ -5,7 +5,12 @@ import api from '../../../utils/api'
 import './Register.css'
 
 const Register = () => {
-  const [registrationData, setRegistrationData] = useState({})
+  const [registrationData, setRegistrationData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    passwordConfirmation: ''
+  })
   const [isLoading, setIsLoading] = useState(false)
   const [captchaValue, setCaptchaValue] = useState(null)
   const navigate = useNavigate()
@@ -16,7 +21,7 @@ const Register = () => {
   }
 
   const handleCaptcha = (value) => {
-    setCaptchaValue(value) // Save reCAPTCHA token
+    setCaptchaValue(value)
   }
 
   const handleRegistration = async (e) => {
@@ -24,6 +29,11 @@ const Register = () => {
 
     if (!registrationData.email || !registrationData.password || !registrationData.name) {
       alert('Please fill in all required fields')
+      return
+    }
+
+    if (registrationData.password !== registrationData.passwordConfirmation) {
+      alert('Passwords do not match')
       return
     }
 
@@ -39,10 +49,9 @@ const Register = () => {
         email: registrationData.email,
         password: registrationData.password,
         passwordConfirmation: registrationData.passwordConfirmation,
-        recaptcha: captchaValue, // Send reCAPTCHA token to backend
+        recaptcha: captchaValue,
       })
 
-      console.log(response)
       if (response.status === 201) {
         alert('Registration successful, please verify your email')
         navigate(`/verification/${registrationData.email}`)
@@ -50,12 +59,12 @@ const Register = () => {
     } catch (error) {
       if (error.response) {
         if (error.response.status === 429) {
-            alert('Too many requests. Please try again after 5 minutes');
+          alert('Too many requests. Please try again after 5 minutes')
         } else {
-            alert(error.response.data?.message || 'An error occurred. Please try again.');
+          alert(error.response.data?.message || 'An error occurred. Please try again.')
         }
       } else {
-          alert('An error occurred. Please check your network connection and try again.');
+        alert('An error occurred. Please check your network connection and try again.')
       }
     } finally {
       setIsLoading(false)
@@ -64,54 +73,89 @@ const Register = () => {
 
   return (
     <div className="register">
-      <div className="glow glow-1"></div>
-      <div className="glow glow-2"></div>
-      <div className="glow glow-3"></div>
-
-      <div className="register-img-container">
-        <img className="register-img" src="skull.png" alt="Register" />
+      <div className="background-glows">
+        <div className="glow glow-1"></div>
+        <div className="glow glow-2"></div>
+        <div className="glow glow-3"></div>
       </div>
 
-      <nav className="register-nav">
-        <Link className="login-btn" to="/login">Login</Link>
-        <Link className="nav-link">About</Link>
-        <Link className="nav-link">Contact</Link>
-        <Link className="nav-link">Home</Link>
-      </nav>
+      <div className="register-content">
+        <div className="register-img-container">
+          <img className="register-img" src="skull.png" alt="Register" />
+        </div>
 
-      <div className="form-container">
-        <h2>Sign Up</h2>
-        <form onSubmit={handleRegistration}>
-          <div className="input-group">
-            <label htmlFor="name">Full Name</label>
-            <input type="text" id="name" name="name" placeholder="e.g., John Doe" required onChange={handleFieldChange} />
-          </div>
+        <nav className="register-nav">
+          <Link className="login-btn" to="/login">Login</Link>
+          <Link className='nav-link' to="/">Home</Link>  
+        </nav>
 
-          <div className="input-group">
-            <label htmlFor="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="yourname@panpacificu.edu.ph" required onChange={handleFieldChange} />
-          </div>
+        <div className="register-form-container">
+          <h2>Sign Up</h2>
+          <form onSubmit={handleRegistration}>
+            <div className="input-group">
+              <label htmlFor="name">Full Name</label>
+              <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                placeholder="e.g., John Doe" 
+                value={registrationData.name}
+                required 
+                onChange={handleFieldChange} 
+              />
+            </div>
 
-          <div className="input-group">
-            <label htmlFor="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="••••••••" required onChange={handleFieldChange} />
-          </div>
+            <div className="input-group">
+              <label htmlFor="email">Email</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                placeholder="yourname@panpacificu.edu.ph" 
+                value={registrationData.email}
+                required 
+                onChange={handleFieldChange} 
+              />
+            </div>
 
-          <div className="input-group">
-            <label htmlFor="password-confirmation">Confirm Password</label>
-            <input type="password" id="password-confirmation" name="passwordConfirmation" placeholder="••••••••" required onChange={handleFieldChange} />
-          </div>
+            <div className="input-group">
+              <label htmlFor="password">Password</label>
+              <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                placeholder="••••••••" 
+                value={registrationData.password}
+                required 
+                onChange={handleFieldChange} 
+              />
+            </div>
 
-          {/* Google reCAPTCHA */}
-          <div className="captcha-container">
-            <ReCAPTCHA
-              sitekey="6Lfl_9QqAAAAAAFX9cr264UKhJVVRXlawTuXD-y0" // Your reCAPTCHA site key
-              onChange={handleCaptcha}
-            />
-          </div>
+            <div className="input-group">
+              <label htmlFor="passwordConfirmation">Confirm Password</label>
+              <input 
+                type="password" 
+                id="passwordConfirmation" 
+                name="passwordConfirmation" 
+                placeholder="••••••••" 
+                value={registrationData.passwordConfirmation}
+                required 
+                onChange={handleFieldChange} 
+              />
+            </div>
 
-          <button type="submit">{isLoading ? 'Registering...' : 'Register'}</button>
-        </form>
+            <div className="captcha-container">
+              <ReCAPTCHA
+                sitekey="6Lduc_0qAAAAAE3tj3C9pTiylE4BypZT2bK0TSgd"
+                onChange={handleCaptcha}
+              />
+            </div>
+
+            <button type="submit" disabled={isLoading}>
+              {isLoading ? 'Registering...' : 'Register'}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   )
