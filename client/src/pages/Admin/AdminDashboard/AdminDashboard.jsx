@@ -5,6 +5,7 @@ import {
   Tooltip, ResponsiveContainer, LineChart, Line 
 } from 'recharts'
 import './AdminDashboard.css'
+import FloatingHomeButton from '../../../components/FloatingHomeButton/FloatingHomeButton'
 
 const UserActivityDashboard = () => {
   const [activeUsersData, setActiveUsersData] = useState({
@@ -173,6 +174,7 @@ const UserActivityDashboard = () => {
           </ResponsiveContainer>
         </div>
       )}
+      <FloatingHomeButton />
     </div>
   )
 }
