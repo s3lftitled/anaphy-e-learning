@@ -18,6 +18,11 @@ const UserActivityDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview')
 
   useEffect(() => {
+    // Page title
+    document.title = `AnatomyVerse - User Activity Dashboard`
+  }, [])
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true)

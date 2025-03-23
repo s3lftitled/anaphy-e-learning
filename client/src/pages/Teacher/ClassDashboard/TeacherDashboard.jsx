@@ -46,6 +46,11 @@ const TeacherDashboard = () => {
   const [showRemoveStudentModal, setShowRemoveStudentModal] = useState(false)
   const [studentToRemove, setStudentToRemove] = useState(null)
 
+  useEffect(() => {
+    // Page title
+    document.title = `AnatomyVerse - Teacher Dashboard`
+  }, [])
+
   // Fetch classes data from API
   useEffect(() => {
     if (user && user.id) {

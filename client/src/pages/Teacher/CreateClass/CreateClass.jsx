@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
 import usePrivateApi from '../../../hooks/usePrivateApi'
 import { useUser } from '../../../context/UserContext'
 import './CreateClass.css'
@@ -12,6 +12,11 @@ const CreateClassPage = () => {
   const [showSuccess, setShowSuccess] = useState(false)
   const privateAxios = usePrivateApi()
   const { user } = useUser()
+
+  useEffect(() => {
+      // Page title
+      document.title = `AnatomyVerse - Create Class`
+    }, [])
 
   const handleCreateClass = async (e) => {
     e.preventDefault()

@@ -87,6 +87,11 @@ const Homepage = () => {
   const [isScrolling, setIsScrolling] = useState(false)
   const [startX, setStartX] = useState(0)
   const [scrollLeft, setScrollLeft] = useState(0)
+  
+  useEffect(() => {
+    // Page title
+    document.title = `AnatomyVerse - Home`
+  }, [])
 
   const handleMouseDown = (e) => {
     if (!scrollContainerRef.current) return

@@ -15,6 +15,11 @@ const TeacherManagement = () => {
   const privateAxios = usePrivateApi()
 
   useEffect(() => {
+    // Page title
+    document.title = `AnatomyVerse - Teacher Management`
+  }, [])
+
+  useEffect(() => {
     fetchTeachers()
   }, [])
 

@@ -16,6 +16,11 @@ const Issues = () => {
   const [refreshing, setRefreshing] = useState(false)
   const privateApi = usePrivateApi()
 
+  useEffect(() => {
+    // Page title
+    document.title = `AnatomyVerse - Issues`
+  }, [])
+
   // Fetch issues from API
   const fetchIssues = async () => {
     try {

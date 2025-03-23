@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   Search, 
   Book, 
@@ -32,6 +32,11 @@ const StudentClass = () => {
   const [loadingInvitations, setLoadingInvitations] = useState(false);
   const privateAxios = usePrivateApi()
   const { user } = useUser()
+
+  useEffect(() => {
+    // Page title
+    document.title = `AnatomyVerse - Student Class`
+  }, [])
   
   // Fetch user's classes on component mount
   useEffect(() => {

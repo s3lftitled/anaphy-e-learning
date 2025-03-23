@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useUser } from '../../context/UserContext'
 import Navbar from '../../components/Navbar/Navbar'
 import Sidebar from '../../components/LearningComponents/Sidebar'
@@ -14,6 +14,11 @@ import { useNavigation } from '../../hooks/useNavigation'
 const ELearningPage = () => {
   const { user } = useUser()
   const [sidebarExpanded, setSidebarExpanded] = useState(true)
+
+  useEffect(() => {
+    // Page title
+    document.title = `AnatomyVerse - E-Learning`
+  }, [])
   
   const {
     topics,
