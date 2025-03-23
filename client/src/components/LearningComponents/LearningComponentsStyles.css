@@ -305,8 +305,6 @@
   color: var(--text-light);
 }
 
-/* Add this to your existing styles.css file */
-
 .text-to-speech-button {
   background-color: #0c4160;
   color: white;
@@ -332,8 +330,6 @@
 .text-to-speech-button.speaking:hover {
   background-color: #f44336;
 }
-
-/* Add these styles to your existing styles.css file */
 
 /* Completed content indicator in the sidebar */
 .pages-list li.completed {
@@ -669,13 +665,13 @@
 /* Quiz Intro Styling */
 .quiz-intro {
   padding: 40px 24px;
-  text-align: center;
 }
 
 .quiz-intro h2 {
   color: var(--primary);
   font-size: 1.8rem;
   margin-bottom: 16px;
+  text-align: center;
 }
 
 .quiz-intro p {
@@ -975,8 +971,6 @@
   margin: 0 auto;
 }
 
-/* Add these styles to your LearningComponentsStyles.css file */
-
 /* Warning Modal */
 .warning-modal-overlay {
   position: fixed;
@@ -1087,8 +1081,6 @@
   border-radius: 4px;
   display: inline-block;
 }
-
-/* Add these styles to your LearningComponentsStyles.css file */
 
 .lesson-header.disabled {
   cursor: not-allowed;
