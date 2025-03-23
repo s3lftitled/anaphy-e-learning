@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { AlertTriangle, Filter, Search, RefreshCw, ChevronDown, Clock, Mail } from 'lucide-react'
 import usePrivateApi from '../../../hooks/usePrivateApi'
 import './Issues.css'
+import FloatingHomeButton from '../../../components/FloatingHomeButton/FloatingHomeButton'
 import { privateAxios } from '../../../utils/api'
 
 const Issues = () => {
@@ -248,6 +249,7 @@ const Issues = () => {
           <p>{issues.filter(issue => issue.issueType === 'Other').length}</p>
         </div>
       </div>
+      <FloatingHomeButton />
     </div>
   )
 }

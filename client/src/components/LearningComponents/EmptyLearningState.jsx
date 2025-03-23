@@ -1,6 +1,7 @@
 // EmptyLearningState.jsx
 import { useNavigate } from 'react-router-dom'
 import './LearningComponentsStyles.css'
+import FloatingHomeButton from '../FloatingHomeButton/FloatingHomeButton'
 
 const EmptyLearningState = () => {
   const navigate = useNavigate()
@@ -30,6 +31,7 @@ const EmptyLearningState = () => {
           <p>Need help choosing the right class? Contact our support team for personalized guidance.</p>
         </div>
       </div>
+      <FloatingHomeButton />
     </div>
   )
 }
