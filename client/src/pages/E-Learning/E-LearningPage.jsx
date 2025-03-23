@@ -64,7 +64,7 @@ const ELearningPage = () => {
 
   const progress = calculateProgress()
 
-  if (user.joinedClasses <= 0) {
+  if (user.role !== 'admin' && user.joinedClasses <= 0) {
     return <EmptyLearningState />
   }
 
