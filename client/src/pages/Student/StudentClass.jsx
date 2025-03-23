@@ -9,7 +9,10 @@ import {
   ChevronLeft,
   Users,
   Calendar,
-  Hash
+  Hash,
+  Mail,
+  Check,
+  X
 } from 'lucide-react'
 import './StudentClass.css'
 import usePrivateApi from '../../hooks/usePrivateApi'
@@ -24,7 +27,9 @@ const StudentClass = () => {
   const [searchError, setSearchError] = useState('');
   const [selectedClass, setSelectedClass] = useState(null);
   const [announcements, setAnnouncements] = useState([]);
-  const [loadingAnnouncements, setLoadingAnnouncements] = useState(false)
+  const [loadingAnnouncements, setLoadingAnnouncements] = useState(false);
+  const [invitations, setInvitations] = useState([]);
+  const [loadingInvitations, setLoadingInvitations] = useState(false);
   const privateAxios = usePrivateApi()
   const { user } = useUser()
   
@@ -46,6 +51,26 @@ const StudentClass = () => {
     }
     
     fetchClasses()
+  }, [user, privateAxios])
+  
+  // Fetch user's class invitations
+  useEffect(() => {
+    const fetchInvitations = async () => {
+      setLoadingInvitations(true)
+      try {
+        const response = await privateAxios.get(`class/api/v1/fetch-class-invites/${user.id}`)
+        
+        if (response.status === 200) {
+          setInvitations(response.data.studentInvitations)
+        }
+      } catch (error) {
+        console.error('Error fetching class invitations:', error)
+      } finally {
+        setLoadingInvitations(false)
+      }
+    }
+    
+    fetchInvitations()
   }, [user, privateAxios])
   
   // Search for a class by code
@@ -80,7 +105,7 @@ const StudentClass = () => {
     
     try {
       const response = await privateAxios.post(
-        `class/api/v1/join-class/${user?.id}`, 
+        `class/api/v1/join-class/${user?.id}/`, 
         { classCode: searchResult.classCode }, 
         { withCredentials: true }
       )
@@ -98,6 +123,49 @@ const StudentClass = () => {
     }
   }
   
+  // Handle invitation response (accept/reject)
+  const handleInvitationResponse = async (invitationId, action) => {
+    try {
+      let endpoint
+      let method
+      
+      // Choose the appropriate endpoint based on action
+      if (action === 'accept') {
+        method = 'put'
+        endpoint = `class/api/v1/accept-invite/${user.id}/${invitationId}`
+      } else if (action === 'reject') {
+        method = 'delete'
+        endpoint = `class/api/v1/reject-invite/${user.id}/${invitationId}`
+      } else {
+        throw new Error('Invalid action specified')
+      }
+
+      console.log(method)
+      
+      const response = await privateAxios[method](
+        endpoint, {},
+        { withCredentials: true }
+      )
+      
+      if (response.status === 200) {
+        // Refresh invitations list
+        const updatedInvitations = await privateAxios.get(`class/api/v1/fetch-class-invites/${user.id}`)
+        setInvitations(updatedInvitations.data.studentInvitations)
+        
+        // If accepted, refresh classes list
+        if (action === 'accept') {
+          const updatedClasses = await privateAxios.get(`class/api/v1/fetch-joined-classes/${user.id}`)
+          setUserClasses(updatedClasses.data.joinedClasses)
+        }
+        
+        alert(`Invitation ${action === 'accept' ? 'accepted' : 'rejected'} successfully`)
+      }
+    } catch (error) {
+      console.error(`Error ${action}ing invitation:`, error)
+      alert(`Error ${action}ing invitation. Please try again.`)
+    }
+  }
+
   // View class details
   const handleViewClass = async (classItem) => {
     setSelectedClass(classItem)
@@ -282,6 +350,48 @@ const StudentClass = () => {
           <>
             <div className="classes-header">
               <h1>My Classes</h1>
+            </div>
+            
+            {/* Class Invitations Section */}
+            <div className="invitations-section">
+              <h2><Mail size={20} /> Class Invitations</h2>
+              {loadingInvitations ? (
+                <div className="loading-container">
+                  <div className="loading-spinner"></div>
+                  <p>Loading invitations...</p>
+                </div>
+              ) : invitations && invitations.length > 0 ? (
+                <div className="invitations-list">
+                  {invitations.map(invitation => (
+                    <div key={invitation._id} className="invitation-card">
+                      <div className="invitation-details">
+                        <h3>{invitation.classId.name}</h3>
+                        <p><Hash size={14} /> {invitation.classCode}</p>
+                        <p><Clock size={14} /> Invited {getTimeAgo(invitation.invitedAt)}</p>
+                      </div>
+                      <div className="invitation-actions">
+                        <button 
+                          className="accept-button"
+                          onClick={() => handleInvitationResponse(invitation.classId._id, 'accept')}
+                        >
+                          <Check size={16} /> Accept
+                        </button>
+                        <button 
+                          className="reject-button"
+                          onClick={() => handleInvitationResponse(invitation.classId._id, 'reject')}
+                        >
+                          <X size={16} /> Reject
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="empty-state">
+                  <Mail size={28} />
+                  <p>No pending class invitations.</p>
+                </div>
+              )}
             </div>
             
             {loading ? (
