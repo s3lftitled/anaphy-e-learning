@@ -26,6 +26,8 @@ const StudentClass = lazy(() => import('./pages/Student/StudentClass.jsx'))
 const Issues = lazy(() => import('./pages/Admin/IssuesPage/Issues.jsx'))
 const ProtectedRoute = lazy(() => import('./components/ProtectedRoute.jsx'))
 const UnauthorizedPage = lazy(() => import('./pages/Unauthorized/Unauthorized.jsx'))
+const ForgotPassword = lazy(() => import('./pages/Authentication/ForgotPassword/ForgotPassword.jsx'))
+const ResetPassword = lazy(() => import('./pages/Authentication/ResetPassword/ResetPassword.jsx'))
 
 const App = () => {
   return (
@@ -38,6 +40,8 @@ const App = () => {
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/verification/:email' element={<Verification />} />
+            <Route path='/forgot-password' element={<ForgotPassword />} />
+            <Route path='/reset-password/:resetToken' element={<ResetPassword />} />
             <Route path='/*' element={<NotFound />} />
 
             <Route 
