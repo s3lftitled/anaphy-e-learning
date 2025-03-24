@@ -107,7 +107,7 @@ const LandingPage = () => {
       {/* Landing Page Section */}
       <section ref={homeRef} id="home" className="landing-section">
         <div className="container">
-          <img src='1stpage.png' alt="Background" />
+          <img src='landing-page.png' alt="Background" />
         </div>
 
         <div className="glow glow-1"></div>
