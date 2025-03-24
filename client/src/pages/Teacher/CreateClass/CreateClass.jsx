@@ -15,7 +15,7 @@ const CreateClassPage = () => {
 
   useEffect(() => {
       // Page title
-      document.title = `AnatomyVerse - Create Class`
+      document.title = `AnaphyVerse - Create Class`
     }, [])
 
   const handleCreateClass = async (e) => {
@@ -110,6 +110,7 @@ const CreateClassPage = () => {
               )}
             </button>
           </form>
+          <button className='back-btn' onClick={() => window.location.href = '/teacher-dashboard'}>Back to Dashboard</button>
           
           <div className="tips-section">
             <h3>Tips for Class Creation</h3>

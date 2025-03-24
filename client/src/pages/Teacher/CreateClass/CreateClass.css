@@ -164,7 +164,7 @@
   margin-right: 5px;
 }
 
-.create-btn {
+.create-btn, .back-btn {
   width: 100%;
   padding: 16px;
   font-size: 1rem;
@@ -179,14 +179,15 @@
   justify-content: center;
   align-items: center;
   box-shadow: 0 4px 20px rgba(50, 167, 239, 0.3);
+  margin-top: 12px;
 }
 
-.create-btn:hover {
+.create-btn:hover, .back-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(50, 167, 239, 0.4);
 }
 
-.create-btn:active {
+.create-btn:active, .back-btn:active {
   transform: translateY(1px);
 }
 
