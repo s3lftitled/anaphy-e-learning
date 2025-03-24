@@ -1,6 +1,8 @@
 const { 
   saveIssueService, 
   fetchIssuesService,
+  resolveIssueService,
+  contactUserService,
 } = require('../services/issueService')
 const HTTP_STATUS = require('../constants/httpConstants')
 const logger = require('../logger/logger')
@@ -24,6 +26,31 @@ class IssueController {
       res.status(HTTP_STATUS.OK).json({ issues })
     } catch (error) {
       logger.error(`Error fetching issues - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async resolveIssue(req, res, next) {
+    const { issueId } = req.params
+    try {
+      await resolveIssueService(issueId)
+
+      res.status(HTTP_STATUS.OK).json({ message: 'Issue resolved succesfully' })
+    } catch (error) {
+      logger.error(`Error resolving issue - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async contactUser(req, res, next) {
+    const { issueId } = req.params
+    const { subject, message } = req.body
+    try {
+      await contactUserService(subject, message, issueId)
+
+      res.status(HTTP_STATUS.OK).json({ message: 'Contacted issue sender succesfully' })
+    } catch (error) {
+      logger.error(`Error contacting user - ${error.message}`)
       next(error)
     }
   }

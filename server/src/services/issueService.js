@@ -4,6 +4,7 @@ const validator = require('validator')
 const sanitizeHtml = require('sanitize-html')  
 const { validateRequiredParams } = require('../utils/paramsValidator')
 const { appAssert } = require('../utils/appAssert')
+const EmailUtil = require('../utils/emailUtils')
 
 const VALID_TYPES = ['Question', 'Feature Request', 'Bug Report', 'Other']
 
@@ -53,7 +54,54 @@ const fetchIssuesService = async () => {
   }
 }
 
+const resolveIssueService = async (issueId) => {
+  try {
+    // Find the issue by ID
+    const issue = await IssueModel.findById(issueId)
+    appAssert(issue, 'Issue not found', HTTP_STATUS.NOT_FOUND)
+
+    // Update status to "Resolved"
+    issue.status = 'Resolved'
+    await issue.save()
+
+    // Send email notification to the user
+    await EmailUtil.sendResolutionEmail(issue.email, issue.title)
+
+    return { message: 'Issue resolved and user notified' }
+  } catch (error) {
+    throw error
+  }
+}
+
+const contactUserService = async (subject, message, issueId) => {
+  try {
+    // Validate required parameters
+    validateRequiredParams({ subject, message, issueId })
+
+    appAssert(validator.isMongoId(issueId), 'Invalid id format', HTTP_STATUS.NOT_FOUND)
+
+    const issue = await IssueModel.findById(issueId)
+    appAssert(issue, 'Issue not found', HTTP_STATUS.NOT_FOUND)
+
+    appAssert(issue.email, 'Issue sender didnt provide an email', HTTP_STATUS.NOT_FOUND)
+
+    // Sanitize inputs
+    const sanitizedSubject = sanitizeHtml(subject.trim())
+    const sanitizedMessage = sanitizeHtml(message.trim())
+    const email = issue.email
+
+    // Validate subject length
+    appAssert(sanitizedSubject.length <= 50, 'Subject should be 50 characters max', HTTP_STATUS.BAD_REQUEST)
+
+    await EmailUtil.sendContactMessage(email, sanitizedSubject, sanitizedMessage)
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   saveIssueService,
   fetchIssuesService,
+  resolveIssueService,
+  contactUserService,
 }

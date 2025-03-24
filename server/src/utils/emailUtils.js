@@ -78,6 +78,39 @@ class EmailUtil {
       throw new Error('Failed to send message to student.')
     }
   }
+
+  async sendResolutionEmail (email, title) {
+    try {
+      const mailOptions = {
+        from: process.env.USER,
+        to: email,
+        subject: `Your issue "${title}" has been resolved`,
+        text: `Hello,\n\nYour issue "${title}" has been resolved. If you have further concerns, feel free to reach out.\n\nThank you!`
+      }
+  
+      await this.transporter.sendMail(mailOptions)
+    } catch (error) {
+      logger.error('Error sending resolution email:', error)
+      throw new Error('Error sending resolution email')
+    }
+  }
+
+  async sendContactMessage(email, sanitizedSubject, sanitizedMessage) {
+    try {
+      const mailOptions = {
+        from: process.env.USER,
+        to: email,
+        subject: `Regarding your ticket: "${sanitizedSubject}"`,
+        text: sanitizedMessage
+      }
+  
+      await this.transporter.sendMail(mailOptions)
+    } catch (error) {
+      logger.error('Error sending contact email:', error)
+      throw new Error('Error sending contact email')
+    }
+  }  
+
 }
 
 module.exports = new EmailUtil()
