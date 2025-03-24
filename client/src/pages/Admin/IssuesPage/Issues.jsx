@@ -1,20 +1,32 @@
-import { useState, useEffect } from 'react';
-import { AlertTriangle, Filter, Search, RefreshCw, ChevronDown, Clock, Mail } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react';
+import { AlertTriangle, Filter, Search, RefreshCw, ChevronDown, Clock, Mail, Check, X } from 'lucide-react'
 import usePrivateApi from '../../../hooks/usePrivateApi'
 import './Issues.css'
 import FloatingHomeButton from '../../../components/FloatingHomeButton/FloatingHomeButton'
-import { privateAxios } from '../../../utils/api'
 
 const Issues = () => {
   const [issues, setIssues] = useState([])
   const [filteredIssues, setFilteredIssues] = useState([])
   const [loading, setLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState('All')
+  const [filterStatus, setFilterStatus] = useState('All')
   const [expandedIssue, setExpandedIssue] = useState(null)
   const [refreshing, setRefreshing] = useState(false)
-  const privateApi = usePrivateApi()
+
+  // New state variables for contact functionality
+  const [contactModalOpen, setContactModalOpen] = useState(false)
+  const [selectedIssue, setSelectedIssue] = useState(null)
+  const [contactSubject, setContactSubject] = useState('')
+  const [contactMessage, setContactMessage] = useState('')
+  const [contactLoading, setContactLoading] = useState(false)
+  const [contactError, setContactError] = useState(null)
+  const [contactSuccess, setContactSuccess] = useState(false)
+  const modalRef = useRef(null)
+  
+  const privateAxios = usePrivateApi()
 
   useEffect(() => {
     // Page title
@@ -60,6 +72,11 @@ const Issues = () => {
       result = result.filter(issue => issue.issueType === filterType)
     }
     
+    // Filter by status
+    if (filterStatus !== 'All') {
+      result = result.filter(issue => issue.status === filterStatus)
+    }
+    
     // Filter by search term
     if (searchTerm) {
       const term = searchTerm.toLowerCase()
@@ -71,23 +88,52 @@ const Issues = () => {
     }
     
     setFilteredIssues(result)
-  }, [issues, searchTerm, filterType])
+  }, [issues, searchTerm, filterType, filterStatus])
 
   // Handle refresh
   const handleRefresh = () => {
     fetchIssues()
   }
+  
+  // Handle resolving an issue
+  const handleResolveIssue = async (issueId, e) => {
+    e.stopPropagation() // Prevent card expansion when clicking resolve
+    
+    try {
+      setIsLoading(true)
+      await privateAxios.put(`issues/api/v1/resolve-issue/${issueId}`, {}, { withCredentials: true })
+      
+      // Update local state
+      setIssues(prevIssues => 
+        prevIssues.map(issue => 
+          issue._id === issueId 
+            ? { ...issue, status: 'Resolved' } 
+            : issue
+        )
+      )
+      
+      // Success notification could be added here
+      
+    } catch (err) {
+      console.error('Error resolving issue:', err)
+      // Error notification could be added here
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
-  // Format date
+  // Format Date
   const formatDate = (dateString) => {
     const options = { 
       year: 'numeric', 
       month: 'short', 
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
+      second: '2-digit',
+      timeZoneName: 'short'
     }
-    return new Date(dateString).toLocaleDateString(undefined, options)
+    return new Date(dateString).toLocaleString(undefined, options);
   }
 
   // Toggle expanded issue
@@ -114,6 +160,84 @@ const Issues = () => {
         return ''
     }
   }
+
+  // NEW FUNCTIONS FOR CONTACT FUNCTIONALITY
+
+  // Handle opening contact modal
+  const openContactModal = (issue, e) => {
+    e.stopPropagation() // Prevent card expansion when clicking contact
+    setSelectedIssue(issue)
+    setContactSubject(`RE: ${issue.title}`)
+    setContactMessage('')
+    setContactError(null)
+    setContactSuccess(false)
+    setContactModalOpen(true)
+  }
+
+  // Handle closing contact modal
+  const closeContactModal = () => {
+    setContactModalOpen(false)
+    setSelectedIssue(null)
+    setContactSubject('')
+    setContactMessage('')
+    setContactError(null)
+    setContactSuccess(false)
+  }
+
+  // Handle sending contact message
+  const handleSendMessage = async (e) => {
+    e.preventDefault()
+    
+    if (!contactSubject.trim() || !contactMessage.trim()) {
+      setContactError('Please fill in both subject and message fields')
+      return
+    }
+
+    try {
+      setContactLoading(true)
+      setContactError(null)
+      
+      await privateAxios.post(
+        `issues/api/v1/contact-issue/${selectedIssue._id}`, 
+        {
+          subject: contactSubject,
+          message: contactMessage
+        }, 
+        { withCredentials: true }
+      )
+      
+      setContactSuccess(true)
+      setContactMessage('')
+      
+      // Auto close after success
+      setTimeout(() => {
+        closeContactModal()
+      }, 2000)
+      
+    } catch (err) {
+      console.error('Error contacting user:', err)
+      setContactError(err.response?.data?.message || 'Failed to send message. Please try again.')
+    } finally {
+      setContactLoading(false)
+    }
+  }
+
+  // Close modal when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        closeContactModal()
+      }
+    }
+    
+    if (contactModalOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [contactModalOpen])
 
   return (
     <div className="issue-fetching-container">
@@ -150,6 +274,19 @@ const Issues = () => {
             </select>
           </div>
           
+          <div className="filter-container status-filter">
+            <Check size={18} className="filter-icon" />
+            <select 
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="filter-select"
+            >
+              <option value="All">All Status</option>
+              <option value="Pending">Pending</option>
+              <option value="Resolved">Resolved</option>
+            </select>
+          </div>
+          
           <button 
             className={`refresh-button ${refreshing ? 'refreshing' : ''}`}
             onClick={handleRefresh}
@@ -177,7 +314,7 @@ const Issues = () => {
           <div className="empty-container">
             <AlertTriangle size={48} />
             <p>No issues found matching your criteria.</p>
-            <button onClick={() => {setSearchTerm(''); setFilterType('All');}} className="reset-button">
+            <button onClick={() => {setSearchTerm(''); setFilterType('All'); setFilterStatus('All');}} className="reset-button">
               Reset Filters
             </button>
           </div>
@@ -186,13 +323,18 @@ const Issues = () => {
             {filteredIssues.map((issue) => (
               <div 
                 key={issue._id}
-                className={`issue-card ${expandedIssue === issue._id ? 'expanded' : ''}`}
+                className={`issue-card ${expandedIssue === issue._id ? 'expanded' : ''} ${issue.status === 'Resolved' ? 'resolved' : ''}`}
                 onClick={() => toggleExpand(issue._id)}
               >
                 <div className="issue-card-header">
                   <div className="issue-info">
-                    <div className={`issue-type ${getIssueTypeClass(issue.issueType)}`}>
-                      {issue.issueType}
+                    <div className="issue-labels">
+                      <div className={`issue-type ${getIssueTypeClass(issue.issueType)}`}>
+                        {issue.issueType}
+                      </div>
+                      <div className={`issue-status status-${issue.status.toLowerCase()}`}>
+                        {issue.status}
+                      </div>
                     </div>
                     <h3 className="issue-title">{issue.title}</h3>
                   </div>
@@ -217,11 +359,21 @@ const Issues = () => {
                   <div className="issue-details">
                     <p className="issue-description">{issue.description}</p>
                     <div className="issue-actions-footer">
-                      <button className="action-button resolve-button">
-                        Resolve Issue
-                      </button>
-                      <button className="action-button contact-button">
-                        Contact User
+                      {issue.status === 'Pending' && (
+                        <button 
+                          className="action-button resolve-button"
+                          onClick={(e) => handleResolveIssue(issue._id, e)}
+                        >
+                          <Check size={16} />
+                          <span>{ isLoading ? 'Resolving' : 'Resolve Issue' }</span>
+                        </button>
+                      )}
+                      <button 
+                        className="action-button contact-button"
+                        onClick={(e) => openContactModal(issue, e)}
+                      >
+                        <Mail size={16}/>
+                        <span>Contact User</span>
                       </button>
                     </div>
                   </div>
@@ -250,10 +402,91 @@ const Issues = () => {
           <p>{issues.filter(issue => issue.issueType === 'Questions').length}</p>
         </div>
         <div className="issues-stat-card">
-          <h4>Other</h4>
-          <p>{issues.filter(issue => issue.issueType === 'Other').length}</p>
+          <h4>Others</h4>
+          <p>{issues.filter(issue => issue.issueType === 'Others').length}</p>
         </div>
       </div>
+
+      {/* Contact Modal */}
+      {contactModalOpen && selectedIssue && (
+        <div className="contact-modal-overlay">
+          <div className="contact-modal" ref={modalRef}>
+            <div className="contact-modal-header">
+              <h2>Contact User</h2>
+              <button className="close-modal-button" onClick={closeContactModal}>
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="contact-modal-body">
+              <div className="contact-recipient">
+                <Mail size={16} />
+                <span>To: {selectedIssue.email}</span>
+              </div>
+              
+              <form onSubmit={handleSendMessage}>
+                <div className="form-group">
+                  <label htmlFor="contact-subject">Subject (max 50 characters):</label>
+                  <input
+                    id="contact-subject"
+                    type="text"
+                    value={contactSubject}
+                    onChange={(e) => setContactSubject(e.target.value)}
+                    maxLength={50}
+                    required
+                    className="contact-input"
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="contact-message">Message:</label>
+                  <textarea
+                    id="contact-message"
+                    value={contactMessage}
+                    onChange={(e) => setContactMessage(e.target.value)}
+                    required
+                    rows={6}
+                    className="contact-textarea"
+                    placeholder="Enter your message here..."
+                  />
+                </div>
+                
+                {contactError && (
+                  <div className="contact-error">
+                    <AlertTriangle size={16} />
+                    <span>{contactError}</span>
+                  </div>
+                )}
+                
+                {contactSuccess && (
+                  <div className="contact-success">
+                    <Check size={16} />
+                    <span>Message sent successfully!</span>
+                  </div>
+                )}
+                
+                <div className="contact-modal-footer">
+                  <button 
+                    type="button" 
+                    className="cancel-button"
+                    onClick={closeContactModal}
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="send-button"
+                    disabled={contactLoading}
+                  >
+                    {contactLoading ? 'Sending...' : 'Send Message'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <FloatingHomeButton />
     </div>
   )
