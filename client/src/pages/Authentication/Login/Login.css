@@ -411,7 +411,7 @@
 }
 
 /* Extra small */
-@media (max-width: 460px) {
+@media (max-width: 480px) {
   .login-nav {
     padding: 12px 10px;
   }
@@ -428,7 +428,7 @@
   }
   
   .login-form-container {
-    width: 92%;
+    width: 90%;
     padding: 15px 10px;
     border-width: 2px;
   }
