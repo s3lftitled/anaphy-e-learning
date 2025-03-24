@@ -4,6 +4,8 @@ import ReCAPTCHA from 'react-google-recaptcha'
 import api from '../../../utils/api'
 import './Register.css'
 
+const RECAPTCHA_PROD = import.meta.env.VITE_RECAPTCHA
+
 const Register = () => {
   const [registrationData, setRegistrationData] = useState({
     name: '',
@@ -151,7 +153,7 @@ const Register = () => {
 
             <div className="captcha-container">
               <ReCAPTCHA
-                sitekey="6Lfl_9QqAAAAAAFX9cr264UKhJVVRXlawTuXD-y0"
+                sitekey={RECAPTCHA_PROD}
                 onChange={handleCaptcha}
               />
             </div>

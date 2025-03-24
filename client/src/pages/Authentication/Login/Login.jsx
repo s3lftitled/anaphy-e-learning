@@ -5,6 +5,7 @@ import api from '../../../utils/api'
 import useAuth from '../../../hooks/useAuth'
 import './Login.css'
 
+const RECAPTCHA_PROD = import.meta.env.VITE_RECAPTCHA
 
 const Login = () => {
   const [ loginData, setLoginData ] = useState({})
@@ -15,6 +16,7 @@ const Login = () => {
   useEffect(() => {
     // Page title
     document.title = `AnaphyVerse - Login`
+    console.log(RECAPTCHA_PROD)
   }, [])
 
   const handleFieldChange = (e) => {
@@ -114,7 +116,7 @@ const Login = () => {
 
           <div className="recaptcha-container">
             <ReCAPTCHA
-              sitekey="6Lfl_9QqAAAAAAFX9cr264UKhJVVRXlawTuXD-y0"
+              sitekey={RECAPTCHA_PROD}
               onChange={handleCaptchaChange}
             />
           </div>
