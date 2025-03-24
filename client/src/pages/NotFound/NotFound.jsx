@@ -1,8 +1,15 @@
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 import './NotFound.css'
 
 const NotFound = () => {
   const navigate = useNavigate()
+
+  useEffect(() => {
+      // Page title
+      document.title = `AnaphyVerse - Not Found`
+    }, [])
+    
 
   return (
     <div className="not-found-container">

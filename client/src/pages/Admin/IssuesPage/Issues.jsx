@@ -30,7 +30,7 @@ const Issues = () => {
 
   useEffect(() => {
     // Page title
-    document.title = `AnatomyVerse - Issues`
+    document.title = `AnaphyVerse - Issues`
   }, [])
 
   // Fetch issues from API

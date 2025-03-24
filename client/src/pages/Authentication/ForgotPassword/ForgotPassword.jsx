@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import api from '../../../utils/api'
 import './ForgotPassword.css'
 
@@ -7,6 +7,11 @@ const ForgotPassword = () => {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    // Page title
+    document.title = `AnaphyVerse - Forgot Password`
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()

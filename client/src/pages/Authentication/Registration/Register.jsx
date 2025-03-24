@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import api from '../../../utils/api'
 import './Register.css'
@@ -14,6 +14,11 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [captchaValue, setCaptchaValue] = useState(null)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    // Page title
+    document.title = `AnaphyVerse - Register`
+  }, [])
 
   const handleFieldChange = (e) => {
     const { name, value } = e.target
@@ -81,7 +86,7 @@ const Register = () => {
 
       <div className="register-content">
         <div className="register-img-container">
-          <img className="register-img" src="skull.png" alt="Register" />
+          <img className="register-img" src="registration-image.png" alt="Register" />
         </div>
 
         <nav className="register-nav">

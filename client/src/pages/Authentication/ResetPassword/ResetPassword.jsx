@@ -15,6 +15,11 @@ const ResetPassword = () => {
   const { resetToken } = useParams()
 
   useEffect(() => {
+    // Page title
+    document.title = `AnaphyVerse - Reset Password`
+  }, [])
+
+  useEffect(() => {
     console.log(resetToken)
     setToken(resetToken || '')
     

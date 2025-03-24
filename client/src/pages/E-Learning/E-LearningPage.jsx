@@ -17,7 +17,7 @@ const ELearningPage = () => {
 
   useEffect(() => {
     // Page title
-    document.title = `AnatomyVerse - E-Learning`
+    document.title = `AnaphyVerse - E-Learning`
   }, [])
   
   const {

@@ -48,7 +48,7 @@ const TeacherDashboard = () => {
 
   useEffect(() => {
     // Page title
-    document.title = `AnatomyVerse - Teacher Dashboard`
+    document.title = `AnaphyVerse - Teacher Dashboard`
   }, [])
 
   // Fetch classes data from API

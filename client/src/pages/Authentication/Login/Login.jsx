@@ -12,6 +12,11 @@ const Login = () => {
   const { setAuth } = useAuth()
   const navigate = useNavigate()
 
+  useEffect(() => {
+    // Page title
+    document.title = `AnaphyVerse - Login`
+  }, [])
+
   const handleFieldChange = (e) => {
     const { name, value } = e.target
     let formattedValue = value
@@ -73,7 +78,7 @@ const Login = () => {
       <div className="glow glow-2"></div>
       <div className="glow glow-3"></div>
 
-      <img className="login-img" src="skull1.png" alt="Skull Logo" />
+      <img className="login-img" src="login-image.png" alt="Skull Logo" />
 
       <nav className="login-nav">
         <button className="login-button" href="">Login</button>

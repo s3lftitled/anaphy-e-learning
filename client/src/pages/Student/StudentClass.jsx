@@ -17,6 +17,7 @@ import {
 import './StudentClass.css'
 import usePrivateApi from '../../hooks/usePrivateApi'
 import { useUser } from '../../context/UserContext'
+import FloatingHomeButton from '../../components/FloatingHomeButton/FloatingHomeButton'
 
 const StudentClass = () => {
   const [userClasses, setUserClasses] = useState([]);
@@ -35,7 +36,7 @@ const StudentClass = () => {
 
   useEffect(() => {
     // Page title
-    document.title = `AnatomyVerse - Student Class`
+    document.title = `AnaphyVerse - Student Class`
   }, [])
   
   // Fetch user's classes on component mount
@@ -445,6 +446,7 @@ const StudentClass = () => {
           </>
         )}
       </main>
+      <FloatingHomeButton />
     </div>
   )
 }

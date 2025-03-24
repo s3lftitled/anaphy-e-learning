@@ -16,7 +16,7 @@ const TeacherManagement = () => {
 
   useEffect(() => {
     // Page title
-    document.title = `AnatomyVerse - Teacher Management`
+    document.title = `AnaphyVerse - Teacher Management`
   }, [])
 
   useEffect(() => {
@@ -110,7 +110,7 @@ const TeacherManagement = () => {
               <h2>Add New Teacher</h2>
               <form onSubmit={handleSubmit} className="add-teacher-form">
                 <div className="form-row">
-                  <div className="input-group">
+                  <div className="teacher-mgmt-input-group">
                     <Mail className="input-icon" size={20} />
                     <input
                       type="email"

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import api from '../../../utils/api'
 import './Verification.css'
@@ -9,6 +9,11 @@ const Verification = () => {
   const { email } = useParams()
   const inputRefs = useRef([])
   const navigate = useNavigate()
+
+  useEffect(() => {
+    // Page title
+    document.title = `AnaphyVerse - Email Verification`
+  }, [])
 
   // Initialize refs array
   if (inputRefs.current.length === 0) {

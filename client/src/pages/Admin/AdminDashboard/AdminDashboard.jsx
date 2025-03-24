@@ -20,7 +20,7 @@ const UserActivityDashboard = () => {
 
   useEffect(() => {
     // Page title
-    document.title = `AnatomyVerse - User Activity Dashboard`
+    document.title = `AnaphyVerse - User Activity Dashboard`
   }, [])
 
   useEffect(() => {
