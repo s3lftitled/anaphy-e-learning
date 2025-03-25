@@ -42,6 +42,7 @@
   max-width: 1400px;
   margin: 0 auto;
   max-height: 100vh; 
+  margin-top: 4rem;
 }
 
 .classes-header {
@@ -534,7 +535,7 @@
   line-height: 1.7;
 }
 
-.empty-state {
+.student-class-empty-state {
   text-align: center;
   padding: 4rem 1rem;
   color: var(--text-light);

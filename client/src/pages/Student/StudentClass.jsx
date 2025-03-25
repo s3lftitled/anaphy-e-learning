@@ -18,6 +18,7 @@ import './StudentClass.css'
 import usePrivateApi from '../../hooks/usePrivateApi'
 import { useUser } from '../../context/UserContext'
 import FloatingHomeButton from '../../components/FloatingHomeButton/FloatingHomeButton'
+import Navbar from '../../components/Navbar/Navbar'
 
 const StudentClass = () => {
   const [userClasses, setUserClasses] = useState([]);
@@ -233,6 +234,7 @@ const StudentClass = () => {
 
   return (
     <div className="classes-page">
+      <Navbar user={user} />
       <main className="classes-content">
         <div className="join-class-section">
           <h2><Users size={20} /> Join a Class</h2>
@@ -343,7 +345,7 @@ const StudentClass = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="empty-state">
+                  <div className="student-class-empty-state">
                     <AlertCircle size={28} />
                     <p>No announcements yet.</p>
                   </div>
@@ -393,7 +395,7 @@ const StudentClass = () => {
                   ))}
                 </div>
               ) : (
-                <div className="empty-state">
+                <div className="student-class-empty-state">
                   <Mail size={28} />
                   <p>No pending class invitations.</p>
                 </div>
