@@ -47,7 +47,7 @@
 }
 
 .learning-sidebar.collapsed {
-  min-width: 70px;
+  min-width: 60px;
   max-width: 70px;
 }
 
@@ -190,6 +190,7 @@
 }
 
 .content-container {
+  align-self: center;
   background-color: var(--white);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
@@ -218,6 +219,9 @@
   font-size: 1.1rem;
   margin-bottom: 2rem;
   line-height: 1.6;
+  text-align: justify; 
+  text-justify: inter-word; 
+  hyphens: auto; 
 }
 
 .content-iframe {
@@ -305,30 +309,131 @@
   color: var(--text-light);
 }
 
-.text-to-speech-button {
-  background-color: #0c4160;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  margin-left: auto;
-  cursor: pointer;
+/* Text-to-Speech Component Styles */
+.text-to-speech-container {
+  max-width: 100%;
+  margin: 0 auto;
+  margin-top: 1rem;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 
+    0 10px 25px rgba(0, 0, 0, 0.05), 
+    0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 1px solid rgba(12, 65, 96, 0.1);
+  padding: 12px;
+}
+
+.controls-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.text-to-speech-container button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: 
+    transform 0.2s ease, 
+    color 0.2s ease, 
+    background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  color: #0c4160;
+}
+
+.text-to-speech-container button:focus {
+  outline: 2px solid rgba(12, 65, 96, 0.3);
+  outline-offset: 2px;
+}
+
+.settings-toggle {
+  color: #0c4160;
+}
+
+/* Settings Panel */
+.settings-panel {
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 16px;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.05), 
+    0 1px 3px rgba(0, 0, 0, 0.03);
+  animation: fadeIn 0.3s ease;
+  border: 1px solid rgba(12, 65, 96, 0.05);
+}
+
+/* Voice and Range Inputs */
+.settings-panel select,
+.settings-panel input[type="range"] {
+  width: 100%;
+  margin-top: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(12, 65, 96, 0.2);
+  padding: 10px;
+  transition: 
+    box-shadow 0.3s ease, 
+    border-color 0.3s ease;
+}
+
+.settings-panel select:focus,
+.settings-panel input[type="range"]:focus {
+  outline: none;
+  border-color: #0c4160;
+  box-shadow: 
+    0 0 0 3px rgba(12, 65, 96, 0.1), 
+    0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.settings-panel label {
+  color: #0c4160;
   font-weight: 500;
-  transition: background-color 0.2s ease;
+  margin-bottom: 8px;
+  display: block;
 }
 
-.text-to-speech-button:hover {
-  background-color: #1a5980;
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+  .text-to-speech-container {
+    margin: 0 16px;
+    padding: 16px;
+  }
+
+  .button-group {
+    gap: 12px;
+  }
+
+  .text-to-speech-container button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .settings-panel {
+    padding: 16px;
+  }
 }
 
-.text-to-speech-button.speaking {
-  background-color: #d32f2f;
-}
-
-.text-to-speech-button.speaking:hover {
-  background-color: #f44336;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Completed content indicator in the sidebar */
@@ -395,6 +500,14 @@
   .content-header h1 {
     font-size: 1.5rem;
   }
+
+  .content-body {
+    font-size: 0.9rem;
+    text-align: justify; 
+    text-justify: inter-word; 
+    hyphens: auto; 
+  }
+  
 
   .content-iframe {
     height: 300px;
@@ -1206,12 +1319,6 @@ li.locked {
 
 /* E-Learning Page Layout - Mobile & Tablet Responsiveness */
 @media (max-width: 992px) {
-  .e-learning-page {
-    flex-direction: column;
-    height: auto;
-    min-height: 100vh;
-  }
-  
   .learning-sidebar.expanded {
     min-width: 100%;
     max-width: 100%;
@@ -1231,8 +1338,44 @@ li.locked {
   }
   
   .sidebar-toggle {
-    top: 10px;
-    right: 10px;
+    top: 18px;
+    right: 0;
+  }
+}
+
+@media (max-width: 992px) {
+  
+  .learning-sidebar {
+    position: relative;
+    width: 100%;
+  }
+  
+  .learning-sidebar.collapsed {
+    position: relative;
+    top: 10;
+    left: 0;
+    height: 100vh;
+    min-width: 20px;
+    max-width: 20px;
+  }
+
+  .learning-sidebar.collapsed .sidebar-toggle {
+    background-color: var(--primary-light);
+  }
+  
+  .learning-sidebar.collapsed .sidebar-content {
+    display: none;
+  }
+}
+
+/* Additional mobile-specific adjustments */
+@media (max-width: 768px) {
+  .sidebar-toggle {
+    top: 25px;
+    right: 1px;
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
   }
 }
 
