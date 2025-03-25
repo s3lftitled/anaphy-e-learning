@@ -1214,3 +1214,137 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 600px) {
+  /* Modal Responsiveness */
+  .modal {
+    width: 95%;
+    margin: 0 10px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    padding: 15px;
+  }
+
+  .modal-body {
+    padding: 15px;
+  }
+
+  .modal-header h2 {
+    font-size: 1rem;
+  }
+
+  /* Search Container Responsiveness */
+  .search-container input {
+    width: 80%;
+    padding: 8px 12px 8px 35px;
+  }
+
+  .filter-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .status-filter {
+    width: 100%;
+  }
+
+  /* Email Modal Responsiveness */
+  .email-modal .recipient-info {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .email-modal .recipient-avatar {
+    margin-bottom: 10px;
+    margin-right: 0;
+  }
+
+  /* Form Responsiveness */
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions .submit-btn,
+  .form-actions .cancel-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .student-grades-modal {
+    min-width: 95%;
+    max-width: 95%;
+    margin: 0 auto;
+  }
+
+  .grades-summary {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .grade-average-card {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .grades-summary-details {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .grades-table-header,
+  .grades-table-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grades-table-header .grades-col:nth-child(3),
+  .grades-table-header .grades-col:nth-child(4),
+  .grades-table-row .grades-col:nth-child(3),
+  .grades-table-row .grades-col:nth-child(4) {
+    display: none;
+  }
+
+  .grades-table-header .grades-col:first-child,
+  .grades-table-row .grades-col:first-child {
+    grid-column: span 2;
+  }
+
+  .summary-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grades-table-header,
+  .grades-table-row {
+    grid-template-columns: 1fr;
+  }
+
+  .grades-table-header .grades-col,
+  .grades-table-row .grades-col {
+    padding: 10px;
+  }
+
+  .grades-table-row .grades-col:before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-right: 10px;
+  }
+
+  .grades-table-row .grades-col {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .grades-table-row .grades-col:last-child {
+    border-bottom: none;
+  }
+}
