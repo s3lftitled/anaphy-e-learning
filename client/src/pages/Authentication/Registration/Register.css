@@ -115,17 +115,16 @@
   width: 400px;
   padding: 30px 15px;
   border: 5px solid #1DAAB1;
-  margin: auto 40px auto auto;
-  margin-top: 10px;
+  margin: auto 30px auto auto;
   max-height: 80vh;
   overflow-y: auto;
 }
 
 .register-form-container h2 {
   color: #FFFFFF;
-  margin-bottom: 20px;
-  text-align: center;
-  font-size: 1.8rem;
+  margin-left: 20px;
+  font-size: 1.6rem;
+  margin-bottom: 18px;
 }
 
 .input-group {
