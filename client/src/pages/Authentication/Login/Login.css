@@ -10,6 +10,7 @@
   position: absolute;
   filter: blur(500px);
   transform: rotate(2.85deg);
+  z-index: 0; 
 }
 
 .login .glow-1 {
@@ -41,6 +42,7 @@
   justify-content: flex-end;
   padding: 20px 40px;
   z-index: 10;
+  position: relative;
 }
 
 .login-nav .nav-link {
@@ -54,6 +56,9 @@
   padding: 10px 16px;
   margin-right: 20px;
   letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
 }
 
 .login-button {
@@ -466,5 +471,50 @@
   .signup-prompt, .forgot-password-prompt {
     margin-top: 10px;
     font-size: 0.8rem;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1400px) {
+  .login-img {
+    right: 50%; /* Centered positioning */
+    width: 50; /* Slightly larger image */
+    min-height: 130vh;
+    bottom: -20%; /* More vertical space */
+    opacity: 0.5; /* Slightly more visible */
+  }
+}
+
+/* Extra Large screens */
+@media (min-width: 1600px) {
+  .login-img {
+    right: 50%; /* Centered positioning */
+    width: 55%; /* Slightly larger image */
+    max-height: 140vh;
+    bottom: -20%; /* More vertical space */
+    opacity: 0.5; /* Slightly more visible */
+  }
+  
+}
+
+/* Very Large screens (1700-2000px) */
+@media (min-width: 1700px) and (max-width: 2000px) {
+  .login-img {
+    right: 50%; /* Centered positioning */
+    width: 50%; /* Slightly larger image */
+    min-height: 130vh;
+    bottom: -20%; /* More vertical space */
+    opacity: 0.5; /* Slightly more visible */
+  }
+}
+
+/* Extra Large screens (above 2000px) */
+@media (min-width: 2000px) {
+  .login-img {
+    right: 48%; /* More centered */
+    width: 50%; /* Even larger image */
+    min-height: 135vh;
+    bottom: -25%; /* More vertical space */
+    opacity: 0.5; /* More visible */
   }
 }

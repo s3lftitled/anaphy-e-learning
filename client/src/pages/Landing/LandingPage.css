@@ -865,6 +865,24 @@ section {
   }
 }
 
+@media (min-width: 512px) and (max-width: 600px) {
+  .divider {
+    width: 450px;
+  }
+}
+
+@media (min-width: 472px) and (max-width: 512px) {
+  .divider {
+    width: 400px;
+  }
+}
+
+@media (min-width: 360px) and (max-width: 471px) {
+  .divider {
+    width: 350px;
+  }
+}
+
 /* Fix for very small screens (320px and below) */
 @media (max-width: 320px) {
   .about-section {
@@ -916,5 +934,53 @@ section {
   .sdg-icon-img {
     width: 70px;
     height: 70px;
+  }
+}
+
+/* Responsive styles for container image on large screens */
+@media  (min-width: 666px) and (max-width: 999px) {
+  .container {
+    display: none;
+  }
+  .divider {
+    width: 570px;
+  }
+}
+
+/* Responsive styles for container image on large screens */
+@media (min-width: 1000px) and (max-width: 1399px) {
+  .container {
+    left: 70%;
+    transform: translateX(-50%);
+    opacity: 0.2;
+    max-width: 800px;
+    width: 150%;
+    min-height: 110vh;
+  }
+
+  .container img {
+    width: 170%;
+    min-height: 100vh;
+  }
+
+  .divider {
+    width: 600px;
+  }
+}
+
+/* Responsive styles for container image on large screens */
+@media (min-width: 1400px) and (max-width: 2300px) {
+  .container {
+    left: 65%;
+    transform: translateX(-50%);
+    opacity: 0.2;
+    max-width: 800px;
+    width: 170%;
+    min-height: 120vh;
+  }
+
+  .container img {
+    width: 170%;
+    min-height: 100vh;
   }
 }
