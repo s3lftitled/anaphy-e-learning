@@ -127,21 +127,21 @@
   margin-bottom: 18px;
 }
 
-.input-group {
+.register-input-group {
   display: flex;
   flex-direction: column;
   width: 100%;
   margin-bottom: 15px;
 }
 
-.input-group label {
+.register-input-group label {
   font-size: 0.9rem;
   color: #FFFFFF;
   margin-bottom: 4px;
   margin-left: 40px;
 }
 
-.input-group input {
+.register-input-group input {
   width: 70%;
   height: 40px;
   padding: 8px 16px;
@@ -154,7 +154,7 @@
   transition: border-color 0.3s ease;
 }
 
-.input-group input:focus {
+.register-input-group input:focus {
   border-color: #55B8FF;
   outline: none;
 }
@@ -255,11 +255,11 @@
     margin-top: 50px;
   }
   
-  .input-group label {
+  .register-input-group label {
     margin-left: 30px;
   }
   
-  .input-group input {
+  .register-input-group input {
     width: 80%;
   }
 }
@@ -284,11 +284,11 @@
     width: 85%;
   }
   
-  .input-group label {
+  .register-input-group label {
     margin-left: 25px;
   }
   
-  .input-group input {
+  .register-input-group input {
     width: 85%;
   }
   
@@ -327,11 +327,11 @@
     margin-bottom: 15px;
   }
   
-  .input-group {
+  .register-input-group {
     margin-bottom: 12px;
   }
   
-  .input-group label {
+  .register-input-group label {
     margin-left: 15px;
     font-size: 0.85rem;
   }
@@ -386,12 +386,12 @@
     margin-bottom: 12px;
   }
   
-  .input-group label {
+  .register-input-group label {
     margin-left: 12px;
     font-size: 0.8rem;
   }
   
-  .input-group input {
+  .register-input-group input {
     width: 92%;
     height: 36px;
     font-size: 0.9rem;
