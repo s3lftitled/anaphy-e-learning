@@ -31,7 +31,7 @@ const CreateClassPage = () => {
     }
     
     try {
-        const response = await privateAxios.post(`class/api/v1/create-class/teacher/${user.id}`, { className }, {
+        const response = await privateAxios.post(`class/api/v1/create-class/${user.id}`, { className }, {
           withCredentials: true
         })
 
