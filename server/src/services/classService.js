@@ -8,13 +8,10 @@ const { generateUniqueClassCode } = require('../utils/classUtils')
 const TeacherModel = require('../models/teacher.model')
 const UserModel = require("../models/user.model")
 
-const createClassService = async (userRole, teacherId, className) => {
+const createClassService = async (teacherId, className) => {
   try {
     // Check if all required params are present
-    validateRequiredParams(userRole, teacherId, className)
-
-    // Check if user role is teacher to give permission
-    appAssert(userRole === 'teacher', 'You dont have a permission to perform this action', HTTP_STATUS.FORBIDDEN)
+    validateRequiredParams( teacherId, className)
 
     // Check if the provided teacherId is a valid MongoDB ObjectId
     appAssert(validator.isMongoId(teacherId), 'Invalid teacher ID format', HTTP_STATUS.BAD_REQUEST)
