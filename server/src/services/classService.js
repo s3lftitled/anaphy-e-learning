@@ -46,7 +46,7 @@ const createClassService = async (teacherId, className) => {
 
     return classCode
   } catch (error) {
-    throw(error)
+    throw error
   }
 }
 
@@ -96,7 +96,7 @@ const inviteStudentService = async (teacherId, studentEmail, classId) => {
 
     return studentData
   } catch (error) {
-    throw(error)
+    throw error
   }
 }
 
@@ -115,7 +115,7 @@ const fetchClassInvitationsService = async (studentId) => {
 
     return student.invitations
   } catch (error) {
-    throw(error)
+    throw error
   }
 }
 
@@ -147,7 +147,7 @@ const acceptInvitationService = async (studentId, classId) => {
     await classData.save()
     await student.save()
   } catch (error) {
-    throw(error)
+    throw error
   }
 }
 
