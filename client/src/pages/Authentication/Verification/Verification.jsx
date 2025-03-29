@@ -6,30 +6,48 @@ import './Verification.css'
 const Verification = () => {
   const [code, setCode] = useState(['', '', '', '', '', ''])
   const [isLoading, setIsLoading] = useState(false)
+  const [resendDisabled, setResendDisabled] = useState(false)
+  const [resendTimer, setResendTimer] = useState(0)
   const { email } = useParams()
   const inputRefs = useRef([])
   const navigate = useNavigate()
-
-  useEffect(() => {
-    // Page title
-    document.title = `AnaphyVerse - Email Verification`
-  }, [])
 
   // Initialize refs array
   if (inputRefs.current.length === 0) {
     inputRefs.current = Array(6).fill(null).map(() => React.createRef())
   }
 
+  // Focus first input on component mount
+  useEffect(() => {
+    if (inputRefs.current[0]) {
+      inputRefs.current[0].focus()
+    }
+  }, [])
+
+  // Handle resend timer
+  useEffect(() => {
+    let interval
+    if (resendTimer > 0) {
+      interval = setInterval(() => {
+        setResendTimer(prevTimer => prevTimer - 1)
+      }, 1000)
+    } else if (resendTimer === 0) {
+      setResendDisabled(false)
+    }
+
+    return () => clearInterval(interval)
+  }, [resendTimer])
+
   const handleChange = (index, e) => {
     const value = e.target.value
     
-    // Only proceed if the input is empty or a number
+    // Only proceed if the input is empty or a single alphanumeric character
     if (value === '' || /^[a-zA-Z0-9]$/.test(value)) {
       const newCode = [...code]
       newCode[index] = value
       setCode(newCode)
 
-      // Auto-focus next input if a number was entered
+      // Auto-focus next input if a character was entered
       if (value !== '' && index < 5) {
         inputRefs.current[index + 1].focus()
       }
@@ -66,21 +84,21 @@ const Verification = () => {
     e.preventDefault()
     const pastedData = e.clipboardData.getData('text').trim()
     
-    // Check if pasted content contains only numbers
-    if (/^\d+$/.test(pastedData)) {
+    // Check if pasted content contains only alphanumeric characters
+    if (/^[a-zA-Z0-9]+$/.test(pastedData)) {
       const pastedArray = pastedData.slice(0, 6).split('')
       const newCode = [...code]
       
-      pastedArray.forEach((digit, index) => {
+      pastedArray.forEach((char, index) => {
         if (index < 6) {
-          newCode[index] = digit
+          newCode[index] = char
         }
       })
       
       setCode(newCode)
       
       // Focus the next empty input or the last input
-      const nextEmptyIndex = newCode.findIndex(digit => digit === '')
+      const nextEmptyIndex = newCode.findIndex(char => char === '')
       if (nextEmptyIndex !== -1 && nextEmptyIndex < 6) {
         inputRefs.current[nextEmptyIndex].focus()
       } else {
@@ -115,6 +133,41 @@ const Verification = () => {
     }
   }
 
+  const handleResendCode = async () => {
+    try {
+      setResendDisabled(true)
+      setResendTimer(60) // 60 second cooldown
+      
+      const response = await api.post(`auth/api/v1/resend-verification/${email}`)
+      
+      if (response.status === 200) {
+        alert('A new verification code has been sent to your email')
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        alert(error.response.data.message)
+      } else {
+        alert('An error occurred. Please try again.')
+      }
+      setResendDisabled(false)
+      setResendTimer(0)
+    }
+  }
+
+  // Format email for display (obscure middle part)
+  const formatEmail = (email) => {
+    if (!email) return '';
+    const parts = email.split('@');
+    if (parts.length !== 2) return email;
+    
+    const name = parts[0];
+    const domain = parts[1];
+    
+    if (name.length <= 3) return email;
+    
+    return `${name.substring(0, 3)}${'*'.repeat(Math.min(5, name.length - 3))}@${domain}`;
+  }
+
   return (
     <div className="verification-container">
       <div className="verification-card">
@@ -129,12 +182,19 @@ const Verification = () => {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="2"
-              d="M5 13l4 4L19 7"
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
             />
           </svg>
         </div>
 
-        <h2 className="verification-title">Please Verify Account</h2>
+        <h2 className="verification-title">Verify Your Account</h2>
+        
+        <p className="verification-email">{formatEmail(email)}</p>
+        
+        <p className="verification-message">
+          We've sent a 6-character code to your email. 
+          Enter the code below to verify your account.
+        </p>
 
         <div className="input-group">
           {code.map((digit, index) => (
@@ -149,17 +209,29 @@ const Verification = () => {
               ref={(ref) => inputRefs.current[index] = ref}
               className="verification-input"
               autoComplete="off"
+              aria-label={`Digit ${index + 1}`}
             />
           ))}
         </div>
 
         <button
           onClick={handleVerify}
-          className="verify-button"
+          className={`verify-button ${isLoading ? 'loading' : ''}`}
           disabled={isLoading || code.some(digit => digit === '')}
         >
-          {isLoading ? 'Verifying...' : 'Verify'}
+          {isLoading ? '' : 'Verify Account'}
         </button>
+        
+        <div className="resend-container">
+          <p className="resend-text">Didn't receive a code?</p>
+          <button 
+            className="resend-button" 
+            onClick={handleResendCode}
+            disabled={resendDisabled}
+          >
+            {resendTimer > 0 ? `Resend in ${resendTimer}s` : 'Resend Code'}
+          </button>
+        </div>
       </div>
     </div>
   )

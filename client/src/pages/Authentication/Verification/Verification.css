@@ -3,31 +3,44 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #1a1a2e;
-  padding: 20px;
+  background-image: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 16px;
   font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
 }
 
+/* Card styling */
 .verification-card {
   background-color: white;
-  border-radius: 12px;
-  padding: 32px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   width: 100%;
   max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
 }
 
+/* Email display */
+.verification-email {
+  font-size: 15px;
+  color: #555;
+  text-align: center;
+  margin: 0;
+  word-break: break-all;
+}
+
+/* Icon container */
 .icon-container {
   background-color: #2196f3;
-  border-radius: 8px;
-  padding: 12px;
+  border-radius: 50%;
+  padding: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
 }
 
 .verification-icon {
@@ -36,49 +49,153 @@
   color: white;
 }
 
+/* Title styling */
 .verification-title {
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 700;
   color: #333;
   margin: 0;
   text-align: center;
 }
 
+/* Verification message */
+.verification-message {
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Input group */
 .input-group {
   display: flex;
   flex-direction: row;
   gap: 8px;
   justify-content: center;
+  width: 100%;
 }
 
+/* Individual input boxes */
 .verification-input {
-  width: 48px;
-  height: 48px;
-  font-size: 20px;
+  width: 44px;
+  height: 52px;
+  font-size: 22px;
+  font-weight: 600;
   text-align: center;
   border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 10px;
   outline: none;
-  transition: border-color 0.2s;
+  transition: all 0.2s ease;
+  background-color: #f9f9f9;
+  color: #333;
 }
 
 .verification-input:focus {
   border-color: #2196f3;
+  box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+  background-color: white;
 }
 
+/* Button styling */
 .verify-button {
   width: 100%;
-  padding: 12px;
-  background-color: #1a1a2e;
+  padding: 14px;
+  background-color: #2196f3;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);
 }
 
-.verify-button:hover {
-  background-color: #2a2a3e;
+.verify-button:disabled {
+  background-color: #bbdefb;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Resend code section */
+.resend-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.resend-text {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 4px 0;
+}
+
+.resend-button {
+  background: none;
+  border: none;
+  color: #2196f3;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.resend-button:disabled {
+  color: #90caf9;
+  cursor: not-allowed;
+}
+
+/* Loading state */
+.verify-button.loading {
+  position: relative;
+  color: transparent;
+}
+
+.verify-button.loading::after {
+  content: "";
+  position: absolute;
+  top: calc(50% - 10px);
+  left: calc(50% - 10px);
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments for very small screens */
+@media (max-width: 360px) {
+  .verification-card {
+    padding: 24px 16px;
+  }
+  
+  .verification-input {
+    width: 36px;
+    height: 48px;
+    font-size: 20px;
+  }
+  
+  .icon-container {
+    padding: 12px;
+  }
+  
+  .verification-title {
+    font-size: 22px;
+  }
+  
+  .verification-message {
+    font-size: 13px;
+  }
+  
+  .input-group {
+    gap: 6px;
+  }
 }
