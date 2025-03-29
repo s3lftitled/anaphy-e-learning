@@ -18,12 +18,6 @@ const userProgressSchema = new mongoose.Schema({
     passed: Boolean,
     completedAt: Date,
   }],
-  examResult: {
-    score: Number,
-    passed: Boolean,
-    completedAt: Date,
-    attempts: Number
-  },
   lastViewed: {
     contentId: { type: mongoose.Schema.Types.ObjectId, required: true },
     topicId: { type: mongoose.Schema.Types.ObjectId, ref: 'Topic', required: true },
