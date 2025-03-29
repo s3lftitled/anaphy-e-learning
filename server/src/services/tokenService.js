@@ -31,7 +31,7 @@ const refreshAccessToken = async (refreshToken) => {
 
       // Generate a new access token
       const newAccessToken = jwt.sign(
-        { id: decoded.id },
+        { id: decoded.id, role: decoded.role },
         process.env.SECRET_KEY,
         { expiresIn: '20m' }
       )
