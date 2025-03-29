@@ -20,10 +20,10 @@ const logger = require('../logger/logger')
 
 class ClassController {
   async createClass(req, res, next) {
-    const { userRole, teacherId } = req.params
+    const { teacherId } = req.params
     const { className } = req.body
     try {
-      const code = await createClassService(userRole, teacherId, className)
+      const code = await createClassService(teacherId, className)
 
       res.status(HTTP_STATUS.CREATED).json({ code, message: 'Class created succesfully' })
     } catch (error) {
