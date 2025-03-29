@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import api from '../../../utils/api'
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, 
   Tooltip, ResponsiveContainer, LineChart, Line 
 } from 'recharts'
 import './AdminDashboard.css'
 import FloatingHomeButton from '../../../components/FloatingHomeButton/FloatingHomeButton'
+import usePrivateApi from '../../../hooks/usePrivateApi'
 
 const UserActivityDashboard = () => {
   const [activeUsersData, setActiveUsersData] = useState({
@@ -17,6 +17,7 @@ const UserActivityDashboard = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
   const [activeTab, setActiveTab] = useState('overview')
+  const privateAxios = usePrivateApi()
 
   useEffect(() => {
     // Page title
@@ -29,10 +30,10 @@ const UserActivityDashboard = () => {
         setIsLoading(true)
         
         const [dailyResponse, weeklyResponse, monthlyResponse, historyResponse] = await Promise.all([
-          api.get('user-activities/api/v1/get-daily-active-users'),
-          api.get('user-activities/api/v1/get-weekly-active-users'),
-          api.get('user-activities/api/v1/get-monthly-active-users'),
-          api.get('user-activities/api/v1/get-historical-user-activity?days=7')
+          privateAxios.get('user-activities/api/v1/get-daily-active-users', {}, { withCredentials: true }),
+          privateAxios.get('user-activities/api/v1/get-weekly-active-users', {}, { withCredentials: true }),
+          privateAxios.get('user-activities/api/v1/get-monthly-active-users', {}, { withCredentials: true }),
+          privateAxios.get('user-activities/api/v1/get-historical-user-activity?days=7', {}, { withCredentials: true })
         ])
         
         setActiveUsersData({
