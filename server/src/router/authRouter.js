@@ -10,5 +10,6 @@ router.put('/v1/change-password/:userId', limiter, AuthController.changePassword
 router.delete('/v1/log-out', AuthController.logOut)
 router.post('/v1/forgot-password', AuthController.forgotPassword)
 router.put('/v1/reset-password/:resetToken', AuthController.resetPassword)
+router.post('/v1/resend-verification/:email', limiter, AuthController.resendVerificationCode)
 
 module.exports = router

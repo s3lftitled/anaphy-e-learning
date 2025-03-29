@@ -6,6 +6,7 @@ const {
   logOutService, 
   forgotPasswordService,
   resetPasswordService,
+  resendVerificationCodeService,
 } = require('../services/authService')
 const HTTP_STATUS = require('../constants/httpConstants')
 const logger = require('../logger/logger')
@@ -96,6 +97,19 @@ class AuthController {
       res.status(HTTP_STATUS.OK).json({ message: 'Password reset succesfully' })
     } catch (error) {
       logger.error(`Error resetting password - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async resendVerificationCode(req, res, next) {
+    const { email } = req.params
+    try {
+      await resendVerificationCodeService(email)
+      res.status(HTTP_STATUS.OK).json({ 
+        message: 'A new verification code has been sent to your email' 
+      })
+    } catch (error) {
+      logger.error(`Resend verification error - ${error.message}`)
       next(error)
     }
   }

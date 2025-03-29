@@ -131,7 +131,7 @@ const logIn = async (email, password) => {
 
     // Validate and sanitize email
     appAssert(validator.isEmail(email), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)
-    const sanitizedEmail = sanitizeHtml(email.trim())  // Sanitize to remove potentially harmful HTML
+    const sanitizedEmail = sanitizeHtml(email.trim()) // Sanitize to remove potentially harmful HTML
 
     // Find the user associated with the email
     let user = await UserModel.findOne({ email: sanitizedEmail })
@@ -281,6 +281,34 @@ const resetPasswordService = async (resetToken, newPassword, newPasswordConfirma
   }
 }
 
+const resendVerificationCodeService = async (email) => {
+  try {
+    // Validate required params
+    validateRequiredParams({ email })
+
+    // Validate and sanitize email
+    appAssert(validator.isEmail(email), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)
+    const sanitizedEmail = sanitizeHtml(email.trim())
+
+    // Find the user associated with the email
+    const user = await UserModel.findOne({ email: sanitizedEmail })
+    appAssert(user, 'No user is associated with that email', HTTP_STATUS.BAD_REQUEST)
+
+    // Generate a new verification code
+    const newVerificationCode = await EmailUtil.generateVerificationCode()
+
+    // Update the user's verification code
+    user.verificationCode = newVerificationCode
+    await user.save()
+
+    // Send a new verification email
+    await EmailUtil.sendVerificationEmail(sanitizedEmail, newVerificationCode)
+
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   registerUser,
   logIn,
@@ -289,4 +317,5 @@ module.exports = {
   logOutService,
   forgotPasswordService,
   resetPasswordService,
+  resendVerificationCodeService,
 }
