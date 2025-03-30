@@ -181,7 +181,7 @@ const LandingPage = () => {
         <div className="contact-container">
           <div className="card">
             <div className="imageWrapper">
-              <img className="contact-image" src="" alt="John Lino" />
+              <img className="contact-image" src="flighty.jpg" alt="John Lino" />
             </div>
             <h2 className="member-name">Demonteverde, John Lino Javien</h2>
             <h3 className="position">Lead Developer</h3>
