@@ -65,12 +65,28 @@ const registerUser = async (name, email, password, passwordConfirmation, recaptc
     await EmailUtil.sendVerificationEmail(sanitizedEmail, verificationCode)
 
     // Proceed with user creation, after sanitizing inputs
-    await UserModel.create({
+    const newUser = await UserModel.create({
       name: sanitizedName,
       email: sanitizedEmail,
       password: hashedPassword,
       verificationCode,
     })
+
+    // Schedule deletion check after 30 minutes
+    setTimeout(async () => {
+      try {
+        // Find the user by ID and check if verification code is still present
+        const user = await UserModel.findById(newUser._id)
+        
+        // If user exists and verificationCode is still present (not null), delete the user
+        if (user && user.verificationCode) {
+          await UserModel.findByIdAndDelete(newUser._id)
+          logger.info(`Deleted unverified user with email: ${sanitizedEmail} after 30 minutes`)
+        }
+      } catch (err) {
+        logger.info('Error in auto-deletion process:', err)
+      }
+    }, 30 * 60 * 1000)
 
   } catch (error) {
     throw error

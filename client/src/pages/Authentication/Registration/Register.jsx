@@ -60,7 +60,7 @@ const Register = () => {
       })
 
       if (response.status === 201) {
-        alert('Registration successful, please verify your email')
+        alert(response.data.message)
         navigate(`/verification/${registrationData.email}`)
       }
     } catch (error) {

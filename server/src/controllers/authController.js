@@ -16,7 +16,9 @@ class AuthController {
     const { name, email, password, passwordConfirmation, recaptcha } = req.body
     try {
       await registerUser(name, email, password, passwordConfirmation, recaptcha)
-      res.status(HTTP_STATUS.CREATED).json({ message: 'Registration successful! Please check your email for verification.'})
+      res.status(HTTP_STATUS.CREATED).json({
+        message: "Registration successful! Check email for verification code. Account will be deleted if not verified within 30 mins."
+      })
     } catch (error) {
       logger.error(`Registration error - ${error.message}`)
       next(error)
