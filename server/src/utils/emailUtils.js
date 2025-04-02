@@ -11,6 +11,15 @@ class EmailUtil {
         user: process.env.USER,
         pass: process.env.PASSWORD,
       },
+        secure: true,
+        pool: true,
+        maxConnections: 5,
+    
+      dkim: {
+        domainName: 'anaphyverse.site',
+        keySelector: 'email',
+        privateKey: process.env.DKIM_PRIVATE_KEY
+      }
     })
   }
 
@@ -23,8 +32,18 @@ class EmailUtil {
       const mailOptions = {
         from: process.env.USER,
         to: email,
-        subject: 'Email Verification',
-        html: `<p>Your verification code is: <strong>${verificationCode}</strong></p>`,
+        subject: 'Verify Your AnaphyVerse Account',
+        html:`
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #000000;">
+    <h2 style="color: #000000;">Verify Your AnaphyVerse Account</h2>
+    <p style="color: #000000;">Thank you for creating an account with AnaphyVerse. To complete your registration, please enter the verification code below:</p>
+    <div style="background-color: #f4f4f4; padding: 12px; text-align: center; font-size: 24px; letter-spacing: 5px; margin: 20px 0; color: #000000;">
+      <strong>${verificationCode}</strong>
+    </div>
+    <p style="color: #000000;">If you did not request this verification, please disregard this email.</p>
+    <p style="color: #000000;">Thank you,<br>The AnaphyVerse Team</p>
+  </div>
+  `,
       }
 
       await this.transporter.sendMail(mailOptions)
