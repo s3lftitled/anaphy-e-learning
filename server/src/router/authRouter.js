@@ -4,13 +4,13 @@ const AuthController = require('../controllers/authController')
 const limiter = require('../middlewares/rateLimiter')
 const { verifyToken } = require('../middlewares/jsonWebTokens')
 
-router.post('/v1/registration', limiter, AuthController.register)
-router.post('/v1/verify-email/:email',limiter, AuthController.verifyEmail)
-router.post('/v1/login', limiter, AuthController.logIn)
-router.put('/v1/change-password/:userId', limiter, verifyToken, AuthController.changePassword)
+router.post('/v1/registration', AuthController.register)
+router.post('/v1/verify-email/:email', AuthController.verifyEmail)
+router.post('/v1/login',  AuthController.logIn)
+router.put('/v1/change-password/:userId', verifyToken, AuthController.changePassword)
 router.delete('/v1/log-out', AuthController.logOut)
 router.post('/v1/forgot-password', AuthController.forgotPassword)
 router.put('/v1/reset-password/:resetToken', AuthController.resetPassword)
-router.post('/v1/resend-verification/:email', limiter, AuthController.resendVerificationCode)
+router.post('/v1/resend-verification/:email', AuthController.resendVerificationCode)
 
 module.exports = router
