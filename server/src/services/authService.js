@@ -38,9 +38,6 @@ const registerUser = async (name, email, password, passwordConfirmation, recaptc
     //captcha
     appAssert(await verifyCaptcha(recaptcha), 'Invalid CAPTCHA', HTTP_STATUS.BAD_REQUEST)
 
-    const emailRegex = /^[a-zA-Z0-9._-]+@panpacificu\.edu\.ph$/
-    appAssert(emailRegex.test(email), 'Please use your panpacific email', HTTP_STATUS.BAD_REQUEST)
-
     // Validate and sanitize email
     appAssert(validator.isEmail(email), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)
     const sanitizedEmail = sanitizeHtml(email.trim())  // Sanitize to remove potentially harmful HTML
