@@ -8,19 +8,13 @@ const AnatomyChatbot = () => {
   ])
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [isListening, setIsListening] = useState(false)
-  const [voiceEnabled, setVoiceEnabled] = useState(false)
-  const [micPermission, setMicPermission] = useState('unknown') // 'unknown', 'granted', 'denied'
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
-  const recognitionRef = useRef(null)
 
-  // Use environment variable or a secure backend service for API keys
-  // This is a placeholder - in production, NEVER include API keys in client-side code
-  const API_KEY = import.meta.env.VITE_GROQ_API_KEY || ''
+  const groqApiKey = import.meta.env.VITE_GROQ_API_KEY || ''
 
   // System message to restrict responses to anatomy-related questions
-  const SYSTEM_MESSAGE = `You are an Anatomy AI Assistant, designed to assist with learning human anatomy.  
+const SYSTEM_MESSAGE = `You are an Anatomy AI Assistant, designed to assist with learning human anatomy.  
 
 Format responses with proper spacing and line breaks using '\\n\\n' where necessary.  
 
@@ -44,35 +38,18 @@ When relevant, suggest related anatomy topics for further exploration.`
     setInputValue(e.target.value)
   }
 
-  const checkMicrophonePermission = () => {
-    if (navigator.permissions && navigator.permissions.query) {
-      navigator.permissions.query({ name: 'microphone' })
-        .then(permissionStatus => {
-          setMicPermission(permissionStatus.state);
-          permissionStatus.onchange = () => {
-            setMicPermission(permissionStatus.state);
-          };
-        })
-        .catch(error => {
-          console.error('Permission check failed:', error);
-        });
-    }
-  }
-
   const callGroqApi = async (userMessage) => {
-    if (!API_KEY) {
-      return "API key is missing. Please set up your API key in the environment variables.";
+    if (!groqApiKey) {
+      return "API key is missing. Please provide a valid Groq API key.";
     }
 
     try {
       setIsLoading(true)
       
-      // Ideally, this API call should be made through a secure backend service
-      // to protect your API key
       const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${API_KEY}`,
+          'Authorization': `Bearer ${groqApiKey}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -107,7 +84,7 @@ When relevant, suggest related anatomy topics for further exploration.`
   }
 
   const handleSubmit = async (e) => {
-    if (e) e.preventDefault();
+    e.preventDefault();
     if (inputValue.trim() === '' || isLoading) return
 
     const userMessage = inputValue.trim()
@@ -132,131 +109,6 @@ When relevant, suggest related anatomy topics for further exploration.`
           : msg
       )
     )
-
-    // Speak the response if voice is enabled
-    if (voiceEnabled) {
-      speakText(botResponse.replace(/\*/g, ''))
-    }
-  }
-
-  // Initialize speech recognition - only called when needed, not on component mount
-  const initSpeechRecognition = () => {
-    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-      recognitionRef.current = new SpeechRecognition()
-      recognitionRef.current.continuous = false
-      recognitionRef.current.interimResults = false
-      recognitionRef.current.lang = 'en-US'
-
-      recognitionRef.current.onresult = (event) => {
-        const transcript = event.results[0][0].transcript
-        setInputValue(transcript)
-        setIsListening(false)
-        // Slight delay to allow user to see what was transcribed
-        setTimeout(() => {
-          handleSubmit()
-        }, 500)
-      }
-
-      recognitionRef.current.onerror = (event) => {
-        console.error('Speech recognition error', event.error)
-        setIsListening(false)
-        
-        // User-friendly error message when permission is denied
-        if (event.error === 'not-allowed') {
-          setMessages(prev => [...prev, { 
-            id: Date.now(), 
-            text: "I need permission to access your microphone. Please check your browser settings and try again.", 
-            sender: 'bot' 
-          }]);
-          setMicPermission('denied');
-        }
-      }
-
-      recognitionRef.current.onend = () => {
-        setIsListening(false)
-      }
-    } else {
-      console.error('Speech recognition not supported in this browser')
-      setMessages(prev => [...prev, { 
-        id: Date.now(), 
-        text: "Voice input is not supported in your browser. Please type your question instead.", 
-        sender: 'bot' 
-      }]);
-    }
-  }
-
-  // Toggle speech recognition with permission handling
-  const toggleListening = () => {
-    if (isListening) {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop()
-      }
-      setIsListening(false)
-    } else {
-      // Initialize speech recognition if not already done
-      if (!recognitionRef.current) {
-        initSpeechRecognition()
-      }
-      
-      // Request microphone permission explicitly before starting
-      navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(() => {
-          try {
-            recognitionRef.current.start()
-            setIsListening(true)
-            setMicPermission('granted')
-          } catch (error) {
-            console.error('Error starting speech recognition:', error)
-            setIsListening(false)
-          }
-        })
-        .catch(error => {
-          console.error('Microphone permission denied:', error)
-          setIsListening(false)
-          setMicPermission('denied')
-          setMessages(prev => [...prev, { 
-            id: Date.now(), 
-            text: "I need microphone permission to use voice input. Please allow access in your browser settings.", 
-            sender: 'bot' 
-          }]);
-        });
-    }
-  }
-
-  // Toggle voice output
-  const toggleVoice = () => {
-    setVoiceEnabled(!voiceEnabled)
-  }
-
-  // Text-to-speech function
-  const speakText = (text) => {
-    if (!('speechSynthesis' in window)) {
-      console.error('Text-to-speech not supported in this browser')
-      return
-    }
-
-    // Cancel any ongoing speech
-    window.speechSynthesis.cancel()
-
-    const utterance = new SpeechSynthesisUtterance(text)
-    utterance.rate = 1.0
-    utterance.pitch = 1.0
-    utterance.volume = 1.0
-    
-    // Try to use a neutral, clear voice
-    const voices = window.speechSynthesis.getVoices()
-    const preferredVoice = voices.find(voice => 
-      voice.name.includes('Samantha') || 
-      voice.name.includes('Google US English') || 
-      voice.name.includes('Microsoft Zira')
-    )
-    
-    if (preferredVoice) {
-      utterance.voice = preferredVoice
-    }
-    
-    window.speechSynthesis.speak(utterance)
   }
 
   // Auto-scroll to bottom of messages
@@ -270,39 +122,6 @@ When relevant, suggest related anatomy topics for further exploration.`
       inputRef.current?.focus()
     }
   }, [isOpen])
-
-  // Initialize voice synthesis when component mounts
-  // Note: Speech recognition is now initialized only on demand
-  useEffect(() => {
-    // Load voices
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = () => {
-        window.speechSynthesis.getVoices()
-      }
-    }
-    
-    // Check microphone permission status if applicable
-    if (navigator.permissions && navigator.permissions.query) {
-      checkMicrophonePermission();
-    }
-    
-    return () => {
-      // Cleanup
-      if (recognitionRef.current) {
-        recognitionRef.current.abort()
-      }
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel()
-      }
-    }
-  }, [])
-
-  // Helper function to get mic button class
-  const getMicButtonClass = () => {
-    if (isListening) return 'mic-button listening';
-    if (micPermission === 'denied') return 'mic-button denied';
-    return 'mic-button';
-  }
 
   return (
     <div className="chatbot-container">
@@ -320,17 +139,6 @@ When relevant, suggest related anatomy topics for further exploration.`
               </svg>
             </div>
             <h3>Anatomy AI Assistant</h3>
-            <div className="voice-controls">
-              <button 
-                className={`voice-toggle ${voiceEnabled ? 'active' : ''}`} 
-                onClick={toggleVoice} 
-                title={voiceEnabled ? "Disable voice responses" : "Enable voice responses"}
-              >
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 3v18M8 8v8M16 8v8M4 10v4M20 10v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-            </div>
             <button className="close-button" onClick={toggleChatbot}>×</button>
           </div>
           <div className="chatbot-messages">
@@ -368,21 +176,9 @@ When relevant, suggest related anatomy topics for further exploration.`
               value={inputValue}
               onChange={handleInputChange}
               ref={inputRef}
-              disabled={isLoading || isListening}
-            />
-            <button 
-              type="button" 
-              className={getMicButtonClass()}
-              onClick={toggleListening}
               disabled={isLoading}
-              title={micPermission === 'denied' ? "Microphone access denied" : "Voice input"}
-            >
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-            <button type="submit" disabled={isLoading || isListening || inputValue.trim() === ''}>
+            />
+            <button type="submit" disabled={isLoading || inputValue.trim() === ''}>
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M22 2L11 13" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
