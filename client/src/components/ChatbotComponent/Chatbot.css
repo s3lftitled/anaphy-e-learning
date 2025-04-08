@@ -348,3 +348,181 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+
+/* ChatbotVoice.css - Additional styles for voice features */
+
+/* Voice control buttons in header */
+.voice-controls {
+  display: flex;
+  position: absolute;
+  right: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.voice-toggle {
+  background: none;
+  border: none;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: rgba(85, 184, 255, 0.7);
+  transition: all 0.2s ease;
+  margin-left: 8px;
+  padding: 0;
+}
+
+.voice-toggle:hover {
+  color: #FFFFFF;
+  transform: scale(1.1);
+}
+
+.voice-toggle.active {
+  color: #55B8FF;
+}
+
+.voice-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Microphone button */
+.mic-button {
+  width: 36px;
+  height: 36px;
+  margin-right: 10px;
+  background-color: rgba(85, 184, 255, 0.7);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.mic-button:hover {
+  background-color: rgba(85, 184, 255, 0.9);
+  transform: scale(1.05);
+}
+
+.mic-button svg {
+  width: 18px;
+  height: 18px;
+  color: #FFFFFF;
+}
+
+/* Active microphone state */
+.mic-button.listening {
+  background-color: #FF5555;
+  animation: pulse-mic 1.5s infinite;
+}
+
+.mic-button.listening svg {
+  animation: pulse-icon 1.5s infinite;
+}
+
+@keyframes pulse-mic {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 85, 85, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 85, 85, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 85, 85, 0);
+  }
+}
+
+@keyframes pulse-icon {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Adjust input field for mic button */
+.chatbot-input {
+  display: flex;
+  align-items: center;
+}
+
+.chatbot-input input {
+  flex: 1;
+}
+
+/* Styles for when input is disabled during voice input */
+.chatbot-input input:disabled {
+  background-color: rgba(5, 41, 63, 0.7);
+  color: rgba(255, 255, 255, 0.5);
+  border-color: rgba(85, 184, 255, 0.2);
+}
+
+/* Animation for voice transcription */
+@keyframes blink-cursor {
+  0% { border-color: rgba(85, 184, 255, 0.7); }
+  50% { border-color: transparent; }
+  100% { border-color: rgba(85, 184, 255, 0.7); }
+}
+
+.chatbot-input input:disabled::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.chatbot-input input.listening {
+  animation: blink-cursor 1s infinite;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  .voice-controls {
+    right: 45px;
+  }
+  
+  .mic-button {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .mic-button svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .voice-controls {
+    right: 40px;
+  }
+  
+  .voice-toggle {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .voice-toggle svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .mic-button {
+    width: 30px;
+    height: 30px;
+    margin-right: 6px;
+  }
+  
+  .mic-button svg {
+    width: 14px;
+    height: 14px;
+  }
+}
