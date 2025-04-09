@@ -14,7 +14,7 @@ const Homepage = () => {
       backgroundPosition: '50% 10%',
       backgroundSize: '150%',
       textColor: 'white',
-      modelSrc: "https://human.biodigital.com/viewer/?id=62dI&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=M1nqy&paid=o_18063d15",
+      modelSrc: "https://human.biodigital.com/viewer/?id=65M6&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=M2VGy&paid=o_2bb445ae",
       slug: "skeletal",
       description: "The skeletal system provides structural support for the body, protects vital organs, and works with muscles to enable movement. Consisting of 206 bones in adults, it also produces blood cells in bone marrow and stores minerals like calcium and phosphorus. Each bone is a dynamic, living tissue that continuously rebuilds and reforms throughout life."
     },
@@ -24,7 +24,7 @@ const Homepage = () => {
       backgroundPosition: '50% 5%',
       backgroundSize: '150%',
       textColor: 'white',
-      modelSrc:"https://human.biodigital.com/viewer/?id=62dN&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=M1nrf&paid=o_18063d15",
+      modelSrc:"https://human.biodigital.com/viewer/?id=65MA&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=M2VHk&paid=o_2bb445ae",
       slug: "muscular",
       description: "The muscular system comprises over 600 muscles that make up about 40% of body weight. These tissues contract to produce movement, maintain posture, stabilize joints, and generate heat. The three types of muscle tissue—skeletal, cardiac, and smooth—work together to enable both voluntary movements like walking and involuntary functions like digestion and heartbeat."
     },
@@ -34,7 +34,7 @@ const Homepage = () => {
       backgroundPosition: '50% 50%',
       backgroundSize: '150%',
       textColor: 'white',
-      modelSrc:"https://human.biodigital.com/viewer/?id=62dO&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=M1nrs&paid=o_18063d15",
+      modelSrc:"https://human.biodigital.com/viewer/?id=65MF&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=M2VIn&paid=o_2bb445ae",
       slug: "nervous",
       description: "The nervous system is the body's control center, consisting of the brain, spinal cord, and a vast network of nerves. This complex communication highway transmits electrical signals that coordinate everything from conscious actions and thoughts to unconscious processes like breathing and digestion. Neurons—specialized cells that can transmit information—form the foundation of this system, with an adult human brain containing approximately 86 billion of these remarkable cells."
     },
@@ -44,7 +44,7 @@ const Homepage = () => {
       backgroundPosition: '50% 50%',
       backgroundSize: '120%',
       textColor: 'white',
-      modelSrc: "https://human.biodigital.com/viewer/?id=62TW&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=M1lvI&paid=o_18063d15",
+      modelSrc: "https://human.biodigital.com/viewer/?id=65MI&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=M2VIy&paid=o_2bb445ae",
       slug: "cardiovascular",
       description: "The cardiovascular system is a sophisticated transportation network powered by the heart, which pumps approximately 2,000 gallons of blood through 60,000 miles of blood vessels daily. This system delivers oxygen and nutrients to cells while removing waste products. The heart beats about 100,000 times per day, creating a continuous flow that maintains homeostasis and supports every other body system."
     },
@@ -54,7 +54,7 @@ const Homepage = () => {
       backgroundPosition: '50% 30%',
       backgroundSize: '100%',
       textColor: 'white',
-      modelSrc:"https://human.biodigital.com/viewer/?id=62dP&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=M1ns0&paid=o_18063d15",
+      modelSrc:"https://human.biodigital.com/viewer/?id=65MJ&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=M2VJr&paid=o_2bb445ae",
       slug: "respiratory",
       description: "The respiratory system facilitates gas exchange, bringing oxygen into the bloodstream and expelling carbon dioxide. Centered on the lungs, this system includes the nose, pharynx, larynx, trachea, bronchi, and diaphragm. With each breath, air travels through a series of increasingly smaller airways until reaching the alveoli—tiny air sacs where oxygen and carbon dioxide exchange occurs across membranes just one cell thick."
     },
@@ -74,7 +74,7 @@ const Homepage = () => {
       backgroundPosition: '50% 20%',
       backgroundSize: '100%',
       textColor: 'white',
-      modelSrc:"https://human.biodigital.com/viewer/?id=62dW&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=M1nsJ&paid=o_18063d15",
+      modelSrc:"https://human.biodigital.com/viewer/?id=65MO&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=M2VKG&paid=o_2bb445ae",
       slug: "endocrine",
       description: "The endocrine system is a network of glands that produce and release hormones—chemical messengers that regulate metabolism, growth, tissue function, reproduction, sleep, and mood. Though tiny in amount (measured in billionths of grams), these powerful chemical signals coordinate slow-acting but long-lasting changes throughout the body. Major endocrine glands include the pituitary, thyroid, parathyroid, adrenal, pancreas, and reproductive glands."
     },
