@@ -132,6 +132,18 @@
   outline: none;
 }
 
+.login-error-message {
+  background-color: rgba(255, 0, 0, 0.1);
+  color: #ff3333;
+  padding: 12px;
+  margin-left: 20px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border-left: 4px solid #ff3333;
+  font-size: 14px;
+  width: 85%;
+}
+
 .forgot-password {
   color: #1DAAB1; 
   font-size: 0.8rem; 

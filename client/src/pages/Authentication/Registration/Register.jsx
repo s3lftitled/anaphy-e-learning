@@ -15,6 +15,9 @@ const Register = () => {
   })
   const [isLoading, setIsLoading] = useState(false)
   const [captchaValue, setCaptchaValue] = useState(null)
+  const [error, setError] = useState('') 
+  const [showModal, setShowModal] = useState(false)
+  const [modalMessage, setModalMessage] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -25,27 +28,41 @@ const Register = () => {
   const handleFieldChange = (e) => {
     const { name, value } = e.target
     setRegistrationData((prevData) => ({ ...prevData, [name]: value }))
+    
+    // Clear error when user starts typing again
+    if (error) {
+      setError('')
+    }
   }
 
   const handleCaptcha = (value) => {
     setCaptchaValue(value)
   }
 
+  const closeModal = () => {
+    setShowModal(false)
+    // If there was no error, navigate after closing
+    if (!error) {
+      navigate(`/verification/${registrationData.email}`)
+    }
+  }
+
   const handleRegistration = async (e) => {
     e.preventDefault()
+    setError('')
 
     if (!registrationData.email || !registrationData.password || !registrationData.name) {
-      alert('Please fill in all required fields')
+      setError('Please fill in all required fields')
       return
     }
 
     if (registrationData.password !== registrationData.passwordConfirmation) {
-      alert('Passwords do not match')
+      setError('Passwords do not match')
       return
     }
 
     if (!captchaValue) {
-      alert('Please complete the reCAPTCHA')
+      setError('Please complete the reCAPTCHA')
       return
     }
 
@@ -60,18 +77,19 @@ const Register = () => {
       })
 
       if (response.status === 201) {
-        alert(response.data.message)
-        navigate(`/verification/${registrationData.email}`)
+        // Show success modal instead of alert
+        setModalMessage(response.data.message || 'Registration successful! Please check your email to verify your account.')
+        setShowModal(true)
       }
     } catch (error) {
       if (error.response) {
         if (error.response.status === 429) {
-          alert('Too many requests. Please try again after 5 minutes')
+          setError('Too many requests. Please try again after 5 minutes')
         } else {
-          alert(error.response.data?.message || 'An error occurred. Please try again.')
+          setError(error.response.data?.message || 'An error occurred. Please try again.')
         }
       } else {
-        alert('An error occurred. Please check your network connection and try again.')
+        setError('An error occurred. Please check your network connection and try again.')
       }
     } finally {
       setIsLoading(false)
@@ -86,6 +104,25 @@ const Register = () => {
         <div className="glow glow-3"></div>
       </div>
 
+      {/* Success Modal */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3>Registration Status</h3>
+              <button className="modal-close-btn" onClick={closeModal}>×</button>
+            </div>
+            <div className="modal-body success">
+              <div className="success-icon"></div>
+              <p>{modalMessage}</p>
+            </div>
+            <div className="modal-footer">
+              <button className="modal-btn" onClick={closeModal}>Continue</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="register-content">
         <div className="register-img-container">
           <img className="register-img" src="registration-image.png" alt="Register" />
@@ -98,6 +135,14 @@ const Register = () => {
 
         <div className="register-form-container">
           <h2>Sign Up</h2>
+          
+          {/* Display error message if exists */}
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
+          
           <form onSubmit={handleRegistration}>
             <div className="register-input-group">
               <label htmlFor="name">Full Name</label>

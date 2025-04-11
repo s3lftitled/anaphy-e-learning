@@ -10,6 +10,7 @@ const RECAPTCHA_PROD = import.meta.env.VITE_RECAPTCHA
 const Login = () => {
   const [ loginData, setLoginData ] = useState({})
   const [captchaToken, setCaptchaToken] = useState(null)
+  const [errorMessage, setErrorMessage] = useState("")
   const { setAuth } = useAuth()
   const navigate = useNavigate()
 
@@ -20,6 +21,9 @@ const Login = () => {
   }, [])
 
   const handleFieldChange = (e) => {
+    if (errorMessage) {
+      setErrorMessage('')
+    }
     const { name, value } = e.target
     let formattedValue = value
 
@@ -61,15 +65,15 @@ const Login = () => {
         const { status, data } = error.response
     
         if (status === 429) {
-            alert('Too many requests. Please try again after 5 minutes.');
+            setErrorMessage('Too many requests. Please try again after 5 minutes.');
         } else if (status === 403) {
-            alert('Please verify your email first.');
+            setErrorMessage('Please verify your email first.');
             navigate(`/verification/${loginData.email}`);
         } else {
-            alert(data?.message || 'An error occurred. Please try again.');
+            setErrorMessage(data?.message || 'An error occurred. Please try again.');
         }
       } else {
-          alert('An error occurred. Please check your network connection and try again.');
+          setErrorMessage('An error occurred. Please check your network connection and try again.');
       }
     }
   }
@@ -89,6 +93,11 @@ const Login = () => {
 
       <div className="login-form-container">
         <h2>Login</h2>
+        {errorMessage && (
+          <div className="login-error-message">
+            {errorMessage}
+          </div>
+         )}
         <form onSubmit={handleLogin}>
           <div className="login-input-group">
             <label htmlFor="email">Email</label>
@@ -120,7 +129,7 @@ const Login = () => {
               onChange={handleCaptchaChange}
             />
           </div>
-
+          
           <div className='login-options'>
             <button type="submit">Login</button>
             <Link className='signup-prompt' to='/register'>Don't have an account?</Link>

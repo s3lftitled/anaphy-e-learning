@@ -8,6 +8,10 @@ const Verification = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [resendDisabled, setResendDisabled] = useState(false)
   const [resendTimer, setResendTimer] = useState(0)
+  const [error, setError] = useState('') 
+  const [showModal, setShowModal] = useState(false)
+  const [modalMessage, setModalMessage] = useState('')
+  const [resendMessage, setResendMessage ] = useState('')
   const { email } = useParams()
   const inputRefs = useRef([])
   const navigate = useNavigate()
@@ -39,6 +43,9 @@ const Verification = () => {
   }, [resendTimer])
 
   const handleChange = (index, e) => {
+
+    setResendMessage('')
+
     const value = e.target.value
     
     // Only proceed if the input is empty or a single alphanumeric character
@@ -107,26 +114,33 @@ const Verification = () => {
     }
   }
 
+  const closeModal = () => {
+    setShowModal(false)
+    navigate('/login')
+  }
+
   const handleVerify = async () => {
     const verificationCode = code.join('')
     if (verificationCode.length !== 6) {
-      alert('Please enter all 6 digits')
+      setError('Please enter all 6 digits')
       return
     }
 
+    setError('')
+    
     try {
       setIsLoading(true)
       const response = await api.post(`auth/api/v1/verify-email/${email}`, { verificationCode: verificationCode })
       
       if (response.status === 200) {
-        alert(response.data.message)
-        navigate('/login')
+        setModalMessage(response.data.message || 'Your account has been successfully verified! You can now log in.')
+        setShowModal(true)
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        alert(error.response.data.message)
+        setError(error.response.data.message)
       } else {
-        alert('An error occurred. Please try again.')
+        setError('An error occurred. Please try again.')
       }
     } finally {
       setIsLoading(false)
@@ -141,13 +155,13 @@ const Verification = () => {
       const response = await api.post(`auth/api/v1/resend-verification/${email}`)
       
       if (response.status === 200) {
-        alert('A new verification code has been sent to your email')
+        setResendMessage(response.data.message)
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        alert(error.response.data.message)
+        setError(error.response.data.message)
       } else {
-        alert('An error occurred. Please try again.')
+        setError('An error occurred. Please try again.')
       }
       setResendDisabled(false)
       setResendTimer(0)
@@ -170,6 +184,27 @@ const Verification = () => {
 
   return (
     <div className="verification-container">
+      {/* Success Modal */}
+      {showModal && (
+        <div className="verification-modal-overlay">
+          <div className="verification-modal-content">
+            <div className="verification-modal-header">
+              <h3>Verification Status</h3>
+              <button className="verification-modal-close-btn" onClick={closeModal}>×</button>
+            </div>
+            <div className="verification-modal-body success">
+              <div className="verification-success-icon"></div>
+              <p>{modalMessage}</p>
+            </div>
+            <div className="verification-modal-footer">
+              <button className="verification-modal-btn" onClick={closeModal}>
+                Continue to Login
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <div className="verification-card">
         <div className="icon-container">
           <svg 
@@ -214,6 +249,13 @@ const Verification = () => {
           ))}
         </div>
 
+        {/* Display error message if exists */}
+        {error && (
+          <div className="verification-error-message">
+            {error}
+          </div>
+        )}
+
         <button
           onClick={handleVerify}
           className={`verify-button ${isLoading ? 'loading' : ''}`}
@@ -231,6 +273,7 @@ const Verification = () => {
           >
             {resendTimer > 0 ? `Resend in ${resendTimer}s` : 'Resend Code'}
           </button>
+          { resendMessage && <p className='resend-text'>{resendMessage}</p> }
         </div>
       </div>
     </div>
