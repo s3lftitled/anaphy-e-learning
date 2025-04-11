@@ -69,6 +69,8 @@ const TeacherDashboard = () => {
       })
       
       const { classesDetails } = response.data
+
+      console.log(classesDetails)
       
       // Transform the API response to match our component's expected structure
       const transformedClasses = classesDetails.map(cls => ({
@@ -81,7 +83,8 @@ const TeacherDashboard = () => {
           name: student.name,
           email: student.email,
           status: student.status,
-          lastActive: student.lastActive || null
+          lastActive: student.lastActive || null,
+          profilePic: student.profilePicture
         })),
       }))
       
@@ -594,7 +597,6 @@ const TeacherDashboard = () => {
                   <div className="col-name">Name</div>
                   <div className="col-email">Email</div>
                   <div className="col-status">Status</div>
-                  <div className="col-activity">Last Activity</div>
                   <div className="col-actions">Actions</div>
                 </div>
                 
@@ -602,13 +604,28 @@ const TeacherDashboard = () => {
                   {filteredStudents.length > 0 ? (
                     filteredStudents.map(student => (
                       <div key={student.id} className="table-row">
-                        <div className="col-name">{student.name}</div>
+                        <div className="col-name">
+                          {student.profilePic ? (
+                            <div className="student-profile-with-pic">
+                              <img 
+                                src={student.profilePic} 
+                                alt={`${student.name}'s profile`} 
+                                className="student-profile-pic"
+                              />
+                              <span>{student.name}</span>
+                            </div>
+                          ) : (
+                            <div className="student-profile-with-pic">
+                              <div className="student-profile-placeholder">
+                                {student.name ? student.name.charAt(0) : "?"}
+                              </div>
+                              <span>{student.name}</span>
+                            </div>
+                          )}
+                        </div>
                         <div className="col-email">{student.email}</div>
                         <div className={`col-status ${getStatusClass(student.status)}`}>
                           {student.status}
-                        </div>
-                        <div className="col-activity">
-                          {student.lastActive ? new Date(student.lastActive).toLocaleDateString() : 'Never'}
                         </div>
                         <div className="col-actions">
                           <button 
