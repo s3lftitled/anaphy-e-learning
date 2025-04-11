@@ -23,8 +23,6 @@ const checkRole = (allowedRoles) => {
   return (req, res, next) => {
     // Extract user's role from decoded token attached to request
     const userRole = req.user?.role
-
-    console.log(userRole)
     
     // Handle undefined user role
     if (!userRole) {
@@ -41,8 +39,6 @@ const checkRole = (allowedRoles) => {
         code: 'INSUFFICIENT_PRIVILEGES' 
       })
     }
-
-    console.log('user is allowed')
     
     // Continue to the next middleware if user's role is allowed
     next()
