@@ -194,7 +194,7 @@ const fetchTeacherClassService = async (teacherId) => {
       path: "classes",
       populate: {
         path: "students.student",
-        select: "name email", 
+        select: "name email profilePicture", 
       },
     })
 
@@ -210,6 +210,7 @@ const fetchTeacherClassService = async (teacherId) => {
         name: s.student.name,
         email: s.student.email,
         status: s.status, 
+        profilePicture: s.student.profilePicture
       })),
     }))
 
