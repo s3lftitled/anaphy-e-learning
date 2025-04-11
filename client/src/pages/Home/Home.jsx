@@ -5,6 +5,7 @@ import './Home.css'
 import { useUser } from '../../context/UserContext'
 import Navbar from '../../components/Navbar/Navbar'
 import Sidebar from '../../components/Sidebar/Sidebar'
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
 const Homepage = () => {
   const topics = [
@@ -96,13 +97,75 @@ const Homepage = () => {
   const [isScrolling, setIsScrolling] = useState(false)
   const [startX, setStartX] = useState(0)
   const [scrollLeft, setScrollLeft] = useState(0)
+
+  const [showLeftArrow, setShowLeftArrow] = useState(false)
+  const [showRightArrow, setShowRightArrow] = useState(true)
+
+  const scrollTopics = (direction) => {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current
+      const scrollAmount = container.clientWidth * 0.8 // Scroll 80% of container width
+      
+      if (direction === 'left') {
+        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' })
+      } else {
+        container.scrollBy({ left: scrollAmount, behavior: 'smooth' })
+      }
+    }
+  }
+
+  // Check if there's content to scroll to and update arrow visibility
+  const checkScrollability = () => {
+    if (!scrollContainerRef.current) return
+    
+    const container = scrollContainerRef.current
+    
+    // Check if we can scroll left (not at the beginning)
+    const canScrollLeft = container.scrollLeft > 5
+    
+    // Check if we can scroll right (not at the end)
+    const canScrollRight = container.scrollLeft + container.clientWidth < container.scrollWidth - 5
+    
+    setShowLeftArrow(canScrollLeft)
+    setShowRightArrow(canScrollRight)
+  }
+
+  // Set up scroll event listener
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (container) {
+      container.addEventListener('scroll', checkScrollability)
+      
+      // Initial check after content is loaded
+      checkScrollability()
+      
+      // Additional check after a small delay to ensure content is fully rendered
+      const timer = setTimeout(() => {
+        checkScrollability()
+      }, 500)
+      
+      return () => {
+        container.removeEventListener('scroll', checkScrollability)
+        clearTimeout(timer)
+      }
+    }
+  }, [])
+  
+  // Check scrollability on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      checkScrollability()
+    }
+    
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
   
   useEffect(() => {
     // Page title
     document.title = `AnaphyVerse - Home`
   }, [])
   
-
   const handleMouseDown = (e) => {
     if (!scrollContainerRef.current) return
     
@@ -169,8 +232,17 @@ const Homepage = () => {
         </div>
         
         <h2 className="section-title">Body Systems</h2>
-        
         <div className="topics-container-wrapper">
+          {showLeftArrow && (
+            <button 
+              className="scroll-arrow scroll-left"
+              onClick={() => scrollTopics('left')}
+              aria-label="Scroll left"
+            >
+              <FaChevronLeft />
+            </button>
+          )}
+          
           <div 
             className="topics-container" 
             ref={scrollContainerRef}
@@ -199,6 +271,16 @@ const Homepage = () => {
               ))}
             </div>
           </div>
+          
+          {showRightArrow && (
+            <button 
+              className="scroll-arrow scroll-right"
+              onClick={() => scrollTopics('right')}
+              aria-label="Scroll right"
+            >
+              <FaChevronRight />
+            </button>
+          )}
         </div>
       </main>
     </div>
