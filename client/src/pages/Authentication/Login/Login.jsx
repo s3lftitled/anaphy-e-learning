@@ -52,7 +52,7 @@ const Login = () => {
     }
     e.preventDefault()
     try {
-      const response = await api.post('auth/api/v1/login', { email: loginData.email, password: loginData.password },
+      const response = await api.post('auth/api/v1/login', { email: loginData.email, password: loginData.password, recaptcha: captchaToken },
         { withCredentials: true }
       )
 

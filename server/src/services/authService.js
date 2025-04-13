@@ -140,10 +140,12 @@ const updateUserActivity = async (userId, userType) => {
   }
 }
 
-const logIn = async (email, password) => {
+const logIn = async (email, password, recaptcha) => {
   try {
     // Check all the required fields
-   validateRequiredParams({ email, password })
+   validateRequiredParams({ email, password, recaptcha })
+
+   appAssert(await verifyCaptcha(recaptcha), 'Invalid CAPTCHA', HTTP_STATUS.BAD_REQUEST)
 
     // Validate and sanitize email
     appAssert(validator.isEmail(email), 'Invalid email format', HTTP_STATUS.BAD_REQUEST)

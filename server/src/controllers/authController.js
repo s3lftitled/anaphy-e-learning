@@ -38,9 +38,9 @@ class AuthController {
   }
 
   async logIn(req, res, next) {
-    const { email, password } = req.body
+    const { email, password, recaptcha } = req.body
     try {
-      const { user, accessToken, refreshToken} = await logIn(email, password)
+      const { user, accessToken, refreshToken} = await logIn(email, password, recaptcha)
 
       // Set cookies
       res.cookie('refreshToken', refreshToken, {
