@@ -224,8 +224,6 @@ const joinClassService = async (classCode, studentId) => {
   try {
     validateRequiredParams(classCode, studentId)
 
-    console.log(studentId)
-
     const classData = await ClassModel.findOne({ code: classCode })
     appAssert(classData, 'Class is not found', HTTP_STATUS.NOT_FOUND)
 
@@ -239,6 +237,41 @@ const joinClassService = async (classCode, studentId) => {
     await classData.save()
     
     student.pendingApproval.push({ classId: classData._id, classCode: classData.code })
+    await student.save()
+  } catch (error) {
+    throw error
+  }
+}
+
+const leaveClassService = async (classCode, studentId) => {
+  try {
+    validateRequiredParams(classCode, studentId)
+
+    const classData = await ClassModel.findOne({ code: classCode })
+    appAssert(classData, 'Class is not found', HTTP_STATUS.NOT_FOUND)
+
+    const existingStudentIndex = classData.students.findIndex(s => s.student.equals(studentId))
+    appAssert(existingStudentIndex !== -1, 'You are not a member of this class', HTTP_STATUS.BAD_REQUEST)
+
+    // Remove student from class
+    classData.students.splice(existingStudentIndex, 1)
+    await classData.save()
+    
+    const student = await UserModel.findById(studentId)
+    appAssert(student, 'Student is not found', HTTP_STATUS.NOT_FOUND)
+
+    // Remove class from student's records
+    // Handle both possibilities: pending approval or already joined classes
+    const pendingIndex = student.pendingApproval.findIndex(p => p.classCode === classCode)
+    if (pendingIndex !== -1) {
+      student.pendingApproval.splice(pendingIndex, 1)
+    }
+
+    const classIndex = student.joinedClasses.findIndex(c => c._id.equals(classData._id))
+    if (classIndex !== -1) {
+      student.joinedClasses.splice(classIndex, 1)
+    }
+
     await student.save()
   } catch (error) {
     throw error
@@ -310,6 +343,7 @@ const acceptPendingApprovalsService = async (classId, userId) => {
     appAssert(studentUpdated, 'Student is not in pending list', HTTP_STATUS.BAD_REQUEST)   
      if (studentUpdated) { 
       student.joinedClasses.push(classData._id)
+      student.pendingApproval = student.pendingApproval.filter(s => !s.classId.equals(classData._id))
       await student.save()
     }
   } catch (error) {
@@ -394,15 +428,12 @@ const fetchStudentJoinedClassesService = async (studentId) => {
 
     appAssert(student, 'Student is not found', HTTP_STATUS.NOT_FOUND)
 
-    console.log(student)
-
     const joinedClasses = await Promise.all(
       student.joinedClasses.map(async (c) => {
         return ClassModel.findById(c._id).populate('teacher', 'name')
       })
     )
 
-    console.log(joinedClasses)
     return joinedClasses
   } catch (error) {
     throw error
@@ -441,6 +472,7 @@ module.exports = {
   inviteStudentService,
   fetchTeacherClassService,
   joinClassService,
+  leaveClassService,
   searchClassService,
   fetchPendingApprovalsService,
   acceptPendingApprovalsService,
