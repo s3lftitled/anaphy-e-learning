@@ -11,6 +11,7 @@ router.put('/v1/accept-invite/:studentId/:classId', verifyToken, checkRole([ROLE
 router.delete('/v1/reject-invite/:studentId/:classId', verifyToken, checkRole([ROLES.LEVEL_1]), ClassController.rejectInvite)
 router.get('/v1/fetch-teacher-classes/:teacherId', verifyToken, checkRole([ROLES.LEVEL_2]), ClassController.fetchTeacherClasses)
 router.post('/v1/join-class/:studentId', verifyToken, checkRole([ROLES.LEVEL_1]), ClassController.joinClass)
+router.delete('/v1/leave-class/:studentId', ClassController.leaveClass)
 router.get('/v1/search-class', verifyToken, checkRole([ROLES.LEVEL_1]), ClassController.searchClass)
 router.get('/v1/fetch-pending-approvals/:classId', verifyToken, checkRole([ROLES.LEVEL_2]), ClassController.fetchPendingApprovals)
 router.put('/v1/accept-pending-approval/:classId/:studentId', verifyToken, checkRole([ROLES.LEVEL_2]), ClassController.acceptPendingApprovals)

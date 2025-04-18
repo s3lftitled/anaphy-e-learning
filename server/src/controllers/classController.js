@@ -6,6 +6,7 @@ const {
   inviteStudentService,
   fetchTeacherClassService,
   joinClassService,
+  leaveClassService,
   searchClassService,
   fetchPendingApprovalsService,
   acceptPendingApprovalsService,
@@ -102,6 +103,19 @@ class ClassController {
       res.status(HTTP_STATUS.OK).json({ message: 'Request sent! Waiting for teacher approval.' })
     } catch (error) {
       logger.error(`Error joining class - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async leaveClass(req, res, next) {
+    const { studentId } = req.params
+    const { classCode } = req.body
+    try {
+      await leaveClassService(classCode, studentId)
+
+      res.status(HTTP_STATUS.OK).json({ message: 'Succesfully left the class' })
+    } catch (error) {
+      logger.error(`Error leaving class - ${error.message}`)
       next(error)
     }
   }
