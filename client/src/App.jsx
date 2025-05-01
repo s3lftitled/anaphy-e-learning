@@ -43,6 +43,7 @@ const App = () => {
             <Route path='/forgot-password' element={<ForgotPassword />} />
             <Route path='/reset-password/:resetToken' element={<ResetPassword />} />
             <Route path='/*' element={<NotFound />} />
+            <Route path='/confirm-teacher-account' element={<ConfirmationForm />} />
 
             <Route 
               element={
@@ -65,7 +66,6 @@ const App = () => {
               <Route element={<ProtectedRoute allowedRoles={'teacher'} />}>
                 <Route path='/teacher-dashboard' element={<TeacherDashboard />} />
                 <Route path='/create-class-page' element={<CreateClassPage />} />
-                <Route path='/confirm-teacher-account' element={<ConfirmationForm />} />
               </Route>
 
               <Route element={<ProtectedRoute allowedRoles={'student'} />}>
