@@ -7,6 +7,7 @@ const { appAssert } = require('../utils/appAssert')
 const validator = require('validator')
 const HTTP_STATUS = require('../constants/httpConstants')
 const bcrypt = require('bcrypt')
+require('dotenv').config()
 
 const createTeacherAccount = async (email) => {
   try {
@@ -33,7 +34,7 @@ const createTeacherAccount = async (email) => {
     })
 
     // Send confirmation email with the token
-    const confirmationLink = `http://localhost:5173/confirm-teacher-account?token=${encodeURIComponent(confirmationToken)}&id=${encodeURIComponent(teacher._id)}`;
+    const confirmationLink = `${process.env.CLIENT}/confirm-teacher-account?token=${encodeURIComponent(confirmationToken)}&id=${encodeURIComponent(teacher._id)}`;
     await EmailUtil.sendConfirmationEmail(sanitizedEmail, confirmationLink)
    
     return teacher
