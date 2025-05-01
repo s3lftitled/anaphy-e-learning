@@ -62,7 +62,7 @@ class EmailUtil {
         html: `
           <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
             <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
-              <h2 style="color: #333;">Welcome to Our Platform</h2>
+              <h2 style="color: #333;">Welcome to AnaphyVerse</h2>
               <p style="font-size: 16px; color: #555;">Hi there,</p>
               <p style="font-size: 16px; color: #555;">
                 You’ve been registered as a teacher in our system. Please verify your email to activate your account.
@@ -78,7 +78,7 @@ class EmailUtil {
               </p>
               <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;" />
               <p style="font-size: 12px; color: #aaa; text-align: center;">
-                © ${new Date().getFullYear()} Our System. All rights reserved.
+                © ${new Date().getFullYear()} AnaphyVerse. All rights reserved.
               </p>
             </div>
           </div>
