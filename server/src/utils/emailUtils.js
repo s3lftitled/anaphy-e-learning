@@ -55,24 +55,42 @@ class EmailUtil {
 
   async sendConfirmationEmail(sanitizedEmail, confirmationLink) {
     try {
-
       const mailOptions = {
         from: process.env.USER,
         to: sanitizedEmail,
-        subject: 'Teacher Account Confirmation',
+        subject: 'Welcome – Please Verify Your Teacher Account',
         html: `
-          <p>You have been added as a teacher to our system. Please confirm your account by clicking the link below:</p>
-          <p><a href="${confirmationLink}" target="_blank">Confirm My Account</a></p>
-          <p>If you did not request this, please ignore this email.</p>
+          <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+            <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+              <h2 style="color: #333;">Welcome to Our Platform</h2>
+              <p style="font-size: 16px; color: #555;">Hi there,</p>
+              <p style="font-size: 16px; color: #555;">
+                You’ve been registered as a teacher in our system. Please verify your email to activate your account.
+              </p>
+              <p style="text-align: center; margin: 30px 0;">
+                <a href="${confirmationLink}" target="_blank" rel="noopener noreferrer"
+                   style="display: inline-block; background-color: #007bff; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 4px;">
+                  Verify My Email
+                </a>
+              </p>
+              <p style="font-size: 14px; color: #777;">
+                If you did not expect this email, you can ignore it.
+              </p>
+              <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;" />
+              <p style="font-size: 12px; color: #aaa; text-align: center;">
+                © ${new Date().getFullYear()} Our System. All rights reserved.
+              </p>
+            </div>
+          </div>
         `,
-      }
-
-      await this.transporter.sendMail(mailOptions)
+      };
+  
+      await this.transporter.sendMail(mailOptions);
     } catch (error) {
-      logger.error('Error sending confirmation email:', error)
-      throw new Error('Failed to send confirmation email.')
+      logger.error('Error sending confirmation email:', error);
+      throw new Error('Failed to send confirmation email.');
     }
-  }
+  }  
 
   async sendMessageToStudent(teacherEmail, studentEmail, subject, message) {
     try {
