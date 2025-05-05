@@ -1,4 +1,6 @@
 const TeacherModel = require('../models/teacher.model')
+const ClassModel = require('../models/class.model')
+const UserModel = require('../models/user.model')
 const EmailUtil = require('../utils/emailUtils')
 const crypto = require('crypto')
 const sanitizeHtml = require('sanitize-html')
@@ -71,7 +73,7 @@ const completeTeacherAccount = async (id, token, name, password) => {
 const fetchTeacherAccounts = async () => {
   try {
     const teachers = await TeacherModel.find({}, 'email status createdAt')
-    console.log(teachers)
+
     return teachers
   } catch (error) {
     throw error
@@ -87,13 +89,30 @@ const deleteTeacherAccount = async (teacherId) => {
     appAssert(validator.isMongoId(teacherId), 'Invalid teacher ID format', HTTP_STATUS.BAD_REQUEST)
 
     // Find the teacher by ID
-    const teacher = await TeacherModel.findById(teacherId);
+    const teacher = await TeacherModel.findById(teacherId)
     appAssert(teacher, 'Teacher not found', HTTP_STATUS.BAD_REQUEST)
+
+    // Find all classes created by the teacher
+    const teacherClasses = await ClassModel.find({ teacher: teacherId })
+    
+    // Get array of class IDs to remove from students
+    const classIds = teacherClasses.map(cls => cls._id)
+
+    if (classIds.length > 0) {
+      // Update all students to remove these classes from their joinedClasses array
+      await UserModel.updateMany(
+        { 'joinedClasses._id': { $in: classIds } },
+        { $pull: { joinedClasses: { _id: { $in: classIds } } } }
+      )
+
+      // Delete all classes created by this teacher
+      await ClassModel.deleteMany({ teacher: teacherId })
+    }
 
     // Delete the teacher account
     await TeacherModel.findByIdAndDelete(teacherId)
 
-    return { message: 'Teacher account successfully deleted' }
+    return { message: 'Teacher account and associated classes successfully deleted' }
   } catch (error) {
     throw error
   }
