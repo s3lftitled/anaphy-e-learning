@@ -415,21 +415,21 @@ const StudentClass = () => {
                     <div className="classes-grid">
                       {userClasses.map(classItem => (
                         <div 
-                          key={classItem._id} 
+                          key={classItem?._id} 
                           className="class-card" 
                           onClick={() => handleViewClass(classItem)}
                         >
-                          <div className="class-card-header" style={{ backgroundColor: classItem.color || 'var(--primary)' }}>
-                            <h3 className="class-name">{classItem.name}</h3>
-                            <p className="class-teacher"><User size={14} /> {classItem.teacher.name}</p>
+                          <div className="class-card-header" style={{ backgroundColor: classItem?.color || 'var(--primary)' }}>
+                            <h3 className="class-name">{classItem?.name}</h3>
+                            <p className="class-teacher"><User size={14} /> {classItem?.teacher.name}</p>
                           </div>
                           <div className="class-card-body">
                             <p className="class-description">
-                              {classItem.description || "No description available for this class."}
+                              {classItem?.description || "No description available for this class."}
                             </p>
                             <div className="class-meta">
-                              <span className="class-code"><Hash size={14} /> {classItem.code}</span>
-                              <span className="joined-date"><Calendar size={14} /> {new Date(classItem.joinedDate).toLocaleDateString()}</span>
+                              <span className="class-code"><Hash size={14} /> {classItem?.code}</span>
+                              <span className="joined-date"><Calendar size={14} /> {new Date(classItem?.joinedDate).toLocaleDateString()}</span>
                             </div>
                           </div>
                         </div>
