@@ -94,7 +94,7 @@ const ConfirmationForm = () => {
           </div>}
           
           <form onSubmit={handleSubmit}>
-            <div className="input-group">
+            <div className="teacher-input-group">
               <label htmlFor="name">Full Name</label>
               <div className="input-wrapper">
                 <input 
@@ -108,7 +108,7 @@ const ConfirmationForm = () => {
               </div>
             </div>
             
-            <div className="input-group">
+            <div className="teacher-input-group">
               <label htmlFor="password">Password</label>
               <div className="input-wrapper">
                 <input 
@@ -123,7 +123,7 @@ const ConfirmationForm = () => {
               <span className="input-hint">Must be at least 8 characters</span>
             </div>
             
-            <div className="input-group">
+            <div className="teacher-input-group">
               <label htmlFor="confirmPassword">Confirm Password</label>
               <div className="input-wrapper">
                 <input 

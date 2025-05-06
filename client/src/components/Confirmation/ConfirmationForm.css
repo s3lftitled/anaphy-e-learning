@@ -108,11 +108,11 @@
 }
 
 /* Form input styling */
-.input-group {
+.teacher-input-group {
   margin-bottom: 1.5rem;
 }
 
-.input-group label {
+.teacher-input-group label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
@@ -123,8 +123,8 @@
   position: relative;
 }
 
-.input-group input {
-  width: 100%;
+.teacher-input-group input {
+  width: 90%;
   padding: 0.85rem 1rem;
   padding-right: 2.5rem;
   border: 1px solid #e2e8f0;
@@ -134,13 +134,13 @@
   transition: all 0.2s ease-in-out;
 }
 
-.input-group input:focus {
+.teacher-input-group input:focus {
   outline: none;
   border-color: #0c4160;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-.input-group input::placeholder {
+.teacher-input-group input::placeholder {
   color: #a0aec0;
 }
 
