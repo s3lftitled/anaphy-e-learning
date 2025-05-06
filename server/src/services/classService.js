@@ -430,7 +430,7 @@ const fetchStudentJoinedClassesService = async (studentId) => {
 
     const joinedClasses = await Promise.all(
       student.joinedClasses.map(async (c) => {
-        return ClassModel.findById(c._id).populate('teacher', 'name')
+        return ClassModel.findById(c._id).select('teacher code createdAt name').populate('teacher', 'name')
       })
     )
 

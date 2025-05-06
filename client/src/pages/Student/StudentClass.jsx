@@ -429,7 +429,7 @@ const StudentClass = () => {
                             </p>
                             <div className="class-meta">
                               <span className="class-code"><Hash size={14} /> {classItem?.code}</span>
-                              <span className="joined-date"><Calendar size={14} /> {new Date(classItem?.joinedDate).toLocaleDateString()}</span>
+                              <span className="joined-date"><Calendar size={14} /> {new Date(classItem?.createdAt).toLocaleDateString()}</span>
                             </div>
                           </div>
                         </div>
