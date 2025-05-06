@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Home, Plus, Mail, User, Trash2, AlertCircle, Menu, X } from 'lucide-react'
+import { Home, Plus, Mail, User, Trash2, AlertCircle, Menu, X, BookOpen } from 'lucide-react'
 import FloatingHomeButton from '../../../components/FloatingHomeButton/FloatingHomeButton'
 import usePrivateApi from '../../../hooks/usePrivateApi'
 import './TeacherManagement.css'
@@ -12,6 +12,10 @@ const TeacherManagement = () => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
   const [showAddConfirmation, setShowAddConfirmation] = useState(false)
   const [teacherToDelete, setTeacherToDelete] = useState(null)
+  const [showClassesModal, setShowClassesModal] = useState(false)
+  const [selectedTeacherClasses, setSelectedTeacherClasses] = useState([])
+  const [selectedTeacherName, setSelectedTeacherName] = useState('')
+  const [loadingClasses, setLoadingClasses] = useState(false)
   const privateAxios = usePrivateApi()
 
   useEffect(() => {
@@ -95,6 +99,27 @@ const TeacherManagement = () => {
     setTeacherToDelete(null)
   }
 
+  // New function to fetch and display teacher classes
+  const handleViewClasses = async (teacher) => {
+    setSelectedTeacherName(teacher.email)
+    setLoadingClasses(true)
+    try {
+      const response = await privateAxios.get(`teacher-management/api/v1/teacher-classes/${teacher._id}`, {}, {
+        withCredentials: true
+      })
+      
+      if (response.status === 200) {
+        setSelectedTeacherClasses(response.data.teacherClasses || [])
+      }
+    } catch (err) {
+      console.error('Error fetching teacher classes:', err)
+      setSelectedTeacherClasses([])
+    } finally {
+      setLoadingClasses(false)
+      setShowClassesModal(true)
+    }
+  }
+
   return (
     <>
       <div className="admin-container">
@@ -167,7 +192,14 @@ const TeacherManagement = () => {
                           </span>
                         </td>
                         <td className="hide-on-mobile">{new Date(teacher.createdAt).toLocaleString()}</td>
-                        <td>
+                        <td className="action-buttons">
+                          <button 
+                            className="view-classes-button"
+                            onClick={() => handleViewClasses(teacher)}
+                            aria-label="View teacher classes"
+                          >
+                            <BookOpen size={16} />
+                          </button>
                           <button 
                             className="delete-button"
                             onClick={() => handleDeleteClick(teacher)}
@@ -209,6 +241,14 @@ const TeacherManagement = () => {
                       </div>
                     </div>
                     <div className="teacher-card-actions">
+                      <button 
+                        className="view-classes-button"
+                        onClick={() => handleViewClasses(teacher)}
+                        aria-label="View teacher classes"
+                      >
+                        <BookOpen size={16} />
+                        <span>View Classes</span>
+                      </button>
                       <button 
                         className="delete-button"
                         onClick={() => handleDeleteClick(teacher)}
@@ -266,6 +306,44 @@ const TeacherManagement = () => {
                   </button>
                   <button className="confirm-button add" onClick={confirmAddTeacher}>
                     Add Teacher
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Classes Modal */}
+          {showClassesModal && (
+            <div className="modal-overlay">
+              <div className="confirmation-modal classes-modal">
+                <div className="modal-header">
+                  <BookOpen size={24} className="classes-icon" />
+                  <h3>Teacher Classes</h3>
+                </div>
+                <div className="modal-content">
+                  <p>Classes for: <span className="teacher-name">{selectedTeacherName}</span></p>
+                  
+                  {loadingClasses ? (
+                    <div className="loading-classes">Loading classes...</div>
+                  ) : selectedTeacherClasses.length === 0 ? (
+                    <div className="no-classes-message">This teacher has no active classes.</div>
+                  ) : (
+                    <div className="classes-list">
+                      {selectedTeacherClasses.map((classItem, index) => (
+                        <div key={index} className="class-item">
+                          <div className="class-name">{classItem.name}</div>
+                          <div className="student-count">
+                            <User size={14} />
+                            <span>{classItem.studentCount} student{classItem.studentCount !== 1 ? 's' : ''}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div className="modal-actions">
+                  <button className="close-button" onClick={() => setShowClassesModal(false)}>
+                    Close
                   </button>
                 </div>
               </div>

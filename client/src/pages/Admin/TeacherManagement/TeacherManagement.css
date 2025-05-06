@@ -406,6 +406,130 @@
   margin-top: 1rem;
 }
 
+.classes-modal {
+  width: 500px;
+  max-width: 90%;
+}
+
+.classes-icon {
+  color: #3b82f6;
+}
+
+.loading-classes {
+  padding: 1.5rem 0;
+  text-align: center;
+  color: #6b7280;
+}
+
+.no-classes-message {
+  padding: 1.5rem 0;
+  text-align: center;
+  color: #6b7280;
+}
+
+.teacher-name {
+  font-weight: 600;
+  color: #0a2d4a;
+}
+
+.classes-list {
+  margin-top: 1rem;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.class-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  background-color: #f9fafb;
+}
+
+.class-name {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.student-count {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: #4b5563;
+  background-color: #e5e7eb;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.close-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #0a2d4a;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.close-button:hover {
+  background-color: #164875;
+}
+
+/* View Classes Button */
+.view-classes-button {
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  color: #3b82f6;
+  cursor: pointer;
+  transition: color 0.2s, background-color 0.2s;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.view-classes-button:hover {
+  color: #2563eb;
+  background-color: #eff6ff;
+}
+
+/* Action buttons container */
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.teacher-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e7eb;
+  gap: 0.5rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .class-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .classes-list {
+    max-height: 200px;
+  }
+  
+  .teacher-card .view-classes-button {
+    padding: 0.5rem 0.75rem;
+  }
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .admin-content {
