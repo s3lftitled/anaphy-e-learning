@@ -342,7 +342,7 @@ const TeacherManagement = () => {
                   )}
                 </div>
                 <div className="modal-actions">
-                  <button className="close-button" onClick={() => setShowClassesModal(false)}>
+                  <button className="teacher-classes-close-button" onClick={() => setShowClassesModal(false)}>
                     Close
                   </button>
                 </div>

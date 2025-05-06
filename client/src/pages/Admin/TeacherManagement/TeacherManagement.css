@@ -465,7 +465,7 @@
   border-radius: 9999px;
 }
 
-.close-button {
+.teacher-classes-close-button {
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -476,7 +476,7 @@
   transition: background-color 0.2s;
 }
 
-.close-button:hover {
+.teacher-classes-close-button:hover {
   background-color: #164875;
 }
 
