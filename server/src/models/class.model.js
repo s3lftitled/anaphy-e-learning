@@ -30,6 +30,7 @@ const ClassSchema = new mongoose.Schema({
       finalGrade: { type: Number, default: 0 }, // Stores overall class grade
     },
   ],
+  createdAt: { type: Date, default: Date.now },
 })
 
 module.exports = mongoose.model("ClassModel", ClassSchema)
