@@ -3,6 +3,7 @@ const {
   completeTeacherAccount,
   fetchTeacherAccounts,
   deleteTeacherAccount,
+  fetchTeacherClasses,
 } = require('../services/teacherManagementService')
 const HTTP_STATUS = require('../constants/httpConstants')
 const logger = require('../logger/logger')
@@ -49,6 +50,18 @@ class TeacherManagementController {
       res.status(HTTP_STATUS.OK).json({ message: response })
     } catch (error) {
       logger.error(`Error deleting teacher - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async fetchTeacherClasses(req, res, next) {
+    const { teacherId } = req.params
+    try {
+      const teacherClasses = await fetchTeacherClasses(teacherId)
+
+      res.status(HTTP_STATUS.OK).json({ teacherClasses, message: 'Teacher classes fetched succesfully' })
+    } catch (error) {
+      logger.error(`Error fetching teacher classes - ${error.message}`)
       next(error)
     }
   }

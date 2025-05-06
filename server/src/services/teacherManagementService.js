@@ -9,6 +9,7 @@ const { appAssert } = require('../utils/appAssert')
 const validator = require('validator')
 const HTTP_STATUS = require('../constants/httpConstants')
 const bcrypt = require('bcrypt')
+const mongoose = require('mongoose')
 require('dotenv').config()
 
 const createTeacherAccount = async (email) => {
@@ -118,9 +119,52 @@ const deleteTeacherAccount = async (teacherId) => {
   }
 }
 
+const fetchTeacherClasses = async (teacherId) => {
+  try {
+    // Validate if teacherId is provided
+    validateRequiredParams({ teacherId })
+    
+    // Check if the provided teacherId is a valid MongoDB ObjectId
+    appAssert(validator.isMongoId(teacherId), 'Invalid teacher ID format', HTTP_STATUS.BAD_REQUEST)
+    
+    // Find the teacher by ID
+    const teacher = await TeacherModel.findById(teacherId)
+    appAssert(teacher, 'Teacher not found', HTTP_STATUS.BAD_REQUEST)
+    
+    // Find all classes created by the teacher with student count
+    const teacherClasses = await ClassModel.aggregate([
+      // Match classes by teacher ID
+      { $match: { teacher: new mongoose.Types.ObjectId(teacherId) } },
+      
+      // Lookup students collection to count students per class
+      {
+        $lookup: {
+          from: 'usermodels', 
+          localField: '_id',
+          foreignField: 'joinedClasses._id',
+          as: 'studentsInClass'
+        }
+      },
+      
+      // Project only the required fields
+      {
+        $project: {
+          name: 1, // Class name
+          studentCount: { $size: '$studentsInClass' } // Count of students
+        }
+      }
+    ])
+
+    return teacherClasses
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   createTeacherAccount,
   completeTeacherAccount,
   fetchTeacherAccounts,
-  deleteTeacherAccount
+  deleteTeacherAccount,
+  fetchTeacherClasses,
 }

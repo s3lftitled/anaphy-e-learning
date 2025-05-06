@@ -8,5 +8,6 @@ router.post('/v1/create-teacher', verifyToken, checkRole([ROLES.LEVEL_3]), Teach
 router.put('/v1/complete-teacher/:id/:token', TeacherManagementController.completeTeacher)
 router.get('/v1/fetch-teachers', verifyToken, checkRole([ROLES.LEVEL_3]), TeacherManagementController.fetchTeacher)
 router.delete('/v1/delete-teacher/:teacherId', verifyToken, checkRole([ROLES.LEVEL_3]), TeacherManagementController.deleteTeacher)
+router.get('/v1/teacher-classes/:teacherId', verifyToken, checkRole([ROLES.LEVEL_3]), TeacherManagementController.fetchTeacherClasses)
 
 module.exports = router
