@@ -128,7 +128,7 @@
   position: relative;
 }
 
-.back-button {
+.model-back-button {
   padding: 0.85rem 1.5rem;
   background-color: var(--white);
   border: none;
@@ -147,7 +147,7 @@
   z-index: 1;
 }
 
-.back-button::before {
+.model-back-button::before {
   content: '';
   position: absolute;
   top: 0;
@@ -160,12 +160,12 @@
   transition: var(--transition);
 }
 
-.back-button:hover {
+.model-back-button:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
-.back-button:hover::before {
+.model-back-button:hover::before {
   width: 100%;
 }
 
@@ -349,6 +349,50 @@
   animation-delay: 0.2s;
 }
 
+/* Add these styles to your existing SystemModel.css file */
+
+.sub-component-container {
+  margin-top: 2rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 1.5rem;
+}
+
+.heart-model-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.heart-model-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.heart-overlay {
+  transition: background-color 0.3s ease;
+}
+
+.heart-model-card:hover .heart-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.sub-model-description {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sub-component-container {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+  }
+  
+  .heart-model-card {
+    height: 140px !important;
+  }
+}
+
 /* Tablet responsiveness */
 @media (max-width: 1024px) {
   .model-container {
@@ -386,7 +430,7 @@
     display: flex;
   }
   
-  .back-button.desktop {
+  .model-back-button.desktop {
     display: none;
   }
   
@@ -496,7 +540,7 @@
     font-size: 1.5rem;
   }
   
-  .back-button.mobile,
+  .model-back-button.mobile,
   .fullscreen-toggle {
     width: 36px;
     height: 36px;

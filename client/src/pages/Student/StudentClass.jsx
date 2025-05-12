@@ -32,6 +32,7 @@ const StudentClass = () => {
   const [loadingAnnouncements, setLoadingAnnouncements] = useState(false);
   const [invitations, setInvitations] = useState([]);
   const [loadingInvitations, setLoadingInvitations] = useState(false);
+  const [showJoinRequestModal, setShowJoinRequestModal] = useState(false);
   const privateAxios = usePrivateApi()
   const { user } = useUser()
 
@@ -121,7 +122,7 @@ const StudentClass = () => {
         // Show success toast instead of alert
         const updatedClasses = await privateAxios.get(`class/api/v1/fetch-joined-classes/${user.id}`)
         setUserClasses(updatedClasses.data.joinedClasses)
-        alert('Request sent to the teacher')
+        setShowJoinRequestModal(true)
         setSearchResult(null)
         setSearchCode('')
       }
@@ -448,6 +449,25 @@ const StudentClass = () => {
           </>
         )}
       </main>
+      {showJoinRequestModal && (
+        <div className="modal-overlay">
+          <div className="modal-container">
+            <div className="modal-content">
+              <div className="modal-icon">
+                <Check size={32} color="var(--success)" />
+              </div>
+              <h3>Success!</h3>
+              <p>Request sent to the teacher</p>
+              <button 
+                className="modal-close-button"
+                onClick={() => setShowJoinRequestModal(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <FloatingHomeButton />
     </div>
   )

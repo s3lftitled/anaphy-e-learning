@@ -5,7 +5,6 @@ import './Home.css'
 import { useUser } from '../../context/UserContext'
 import Navbar from '../../components/Navbar/Navbar'
 import Sidebar from '../../components/Sidebar/Sidebar'
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
 const Homepage = () => {
   const topics = [
@@ -19,6 +18,17 @@ const Homepage = () => {
       slug: "skeletal",
       description: "The skeletal system provides structural support for the body, protects vital organs, and works with muscles to enable movement. Consisting of 206 bones in adults, it also produces blood cells in bone marrow and stores minerals like calcium and phosphorus. Each bone is a dynamic, living tissue that continuously rebuilds and reforms throughout life."
     },
+    /* { 
+      name: "Hand bones",
+      backgroundImage: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWRyaDd5ZWdkdno5ajk3MTg2N2c0YmJiczhrcWV4ZHNlaXQ4cmlpbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3ov9jWEoCJtzRWs02A/giphy.gif",
+      backgroundPosition: '20% 20%',
+      backgroundSize: '100%',
+      textColor: 'white',
+      modelSrc:"",
+      slug: "hand",
+      description: "Carpal bones (proximal) – a set of eight irregularly shaped bones. They are located in the area of the wrist. Metacarpals – a set of five bones, each one related to a digit. They are located in the area of the palm. Phalanges (distal) – the bones of the digits"
+    },
+    */
     { 
       name: "Muscular System",
       backgroundImage: "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExeWp4Z2NybXk4NmR1Nnd6bTMwbWIwbDdrOGVwMWMzeDZiM3k1eGZ5YiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/C5gocDBDRdJ6g/giphy.gif",
@@ -70,7 +80,7 @@ const Homepage = () => {
       description: "The digestive system is a 30-foot-long pathway that breaks down food into nutrients the body can absorb and use for energy, growth, and cell repair. This complex system includes the mouth, esophagus, stomach, small intestine, large intestine, liver, pancreas, and gallbladder. Food takes between 24-72 hours to complete its journey through this remarkable processing system, which produces over 7 liters of digestive juices daily."
     },
     { 
-      name: "Endocrine System",
+      name: " Male Endocrine System",
       backgroundImage: "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExOG5sNWF2cWo5enR6ODVoMXVlZDA4eHJuYnYxdGN2NHF0ajkxNHJ4aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/LyaGVgxlGYHrW2Do1A/giphy.gif",
       backgroundPosition: '50% 20%',
       backgroundSize: '100%',
@@ -80,15 +90,38 @@ const Homepage = () => {
       description: "The endocrine system is a network of glands that produce and release hormones—chemical messengers that regulate metabolism, growth, tissue function, reproduction, sleep, and mood. Though tiny in amount (measured in billionths of grams), these powerful chemical signals coordinate slow-acting but long-lasting changes throughout the body. Major endocrine glands include the pituitary, thyroid, parathyroid, adrenal, pancreas, and reproductive glands."
     },
     { 
-      name: "Immune System",
-      backgroundImage: "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZWZsbDgwYXgycTVwZWc0NHd3aXQ2YTRtOG03MzRrcXJ5bWNlY2Z1bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oGRFxviWGwk77MfE4/giphy.gif",
-      backgroundPosition: '50% 30%',
-      backgroundSize: '130%',
+      name: "Female Endocrine System",
+      backgroundImage: "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3p1NXBpaHd1eDBxcjVwOXI3angxam9icjV5eGs1ZDhycnM4bjFnNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/TGqWGcUJGICXnWqkvr/giphy.gif",
+      backgroundPosition: '40% 60%',
+      backgroundSize: '100%',
       textColor: 'white',
-      modelSrc:"https://human.biodigital.com/viewer/?id=62dW&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&load-rotate=10&uaid=M1nsJ&paid=o_18063d15",
-      slug: "immune",
-      description: "The immune system is the body's complex defense network against harmful invaders like bacteria, viruses, fungi, and parasites. This sophisticated protection includes physical barriers like skin, chemical defenses like stomach acid, and specialized cells that can identify and destroy threats. The system also maintains immunological memory—allowing for faster, stronger responses to previously encountered pathogens—through a remarkable coordination of white blood cells, lymph nodes, and specialized tissues."
-    }
+      modelSrc:"https://human.biodigital.com/viewer/?id=68ZW&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=M3QJi&paid=o_1b172637",
+      slug: "endocrine",
+      description: "The endocrine system is a network of glands that produce and release hormones—chemical messengers that regulate metabolism, growth, tissue function, reproduction, sleep, and mood. Though tiny in amount (measured in billionths of grams), these powerful chemical signals coordinate slow-acting but long-lasting changes throughout the body. Major endocrine glands include the pituitary, thyroid, parathyroid, adrenal, pancreas, and reproductive glands."
+    },
+    
+    { 
+      name: "Male Reproductive System",
+      backgroundImage: "https://blog.ninapaley.com/wp-content/uploads/male1_6.gif",
+      backgroundPosition: '100%' ,
+      backgroundSize: '100%',
+      textColor: 'white',
+      modelSrc:"https://human.biodigital.com/viewer/?id=68ZR&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=M3QIB&paid=o_1b172637", 
+      slug: "reproductive",
+      description: "The reproductive system of an organism, also known as the genital system, is the biological system made up of all the anatomical organs involved in sexual reproduction. Many non-living substances such as fluids, hormones, and pheromones are also important accessories to the"
+    },
+    { 
+      name: "Female Reproductive System",
+      backgroundImage: "https://blog.ninapaley.com/wp-content/uploads/uteri2_8.gif",
+      backgroundPosition: '40% 60%',
+      backgroundSize: '100%',
+      textColor: 'white',
+      modelSrc:"https://human.biodigital.com/viewer/?id=68ZS&ui-anatomy-descriptions=true&ui-anatomy-pronunciations=true&ui-anatomy-labels=true&ui-audio=true&ui-chapter-list=false&ui-fullscreen=true&ui-help=true&ui-info=true&ui-label-list=true&ui-layers=true&ui-skin-layers=true&ui-loader=circle&ui-media-controls=full&ui-menu=true&ui-nav=true&ui-search=true&ui-tools=true&ui-tutorial=false&ui-undo=true&ui-whiteboard=true&initial.none=true&disable-scroll=false&uaid=M3QIu&paid=o_1b172637",
+      slug: "reproductive",
+      description: "The reproductive system of an organism, also known as the genital system, is the biological system made up of all the anatomical organs involved in sexual reproduction. Many non-living substances such as fluids, hormones, and pheromones are also important accessories to the"
+    },
+   
+    
   ]
 
   const { user } = useUser()
@@ -100,6 +133,225 @@ const Homepage = () => {
 
   const [showLeftArrow, setShowLeftArrow] = useState(false)
   const [showRightArrow, setShowRightArrow] = useState(true)
+
+  const [newsArticles, setNewsArticles] = useState([])
+  const [caseStudies, setCaseStudies] = useState([])
+  const [isLoadingNews, setIsLoadingNews] = useState(true)
+  const [isLoadingCases, setIsLoadingCases] = useState(true)
+
+  const fetchAnatomyNews = async () => {
+    setIsLoadingNews(true)
+    try {
+      // You'll need to set up a news API account and use your API key
+      // This is using NewsAPI.org as an example
+      const response = await axios.get('https://newsapi.org/v2/everything', {
+        params: {
+          q: 'human anatomy and physiology and medical and health',
+          language: 'en',
+          sortBy: 'publishedAt',
+          pageSize: 5,
+          apiKey: '2c31ea74a263413682f77ff4cb8e2f17' 
+        }
+      })
+      
+      // Process news articles and match them with related body systems
+      const processedNews = response.data.articles.map(article => {
+        // Determine which body system the article relates to
+        const matchedSystem = determineRelatedSystem(article.title + ' ' + article.description)
+        return {
+          ...article,
+          relatedSystem: matchedSystem
+        }
+      })
+      
+      setNewsArticles(processedNews)
+    } catch (error) {
+      console.error('Error fetching news:', error)
+      // Fallback to sample news data
+      setNewsArticles(sampleNewsData)
+    }
+    setIsLoadingNews(false)
+  }
+  
+  // Function to determine which body system an article relates to
+  const determineRelatedSystem = (text) => {
+    const systemKeywords = {
+      'skeletal': ['bone', 'skeleton', 'joint', 'cartilage', 'skull', 'spine'],
+      'hand': ['hand', 'finger', 'wrist', 'palm', 'carpal'],
+      'muscular': ['muscle', 'tendon', 'myocyte', 'contraction', 'myosin'],
+      'nervous': ['brain', 'nerve', 'neuron', 'spinal', 'neurotransmitter'],
+      'cardiovascular': ['heart', 'blood', 'vessel', 'artery', 'vein', 'cardiac'],
+      'respiratory': ['lung', 'breath', 'oxygen', 'alveoli', 'diaphragm'],
+      'digestive': ['stomach', 'intestine', 'digest', 'liver', 'pancreas'],
+      'endocrine': ['hormone', 'gland', 'thyroid', 'insulin', 'pituitary'],
+      'reproductive': ['uterus', 'ovary', 'testes', 'sperm', 'egg', 'fertility']
+    }
+    
+    // Convert text to lowercase for case-insensitive matching
+    const lowerText = text.toLowerCase()
+    
+    // Find the system with the most keyword matches
+    let bestMatch = null
+    let highestCount = 0
+    
+    for (const [system, keywords] of Object.entries(systemKeywords)) {
+      const matchCount = keywords.filter(keyword => lowerText.includes(keyword)).length
+      if (matchCount > highestCount) {
+        highestCount = matchCount
+        bestMatch = system
+      }
+    }
+    
+    return bestMatch || 'general' // Default to 'general' if no specific system matches
+  }
+
+  // Function to fetch daily case studies
+const fetchCaseStudies = async () => {
+  setIsLoadingCases(true)
+  try {
+    // Fetch from an API or database if available
+    // For demonstration, we're using the PubMed API
+    const date = new Date()
+    const seed = date.getDate() + (date.getMonth() + 1) * 31 // Use date as seed for "random" daily selection
+    
+    const response = await axios.get('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi', {
+      params: {
+        db: 'pubmed',
+        term: 'anatomy case study',
+        retmode: 'json',
+        retmax: 10,
+        sort: 'relevance'
+      }
+    })
+    
+    // Get article IDs
+    const ids = response.data.esearchresult.idlist
+    
+    // Fetch detailed information for each article
+    const detailResponse = await axios.get('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi', {
+      params: {
+        db: 'pubmed',
+        id: ids.join(','),
+        retmode: 'json'
+      }
+    })
+    
+    // Process and select 3 case studies (based on daily seed)
+    const studies = []
+    const result = detailResponse.data.result
+    
+    for (const id of ids) {
+      if (studies.length >= 3) break
+      
+      const article = result[id]
+      if (!article) continue
+      
+      studies.push({
+        id,
+        title: article.title,
+        authors: article.authors ? article.authors.map(a => a.name).join(', ') : 'Unknown',
+        journal: article.fulljournalname || 'Scientific Journal',
+        url: `https://pubmed.ncbi.nlm.nih.gov/${id}/`,
+        relatedSystem: determineRelatedSystem(article.title)
+      })
+    }
+    
+    setCaseStudies(studies)
+  } catch (error) {
+    console.error('Error fetching case studies:', error)
+    // Fall back to sample case studies
+    setCaseStudies(sampleCaseStudies)
+  }
+  setIsLoadingCases(false)
+}
+
+// Sample data to use as fallback
+const sampleNewsData = [
+  {
+    title: "New Discovery Shows How Brain Processes Visual Information",
+    description: "Researchers have identified a novel neural pathway that explains how the brain processes complex visual information.",
+    url: "https://example.com/news/1",
+    urlToImage: "https://via.placeholder.com/300x200?text=Brain+Research",
+    publishedAt: "2025-05-05T09:30:00Z",
+    source: { name: "Neuroscience Today" },
+    relatedSystem: "nervous"
+  },
+  {
+    title: "Revolutionary Treatment for Osteoporosis Shows Promise in Clinical Trials",
+    description: "A new drug targeting bone density has shown remarkable results in strengthening the skeletal system in patients with osteoporosis.",
+    url: "https://example.com/news/2",
+    urlToImage: "https://via.placeholder.com/300x200?text=Bone+Research",
+    publishedAt: "2025-05-04T14:15:00Z",
+    source: { name: "Medical Advances" },
+    relatedSystem: "skeletal"
+  },
+  {
+    title: "Heart Muscle Regeneration Breakthrough Could Transform Cardiac Care",
+    description: "Scientists have developed a technique to stimulate heart muscle cell regeneration after damage, potentially revolutionizing treatment for heart attack patients.",
+    url: "https://example.com/news/3",
+    urlToImage: "https://via.placeholder.com/300x200?text=Heart+Research",
+    publishedAt: "2025-05-03T11:45:00Z",
+    source: { name: "Cardiovascular Science" },
+    relatedSystem: "cardiovascular"
+  },
+  {
+    title: "New Imaging Technology Reveals Previously Unseen Lung Structures",
+    description: "Advanced 4D imaging has revealed microscopic structures in the lungs that may play a crucial role in respiratory diseases.",
+    url: "https://example.com/news/4",
+    urlToImage: "https://via.placeholder.com/300x200?text=Lung+Research",
+    publishedAt: "2025-05-02T08:20:00Z",
+    source: { name: "Respiratory Journal" },
+    relatedSystem: "respiratory"
+  }
+]
+
+const sampleCaseStudies = [
+  {
+    id: "12345678",
+    title: "Rare Anatomical Variation in the Brachial Plexus: A Case Study",
+    authors: "Smith, J., Jones, A., Williams, B.",
+    journal: "Journal of Anatomical Variations",
+    url: "https://example.com/case-study/1",
+    relatedSystem: "nervous"
+  },
+  {
+    id: "23456789",
+    title: "Unusual Presentation of Carpal Tunnel Syndrome: Clinical Implications",
+    authors: "Johnson, M., Thompson, L.",
+    journal: "Hand Surgery International",
+    url: "https://example.com/case-study/2",
+    relatedSystem: "hand"
+  },
+  {
+    id: "34567890",
+    title: "Congenital Heart Defect with Unusual Ventricular Configuration: Surgical Approach",
+    authors: "Garcia, P., Lee, S., Chen, H.",
+    journal: "Cardiac Surgery Cases",
+    url: "https://example.com/case-study/3",
+    relatedSystem: "cardiovascular"
+  }
+]
+
+// Add this useEffect inside your component to load news and case studies when the page loads
+useEffect(() => {
+  fetchAnatomyNews()
+  fetchCaseStudies()
+  
+  // Set up daily refresh for case studies
+  const now = new Date()
+  const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
+  tomorrow.setHours(0, 0, 0, 0)
+  const timeUntilMidnight = tomorrow - now
+  
+  const dailyRefreshTimer = setTimeout(() => {
+    fetchCaseStudies()
+    // Set up daily refresh after first execution
+    const dailyInterval = setInterval(fetchCaseStudies, 24 * 60 * 60 * 1000)
+    return () => clearInterval(dailyInterval)
+  }, timeUntilMidnight)
+  
+  return () => clearTimeout(dailyRefreshTimer)
+}, [])
 
   const scrollTopics = (direction) => {
     if (scrollContainerRef.current) {

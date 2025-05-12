@@ -87,7 +87,6 @@ const Login = () => {
       <img className="login-img" src="login-image.png" alt="Skull Logo" />
 
       <nav className="login-nav">
-        <button className="login-button" href="">Login</button>
         <Link className='nav-link' to="/">Home</Link>  
       </nav>
 

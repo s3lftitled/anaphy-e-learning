@@ -16,6 +16,7 @@ const TeacherDashboard = () => {
   const [showInviteModal, setShowInviteModal] = useState(false)
   const [inviteMethod, setInviteMethod] = useState('email')
   const [inviteEmail, setInviteEmail] = useState('')
+  const [copyNotification, setCopyNotification] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
   const { user } = useUser()
@@ -27,6 +28,7 @@ const TeacherDashboard = () => {
   // New state for announcements and join requests
   const [showAnnouncementsModal, setShowAnnouncementsModal] = useState(false)
   const [showCreateAnnouncementModal, setShowCreateAnnouncementModal] = useState(false)
+  const [showAnnouncementSuccessModal, setShowAnnouncementSuccessModal] = useState(false)
   const [showJoinRequestsModal, setShowJoinRequestsModal] = useState(false)
   const [announcements, setAnnouncements] = useState([])
   const [joinRequests, setJoinRequests] = useState([])
@@ -40,11 +42,13 @@ const TeacherDashboard = () => {
   const [message, setMessage] = useState('')
   const [showEmailModal, setShowEmailModal] = useState(false)
   const [emailStudent, setEmailStudent] = useState(null)
+  const [showEmailSuccessModal, setShowEmailSuccessModal] = useState(false)
   const navigate = useNavigate()
   
   // New state for Remove Student confirmation modal
   const [showRemoveStudentModal, setShowRemoveStudentModal] = useState(false)
   const [studentToRemove, setStudentToRemove] = useState(null)
+  const [studentRemovedNotification, setStudentRemovedNotification] = useState(false)
 
   useEffect(() => {
     // Page title
@@ -63,7 +67,6 @@ const TeacherDashboard = () => {
     try {
       setLoading(true)
       
-      // Replace with your actual API endpoint
       const response = await privateAxios.get(`class/api/v1/fetch-teacher-classes/${user.id}`, {}, { 
         withCredentials: true
       })
@@ -240,7 +243,14 @@ const TeacherDashboard = () => {
         setAnnouncementTitle('')
         setAnnouncementContent('')
         setShowCreateAnnouncementModal(false)
-        alert("Announcement created successfully!")
+        
+        // Show success modal instead of alert
+        setShowAnnouncementSuccessModal(true)
+        
+        // Automatically hide the success modal after 3 seconds
+        setTimeout(() => {
+          setShowAnnouncementSuccessModal(false)
+        }, 3000)
       }
     } catch (error) {
       console.error("Error creating announcement:", error)
@@ -257,6 +267,7 @@ const TeacherDashboard = () => {
       if (!studentId) {
         throw new Error("Student ID not found in request data")
       }
+    
       
       if (action === 'accept') {
         await privateAxios.put(`/class/api/v1/accept-pending-approval/${classId}/${studentId}`, {}, {
@@ -337,44 +348,48 @@ const TeacherDashboard = () => {
   }
 
   const handleRemoveStudent = async () => {
-    if (!studentToRemove || !activeClass) return
+    if (!studentToRemove || !activeClass) return;
     
     try {
       const response = await privateAxios.delete(`class/api/v1/remove-student/${activeClass.id}/${studentToRemove.id}`, {
         withCredentials: true
-      })
+      });
 
       if (response.status === 200 || response.status === 204) {
         // Update state by removing the student
         const updatedStudents = activeClass.students.filter(
           student => student.id !== studentToRemove.id
-        )
+        );
         
         // Update active class
         const updatedClass = {
           ...activeClass,
           students: updatedStudents
-        }
+        };
         
         // Update classes array
         const updatedClasses = classes.map(c => 
           c.id === activeClass.id ? updatedClass : c
-        )
+        );
         
-        setClasses(updatedClasses)
-        setActiveClass(updatedClass)
+        setClasses(updatedClasses);
+        setActiveClass(updatedClass);
         
-        // Close modal and reset
-        setShowRemoveStudentModal(false)
-        setStudentToRemove(null)
+        // Show removal notification instead of alert
+        setStudentRemovedNotification(true);
         
-        alert("Student removed successfully!")
+        // Hide notification after 3 seconds
+        setTimeout(() => {
+          setStudentRemovedNotification(false);
+          setShowRemoveStudentModal(false);
+          setStudentToRemove(null);
+        }, 3000);
       } else {
-        throw new Error(`API returned status ${response.status}`)
+        throw new Error(`API returned status ${response.status}`);
       }
     } catch (error) {
-      console.error("Error removing student:", error)
-      alert("Failed to remove student. Please try again.")
+      console.error("Error removing student:", error);
+      alert("Failed to remove student. Please try again.");
     }
   }
 
@@ -398,8 +413,14 @@ const TeacherDashboard = () => {
       })
       
       if (response.status === 200) {
-        alert("Message sent successfully!")
-        setShowEmailModal(false)
+        // Show success modal instead of alert
+        setShowEmailSuccessModal(true)
+        
+        // Automatically hide the success modal after 3 seconds and close the email modal
+        setTimeout(() => {
+          setShowEmailSuccessModal(false)
+          setShowEmailModal(false)
+        }, 3000)
       } else {
         throw new Error(`API returned status ${response.status}`)
       }
@@ -717,11 +738,18 @@ const TeacherDashboard = () => {
                     <span>{activeClass.code}</span>
                     <button 
                       className="copy-btn" 
-                      onClick={() => {navigator.clipboard.writeText(activeClass.code); alert('Code copied to clipboard!');}}
+                      onClick={() => {
+                        navigator.clipboard.writeText(activeClass.code);
+                        setCopyNotification(true);
+                        setTimeout(() => setCopyNotification(false), 3000);
+                      }}
                     >
                       Copy
                     </button>
                   </div>
+                  {copyNotification && (
+                    <div className="copy-notification">Code copied to clipboard!</div>
+                  )}
                 </div>
               )}
             </div>
@@ -947,6 +975,13 @@ const TeacherDashboard = () => {
                 Are you sure you want to remove <strong>{studentToRemove?.name}</strong> from this class?
                 This action cannot be undone.
               </p>
+              
+              {/* Success notification message */}
+              {studentRemovedNotification && (
+                <div className="success-notification">
+                  Student removed successfully!
+                </div>
+              )}
             </div>
             <div className="modal-footer">
               <button 
@@ -958,6 +993,7 @@ const TeacherDashboard = () => {
               <button 
                 className="danger-btn" 
                 onClick={handleRemoveStudent}
+                disabled={studentRemovedNotification}
               >
                 Remove Student
               </button>
@@ -965,6 +1001,7 @@ const TeacherDashboard = () => {
           </div>
         </div>
       )}
+
       {/* Email Student Modal */}
       {showEmailModal && (
         <div className="modal-overlay">
@@ -1004,6 +1041,44 @@ const TeacherDashboard = () => {
           </div>
         </div>
       )}
+
+
+      {/* Email Success Modal */}
+      {showEmailSuccessModal && (
+        <div className="modal-overlay">
+          <div className="modal success-modal">
+            <div className="modal-header">
+              <h2>Success</h2>
+              <button className="close-btn" onClick={() => setShowEmailSuccessModal(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              <p className="success-message">Message sent successfully!</p>
+            </div>
+            <div className="modal-footer">
+              <button className="btn" onClick={() => setShowEmailSuccessModal(false)}>Close</button>
+            </div>  
+          </div>
+        </div>
+      )}
+
+      {/* Announcement Success Modal */}
+      {showAnnouncementSuccessModal && (
+        <div className="modal-overlay">
+          <div className="modal success-modal">
+            <div className="modal-header">
+              <h2>Success</h2>
+              <button className="close-btn" onClick={() => setShowAnnouncementSuccessModal(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              <p className="success-message">Announcement created successfully!</p>
+            </div>
+            <div className="modal-footer">
+              <button className="btn" onClick={() => setShowAnnouncementSuccessModal(false)}>Close</button>
+            </div>  
+          </div>
+        </div>
+      )}
+
       {/* Floating home button */}
       <FloatingHomeButton />
     </div>
