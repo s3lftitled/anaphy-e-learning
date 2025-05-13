@@ -5,6 +5,7 @@ import './Home.css'
 import { useUser } from '../../context/UserContext'
 import Navbar from '../../components/Navbar/Navbar'
 import Sidebar from '../../components/Sidebar/Sidebar'
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
 const Homepage = () => {
   const topics = [
