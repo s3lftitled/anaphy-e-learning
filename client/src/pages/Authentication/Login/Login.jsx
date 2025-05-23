@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
 import api from '../../../utils/api'
@@ -13,6 +13,8 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("")
   const { setAuth } = useAuth()
   const navigate = useNavigate()
+
+  const recaptchaRef = useRef(null)
 
   useEffect(() => {
     // Page title
@@ -44,6 +46,13 @@ const Login = () => {
     //store captcha
   }
 
+  const resetCaptcha = () => {
+    if (recaptchaRef.current) {
+      recaptchaRef.current.reset()
+      setCaptchaToken(null)
+    }
+  }
+
   
   const handleLogin = async (e) => {
     if (!loginData.email || !loginData.password || !captchaToken) {
@@ -61,6 +70,7 @@ const Login = () => {
         navigate('/home')
       }
     } catch (error) {
+      resetCaptcha()
       if (error.response) {
         const { status, data } = error.response
     
@@ -124,6 +134,7 @@ const Login = () => {
 
           <div className="recaptcha-container">
             <ReCAPTCHA
+              ref={recaptchaRef}
               sitekey={RECAPTCHA_PROD}
               onChange={handleCaptchaChange}
             />
