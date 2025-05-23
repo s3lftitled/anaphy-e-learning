@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import ReCAPTCHA from 'react-google-recaptcha'
 import api from '../../../utils/api'
 import './Register.css'
@@ -20,6 +20,8 @@ const Register = () => {
   const [modalMessage, setModalMessage] = useState('')
   const navigate = useNavigate()
 
+  const recaptchaRef = useRef(null)
+
   useEffect(() => {
     // Page title
     document.title = `AnaphyVerse - Register`
@@ -37,6 +39,13 @@ const Register = () => {
 
   const handleCaptcha = (value) => {
     setCaptchaValue(value)
+  }
+
+  const resetCaptcha = () => {
+    if (recaptchaRef.current) {
+      recaptchaRef.current.reset()
+      setCaptchaValue(null)
+    }
   }
 
   const closeModal = () => {
@@ -82,6 +91,7 @@ const Register = () => {
         setShowModal(true)
       }
     } catch (error) {
+      resetCaptcha()
       if (error.response) {
         if (error.response.status === 429) {
           setError('Too many requests. Please try again after 5 minutes')
@@ -198,6 +208,7 @@ const Register = () => {
 
             <div className="captcha-container">
               <ReCAPTCHA
+                ref={recaptchaRef}
                 sitekey={RECAPTCHA_PROD}
                 onChange={handleCaptcha}
               />
