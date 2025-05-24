@@ -51,12 +51,16 @@
   max-width: 70px;
 }
 
+.learning-sidebar.collapsed .sidebar-toggle {
+  right: 13px;
+}
+
 .sidebar-toggle {
   transition: all 0.6s ease;
   padding: 0.1px;
   color: var(--primary);
   position: absolute;
-  right: 25px;
+  right: 30px;
   top: 32px;
   display: flex;
   align-items: center;
