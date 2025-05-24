@@ -1,6 +1,6 @@
 import React from 'react'
 import ProgressRing from './ProgressRing'
-import { ChevronLeft, ChevronRight, LockIcon } from 'lucide-react'
+import { SquareChevronLeft, SquareChevronRight, LockIcon } from 'lucide-react'
 
 const Sidebar = ({
   topics,
@@ -60,7 +60,7 @@ const Sidebar = ({
   return (
     <div className={`learning-sidebar ${sidebarExpanded ? 'expanded' : 'collapsed'}`}>
       <div className="sidebar-toggle" onClick={toggleSidebar}>
-        {sidebarExpanded ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
+        {sidebarExpanded ? <SquareChevronLeft size={35} strokeWidth={2.5}  /> : <SquareChevronRight size={35} strokeWidth={2.5}  />}
       </div>
       
       <div className="sidebar-content">
