@@ -52,20 +52,25 @@
 }
 
 .sidebar-toggle {
+  transition: all 0.6s ease;
+  padding: 0.1px;
+  color: var(--primary);
   position: absolute;
-  right: 0;
-  top: 20px;
-  width: 24px;
-  height: 24px;
-  background-color: var(--primary);
-  color: var(--white);
+  right: 25px;
+  top: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-radius: 50%;
+  border-radius: 9px;
   font-size: 12px;
   z-index: 2;
+}
+
+.sidebar-toggle:hover {
+  background-color: var(--primary); 
+  color: var(--white); 
+  transform: scale(1.05); 
 }
 
 .progress-container {
