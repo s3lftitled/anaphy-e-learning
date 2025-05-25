@@ -51,30 +51,21 @@
   max-width: 70px;
 }
 
-.learning-sidebar.collapsed .sidebar-toggle {
-  right: 13px;
-}
-
 .sidebar-toggle {
-  transition: all 0.6s ease;
-  padding: 0.1px;
-  color: var(--primary);
   position: absolute;
-  right: 30px;
-  top: 32px;
+  right: 0;
+  top: 20px;
+  width: 24px;
+  height: 24px;
+  background-color: var(--primary);
+  color: var(--white);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-radius: 9px;
+  border-radius: 50%;
   font-size: 12px;
   z-index: 2;
-}
-
-.sidebar-toggle:hover {
-  background-color: var(--primary); 
-  color: var(--white); 
-  transform: scale(1.05); 
 }
 
 .progress-container {
@@ -319,98 +310,270 @@
 }
 
 /* Text-to-Speech Component Styles */
+
 .text-to-speech-container {
-  max-width: 100%;
-  margin: 0 auto;
-  margin-top: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
   background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 
-    0 10px 25px rgba(0, 0, 0, 0.05), 
-    0 4px 12px rgba(0, 0, 0, 0.03);
-  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-  border: 1px solid rgba(12, 65, 96, 0.1);
-  padding: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  margin: 20px auto;
 }
 
 .controls-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 0;
+}
+
+.controls-header.with-settings {
+  margin-bottom: 16px;
 }
 
 .button-group {
   display: flex;
-  align-items: center;
   gap: 8px;
 }
 
-.text-to-speech-container button {
-  background-color: transparent;
+.control-button {
+  background: #3b82f6;
+  color: white;
   border: none;
+  border-radius: 6px;
+  padding: 10px;
   cursor: pointer;
-  transition: 
-    transform 0.2s ease, 
-    color 0.2s ease, 
-    background-color 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  color: #0c4160;
+  transition: background-color 0.2s, transform 0.1s;
 }
 
-.text-to-speech-container button:focus {
-  outline: 2px solid rgba(12, 65, 96, 0.3);
+.control-button:hover {
+  background: #2563eb;
+}
+
+.control-button:active {
+  transform: scale(0.95);
+}
+
+.control-button:focus {
+  outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
 
+.stop-button {
+  background: #dc2626;
+}
+
+.stop-button:hover {
+  background: #b91c1c;
+}
+
 .settings-toggle {
-  color: #0c4160;
+  background: none;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #64748b;
+  transition: border-color 0.2s, color 0.2s;
 }
 
-/* Settings Panel */
+.settings-toggle:hover {
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.settings-toggle:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+.settings-panel-wrapper {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 16px;
+}
+
 .settings-panel {
-  background-color: #f9fafb;
-  border-radius: 12px;
-  padding: 20px;
-  margin-top: 16px;
-  box-shadow: 
-    0 4px 6px rgba(0, 0, 0, 0.05), 
-    0 1px 3px rgba(0, 0, 0, 0.03);
-  animation: fadeIn 0.3s ease;
-  border: 1px solid rgba(12, 65, 96, 0.05);
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 6px;
 }
 
-/* Voice and Range Inputs */
-.settings-panel select,
-.settings-panel input[type="range"] {
-  width: 100%;
-  margin-top: 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(12, 65, 96, 0.2);
-  padding: 10px;
-  transition: 
-    box-shadow 0.3s ease, 
-    border-color 0.3s ease;
+.setting-group {
+  margin-bottom: 16px;
 }
 
-.settings-panel select:focus,
-.settings-panel input[type="range"]:focus {
-  outline: none;
-  border-color: #0c4160;
-  box-shadow: 
-    0 0 0 3px rgba(12, 65, 96, 0.1), 
-    0 1px 3px rgba(0, 0, 0, 0.1);
+.setting-group:last-child {
+  margin-bottom: 0;
 }
 
-.settings-panel label {
-  color: #0c4160;
-  font-weight: 500;
-  margin-bottom: 8px;
+.setting-label {
   display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #374151;
+  font-size: 14px;
+}
+
+.voice-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.voice-select:hover {
+  border-color: #9ca3af;
+}
+
+.voice-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.range-input {
+  width: 100%;
+  margin: 0;
+  height: 6px;
+  border-radius: 3px;
+  background: #e5e7eb;
+  outline: none;
+  cursor: pointer;
+}
+
+.range-input::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.range-input::-webkit-slider-thumb:hover {
+  background: #2563eb;
+}
+
+.range-input::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s;
+}
+
+.range-input::-moz-range-thumb:hover {
+  background: #2563eb;
+}
+
+.status-indicator {
+  font-size: 14px;
+  color: #64748b;
+  text-align: center;
+}
+
+.status-text {
+  font-weight: bold;
+}
+
+.status-text.status-playing {
+  color: #16a34a;
+}
+
+.status-text.status-paused {
+  color: #eab308;
+}
+
+.status-text.status-stopped {
+  color: #64748b;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .text-to-speech-container {
+    max-width: 100%;
+    margin: 10px;
+  }
+  
+  .controls-header {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  
+  .controls-header.with-settings {
+    margin-bottom: 12px;
+  }
+  
+  .button-group {
+    justify-content: center;
+  }
+  
+  .settings-toggle {
+    align-self: center;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .text-to-speech-container {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+  
+  .settings-toggle {
+    border-color: #374151;
+    color: #9ca3af;
+  }
+  
+  .settings-toggle:hover {
+    border-color: #4b5563;
+    color: #d1d5db;
+  }
+  
+  .settings-panel-wrapper {
+    border-color: #374151;
+  }
+  
+  .settings-panel {
+    background: #374151;
+  }
+  
+  .setting-label {
+    color: #f9fafb;
+  }
+  
+  .voice-select {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+  
+  .voice-select:hover {
+    border-color: #6b7280;
+  }
+  
+  .range-input {
+    background: #4b5563;
+  }
+  
+  .status-indicator {
+    color: #9ca3af;
+  }
 }
 
 /* Responsive Adjustments */
