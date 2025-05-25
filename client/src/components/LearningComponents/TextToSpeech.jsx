@@ -40,29 +40,43 @@ const TextToSpeech = ({ content, options = {} }) => {
       }
     }
 
+    // Load voices immediately if available
     loadVoices()
-    window.speechSynthesis.onvoiceschanged = loadVoices
+    
+    // Set up voice change listener
+    const handleVoicesChanged = () => {
+      loadVoices()
+    }
+    
+    window.speechSynthesis.addEventListener('voiceschanged', handleVoicesChanged)
 
     return () => {
-      isMountedRef.current = false;
-      window.speechSynthesis.onvoiceschanged = null;
-      
-      // Ensure speech is stopped when component unmounts
-      window.speechSynthesis.cancel();
+      isMountedRef.current = false
+      window.speechSynthesis.removeEventListener('voiceschanged', handleVoicesChanged)
+      window.speechSynthesis.cancel()
     }
   }, [])
 
   // Extract text from content
   const extractTextFromContent = useCallback((content) => {
-    const tempDiv = document.createElement('div')
-    tempDiv.innerHTML = content;
-    return tempDiv.textContent || tempDiv.innerText || ''
+    if (typeof content === 'string') {
+      // If it's already a string, check if it contains HTML
+      const tempDiv = document.createElement('div')
+      tempDiv.innerHTML = content
+      return tempDiv.textContent || tempDiv.innerText || content
+    }
+    return String(content)
   }, [])
 
-  // Initialize speech synthesis
-  const initializeSpeech = useCallback((text) => {
-    // Cancel any existing speech
+  // Start speech
+  const startSpeech = useCallback(() => {
+    if (!content) return
+
+    // Cancel any existing speech first
     window.speechSynthesis.cancel()
+
+    const text = extractTextFromContent(content)
+    if (!text.trim()) return
 
     // Create new utterance
     const utterance = new SpeechSynthesisUtterance(text)
@@ -74,47 +88,66 @@ const TextToSpeech = ({ content, options = {} }) => {
       utterance.voice = currentVoice
     }
 
-    utteranceRef.current = utterance
-    return utterance
-  }, [rate, pitch, currentVoice])
-
-  // Start speech
-  const startSpeech = useCallback(() => {
-    if (!content) return
-
-    const text = extractTextFromContent(content)
-    const utterance = initializeSpeech(text)
-
+    // Set up event listeners
     utterance.onstart = () => {
+      console.log('Speech started')
       if (isMountedRef.current) {
         setSpeechStatus('playing')
       }
     }
 
     utterance.onend = () => {
+      console.log('Speech ended')
       if (isMountedRef.current) {
         setSpeechStatus('stopped')
       }
     }
 
+    utterance.onerror = (event) => {
+      console.error('Speech error:', event)
+      if (isMountedRef.current) {
+        setSpeechStatus('stopped')
+      }
+    }
+
+    utterance.onpause = () => {
+      console.log('Speech paused')
+      if (isMountedRef.current) {
+        setSpeechStatus('paused')
+      }
+    }
+
+    utterance.onresume = () => {
+      console.log('Speech resumed')
+      if (isMountedRef.current) {
+        setSpeechStatus('playing')
+      }
+    }
+
+    utteranceRef.current = utterance
+    
+    // Set status to playing immediately for better UX
+    setSpeechStatus('playing')
+    
+    // Speak the utterance
     window.speechSynthesis.speak(utterance)
-  }, [content, extractTextFromContent, initializeSpeech])
+  }, [content, extractTextFromContent, rate, pitch, currentVoice])
 
   // Pause speech
   const pauseSpeech = useCallback(() => {
-    if (speechStatus === 'playing') {
+    if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
       window.speechSynthesis.pause()
       setSpeechStatus('paused')
     }
-  }, [speechStatus])
+  }, [])
 
   // Resume speech
   const resumeSpeech = useCallback(() => {
-    if (speechStatus === 'paused') {
+    if (window.speechSynthesis.paused) {
       window.speechSynthesis.resume()
       setSpeechStatus('playing')
     }
-  }, [speechStatus])
+  }, [])
 
   // Stop speech
   const stopSpeech = useCallback(() => {
@@ -122,14 +155,28 @@ const TextToSpeech = ({ content, options = {} }) => {
     setSpeechStatus('stopped')
   }, [])
 
-  // Add an effect to handle potential memory leaks and stop speech on unmount
+  // Monitor speech synthesis state
+  useEffect(() => {
+    const checkSpeechState = () => {
+      if (!window.speechSynthesis.speaking && speechStatus === 'playing') {
+        setSpeechStatus('stopped')
+      }
+    }
+
+    const interval = setInterval(checkSpeechState, 100)
+    
+    return () => {
+      clearInterval(interval)
+    }
+  }, [speechStatus])
+
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
-      // Ensure speech is stopped when component unmounts
-      window.speechSynthesis.cancel();
-      isMountedRef.current = false;
+      window.speechSynthesis.cancel()
+      isMountedRef.current = false
     }
-  }, [])
+  }, [content])
 
   // Render control buttons
   const renderControlButtons = () => {
@@ -138,50 +185,50 @@ const TextToSpeech = ({ content, options = {} }) => {
         return (
           <button 
             onClick={startSpeech} 
-            className="start-button"
+            className="control-button start-button"
             aria-label="Start speech"
           >
-            <Play size={24} />
+            <Play size={20} />
           </button>
-        );
+        )
       case 'playing':
         return (
           <div className="button-group">
             <button 
               onClick={pauseSpeech} 
-              className="pause-button"
+              className="control-button pause-button"
               aria-label="Pause speech"
             >
-              <Pause size={24} />
+              <Pause size={20} />
             </button>
             <button 
               onClick={stopSpeech} 
-              className="stop-button"
+              className="control-button stop-button"
               aria-label="Stop speech"
             >
-              <Square size={24} />
+              <Square size={20} />
             </button>
           </div>
-        );
+        )
       case 'paused':
         return (
           <div className="button-group">
             <button 
               onClick={resumeSpeech} 
-              className="resume-button"
+              className="control-button resume-button"
               aria-label="Resume speech"
             >
-              <Play size={24} />
+              <Play size={20} />
             </button>
             <button 
               onClick={stopSpeech} 
-              className="stop-button"
+              className="control-button stop-button"
               aria-label="Stop speech"
             >
-              <Square size={24} />
+              <Square size={20} />
             </button>
           </div>
-        );
+        )
       default:
         return null
     }
@@ -189,21 +236,22 @@ const TextToSpeech = ({ content, options = {} }) => {
 
   // Render settings panel
   const renderSettingsPanel = () => {
-    if (!showSettings) return null;
+    if (!showSettings) return null
 
     return (
       <div className="settings-panel">
         {/* Voice Selection */}
-        <div className="voice-selection">
-          <label>
+        <div className="setting-group">
+          <label className="setting-label">
             Voice
           </label>
           <select 
             value={currentVoice?.name || ''}
             onChange={(e) => {
-              const selected = voices.find(v => v.name === e.target.value);
-              setCurrentVoice(selected);
+              const selected = voices.find(v => v.name === e.target.value)
+              setCurrentVoice(selected)
             }}
+            className="voice-select"
           >
             {voices.map((voice) => (
               <option key={voice.name} value={voice.name}>
@@ -214,9 +262,9 @@ const TextToSpeech = ({ content, options = {} }) => {
         </div>
 
         {/* Rate Control */}
-        <div className="rate-control">
-          <label>
-            Speech Rate (Current: {rate.toFixed(1)}x)
+        <div className="setting-group">
+          <label className="setting-label">
+            Speech Rate: {rate.toFixed(1)}x
           </label>
           <input 
             type="range"
@@ -225,13 +273,14 @@ const TextToSpeech = ({ content, options = {} }) => {
             step="0.1"
             value={rate}
             onChange={(e) => setRate(parseFloat(e.target.value))}
+            className="range-input"
           />
         </div>
 
         {/* Pitch Control */}
-        <div className="pitch-control">
-          <label>
-            Pitch (Current: {pitch.toFixed(1)})
+        <div className="setting-group">
+          <label className="setting-label">
+            Pitch: {pitch.toFixed(1)}
           </label>
           <input 
             type="range"
@@ -240,6 +289,7 @@ const TextToSpeech = ({ content, options = {} }) => {
             step="0.1"
             value={pitch}
             onChange={(e) => setPitch(parseFloat(e.target.value))}
+            className="range-input"
           />
         </div>
       </div>
@@ -248,7 +298,7 @@ const TextToSpeech = ({ content, options = {} }) => {
 
   return (
     <div className="text-to-speech-container">
-      <div className="controls-header">
+      <div className={`controls-header ${showSettings ? 'with-settings' : ''}`}>
         {/* Speech Control Buttons */}
         <div className="button-group">
           {renderControlButtons()}
@@ -260,12 +310,23 @@ const TextToSpeech = ({ content, options = {} }) => {
           className="settings-toggle"
           aria-label={showSettings ? "Hide settings" : "Show settings"}
         >
-          {showSettings ? <ChevronUp size={24} /> : <Settings size={24} />}
+          {showSettings ? <ChevronUp size={20} /> : <Settings size={20} />}
         </button>
       </div>
 
       {/* Settings Panel */}
-      {renderSettingsPanel()}
+      {showSettings && (
+        <div className="settings-panel-wrapper">
+          {renderSettingsPanel()}
+        </div>
+      )}
+
+      {/* Status indicator */}
+      <div className="status-indicator">
+        Status: <span className={`status-text status-${speechStatus}`}>
+          {speechStatus.charAt(0).toUpperCase() + speechStatus.slice(1)}
+        </span>
+      </div>
     </div>
   )
 }
