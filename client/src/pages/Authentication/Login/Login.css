@@ -153,10 +153,43 @@
   display: inline-block;
 }
 
+
+
 .forgot-password:hover {
   text-decoration: underline;
 }
 
+
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  margin-left: 40px;
+}
+
+.password-input-container input {
+  margin-left: 0;
+  padding-right: 90px
+}
+.password-toggle-btn {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #1DAAB1; 
+  font-size: 0.8rem; 
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  z-index: 1;
+}
+
+.password-toggle-btn:hover {
+  color: #55B8FF;
+}
 .login-img {
   width: 690px;
   position: absolute;

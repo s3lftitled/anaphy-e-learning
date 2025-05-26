@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import ReCAPTCHA from 'react-google-recaptcha'
+import { Eye, EyeOff } from 'lucide-react'
 import api from '../../../utils/api'
 import useAuth from '../../../hooks/useAuth'
 import './Login.css'
@@ -11,6 +12,7 @@ const Login = () => {
   const [ loginData, setLoginData ] = useState({})
   const [captchaToken, setCaptchaToken] = useState(null)
   const [errorMessage, setErrorMessage] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const { setAuth } = useAuth()
   const navigate = useNavigate()
 
@@ -53,7 +55,10 @@ const Login = () => {
     }
   }
 
-  
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  }
+
   const handleLogin = async (e) => {
     if (!loginData.email || !loginData.password || !captchaToken) {
       alert('Please fill in all the required fields and complete the Captcha')
@@ -122,14 +127,27 @@ const Login = () => {
 
           <div className="login-input-group">
             <label htmlFor="password">Password</label>
-            <input 
-              type="password" 
-              id="password" 
-              name="password" 
-              placeholder="••••••••" 
-              required 
-              onChange={handleFieldChange}
-            />
+            <div className="password-input-container">
+              <input 
+                type={showPassword ? "text" : "password"}
+                id="password" 
+                name="password" 
+                placeholder="••••••••" 
+                required 
+                onChange={handleFieldChange}
+              />
+              <button
+                type="button"
+                className="password-toggle-btn"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? (
+                  <EyeOff size={18} />
+                ) : (
+                  <Eye size={18} />
+                )}
+              </button>
+            </div>
           </div>
 
           <div className="recaptcha-container">
