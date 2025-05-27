@@ -225,7 +225,7 @@ const LandingPage = () => {
 
             <div className="card">
               <div className="imageWrapper">
-                <img className="contact-image" src="june.jpg" alt="Frances June" />
+                <img className="contact-image" src="Frances June.jpg" alt="Frances June" />
               </div>
               <h2 className="member-name">Ortiguero, Frances June</h2>
               <h3 className="position">Designer/Frontend Developer</h3>
@@ -246,7 +246,7 @@ const LandingPage = () => {
 
             <div className="card">
               <div className="imageWrapper">
-                <img className="contact-image" src='chrystal.jpg' alt="Ma. Chrystal" />
+                <img className="contact-image" src='Ma. Chrystal.jpg' alt="Ma. Chrystal" />
               </div>
               <h2 className="member-name">Fucio, Ma. Chrystal Yvone Rabago</h2>
               <h3 className="position">Designer/Frontend Developer</h3>
@@ -266,6 +266,51 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
+
+        <footer className="footer-section">
+          <div className="footer-container">
+            <div className="footer-content">
+              <div className="footer-brand">
+                <h2 className="footer-title">INTERACTIVE HUMAN ANATOMY</h2>
+                <p className="footer-description">
+                  Enhancing nursing education through innovative technology and interactive learning experiences.
+                </p>
+              </div>
+
+              <div className="footer-links">
+                <div className="footer-column">
+                  <h3>Navigation</h3>
+                  <button onClick={() => scrollToSection(homeRef)}>Home</button>
+                  <button onClick={() => scrollToSection(aboutRef)}>About</button>
+                  <button onClick={() => scrollToSection(contactRef)}>Our Team</button>
+                </div>
+
+                <div className="footer-column">
+                  <h3>Contact Info</h3>
+                  <p>Panpacific University</p>
+                  <p>Philippines</p>
+                  <p>Interactive Anatomy Project</p>
+                </div>
+
+                <div className="footer-column">
+                  <h3>SDG Goals</h3>
+                  <p>Good Health & Well-Being</p>
+                  <p>Quality Education</p>
+                  <p>Innovation & Infrastructure</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="footer-bottom">
+              <div className="footer-divider"></div>
+              <div className="footer-bottom-content">
+                <p>&copy; 2024 Interactive Human Anatomy. All rights reserved.</p>
+                <p>Developed for educational purposes at Panpacific University</p>
+              </div>
+            </div>
+          </div>
+        </footer>
+
       </div>
     </div>
   )
