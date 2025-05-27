@@ -185,6 +185,13 @@
 }
 
 /* Enhanced responsive breakpoints */
+@media (min-width: 1440px) {
+  .home-nav-content {
+    max-width: 1800px; 
+    padding: 0 2rem; 
+  }
+}
+
 @media (max-width: 768px) {
   .search-container {
     width: 50%;
