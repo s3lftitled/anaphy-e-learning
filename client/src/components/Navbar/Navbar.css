@@ -187,7 +187,7 @@
 /* Enhanced responsive breakpoints */
 @media (min-width: 1440px) {
   .home-nav-content {
-    max-width: 1800px; 
+    max-width: 1520px; 
     padding: 0 2rem; 
   }
 }
