@@ -188,10 +188,9 @@
 @media (min-width: 1440px) {
   .home-nav-content {
     max-width: 1520px; 
-    padding: 0 2rem; 
+    padding: 0 3rem; 
   }
 }
-
 @media (max-width: 768px) {
   .user-info {
     display: none;
