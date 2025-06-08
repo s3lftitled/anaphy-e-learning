@@ -40,8 +40,7 @@ const Navbar = ({ user }) => {
     <nav className="home-navbar">
       <div className="home-nav-content">
         <div className="logo">
-          <span className="logo-text">ANATOMY</span>
-          <div className="logo-underline"></div>
+          <img src="panpacificu-logo.png" alt="Panpacific University Logo" className="school-logo" />
         </div>
         
         <div 
