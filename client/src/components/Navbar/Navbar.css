@@ -26,22 +26,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 0.5rem 0;
+  padding: 0.1rem 0;
+  margin-left: -75px; 
 }
 
-.logo-text {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: var(--primary, #0c4160);
-}
-
-.logo-underline {
-  width: 50%;
-  height: 3px;
-  background: linear-gradient(90deg, var(--primary, #0c4160), var(--accent, #4fc3f7));
-  border-radius: 2px;
-  margin-top: 4px;
+.school-logo {
+  height: 55px;
+  width: auto;
+  object-fit: contain;
 }
 
 /* User profile section */
@@ -51,9 +43,10 @@
   gap: 0.75rem;
   position: relative;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0.5rem 0;
   border-radius: 0.5rem;
   transition: background-color 0.2s ease;
+  margin-right: -2rem;
 }
 
 .user-profile:hover {
@@ -87,7 +80,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: #22c55e; /* Online green color */
+  background-color: #22c55e; 
   border: 2px solid #ffffff;
   z-index: 1;
 }
@@ -190,14 +183,87 @@
     max-width: 1520px; 
     padding: 0 3rem; 
   }
+  
+  .logo {
+    margin-left: -70px;
+    padding: 0.2rem 0;
+  }
+  
+  .school-logo {
+    height: 65px;
+  }
+  
+  .user-profile {
+    gap: 1rem;
+    padding: 0.75rem 0.5rem;
+    margin-right: -1rem;
+  }
+  
+  .user-avatar {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .user-name {
+    font-size: 1rem;
+  }
+  
+  .user-role {
+    font-size: 0.8rem;
+  }
 }
+
+@media (max-width: 1024px) {
+  .logo {
+    margin-left: -15px;
+  }
+  
+  .school-logo {
+    height: 50px;
+  }
+  
+  .user-profile {
+    gap: 0.6rem;
+    padding: 0.4rem 0;
+    margin-right: -0.7rem;
+  }
+  
+  .user-name {
+    font-size: 0.85rem;
+  }
+  
+  .user-role {
+    font-size: 0.7rem;
+  }
+}
+
 @media (max-width: 768px) {
+  .logo {
+    margin-left: -15px;
+  }
+  
+  .school-logo {
+    height: 45px;
+  }
+  
+  .user-profile {
+    gap: 0.5rem;
+    padding: 0.25rem;
+    margin-right: -1rem;
+    border-radius: 50%;
+  }
+  
   .user-info {
     display: none;
   }
   
   .dropdown-arrow {
     display: none;
+  }
+  
+  .user-dropdown {
+    right: -20px;
+    width: 160px;
   }
 }
 
@@ -211,13 +277,43 @@
     justify-content: space-between;
   }
   
-  .logo-text {
-    font-size: 1.25rem;
+  .logo {
+    margin-left: -11px;
+    padding: 0.05rem 0;
   }
   
+  .school-logo {
+    height: 40px;
+  }
+
+  .user-profile {
+    gap: 0.25rem;
+    padding: 0.2rem;
+    margin-right: -0.5rem;
+  }
+
   .user-avatar {
     width: 36px;
     height: 36px;
+  }
+  
+  .user-status-indicator {
+    width: 8px;
+    height: 8px;
+    bottom: 1px;
+    right: 1px;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-profile {
+    padding: 0.15rem;
+    margin-right: 0;
+  }
+  
+  .user-dropdown {
+    right: -30px;
+    width: 140px;
   }
 }
 
@@ -228,11 +324,18 @@
   }
 
   .logo {
-    min-width: 100px;
+    min-width: 90px;
+    margin-left: -10px;
+    padding: 0;
+  }
+  
+  .school-logo {
+    height: 35px;
   }
   
   .user-profile {
-    padding: 0.25rem;
+    padding: 0.1rem;
+    margin-right: 0.25rem;
   }
   
   .user-avatar {
@@ -241,8 +344,21 @@
     border-width: 2px;
   }
   
+  .user-status-indicator {
+    width: 6px;
+    height: 6px;
+    bottom: 0px;
+    right: 0px;
+    border-width: 1px;
+  }
+  
   .user-dropdown {
-    width: 150px;
-    right: -10px;
+    width: 130px;
+    right: -35px;
+  }
+  
+  .dropdown-item {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
   }
 }
