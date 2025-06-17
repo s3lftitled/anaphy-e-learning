@@ -40,9 +40,6 @@ const LandingPage = () => {
  return (
     <div className='landing-container'>
       <div className="scrollable-page">
-        <div className="logo-container">
-          <img src="panpacificu-logo.png" alt="Panpacific University Logo" className="school-logo" />
-        </div>
         {/* Floating Nav Toggle Button - Only visible on mobile */}
         {isMobile && (
           <button
