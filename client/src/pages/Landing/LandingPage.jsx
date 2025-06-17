@@ -118,9 +118,10 @@ const LandingPage = () => {
           <div className="glow glow-3"></div>
 
           <div className="hero-content">
-            <h1 className="title-human">INTERACTIVE</h1>
-            <h1 className="title-interactive">HUMAN</h1>
-            <h1 className="title-anatomy">ANATOMY</h1>
+            <h1 className="landingpage-title">PanpacificU<br/> 
+            Interactive <br />
+            Human <br />
+            Anatomy </h1>
             <hr className="divider" />
             <h3 className="subtitle">Enhance the educational experience for nursing students</h3>
           </div>
