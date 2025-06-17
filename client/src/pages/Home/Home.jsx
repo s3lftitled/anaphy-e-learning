@@ -473,6 +473,7 @@ useEffect(() => {
         <div className="hero-section">
           <div className="head-content">
             <h1 className="home-title">
+              Panpacific University <br/>
               Interactive Human<br />
               <span className="hero-highlight">Anatomy</span>
             </h1>
