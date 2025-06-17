@@ -88,41 +88,7 @@ section {
   overflow: hidden;
 }
 
-.logo-container {
-  position: fixed;
-  top: 10px;
-  left: 40px;
-  z-index: 1001;
-}
-
-.school-logo {
-  height: 100px;
-  width: auto;
-  object-fit: contain;
-}
-
 /* Mobile responsive adjustments */
-@media (max-width: 768px) {
-  .logo-container {
-    top: 15px;
-    left: 20px;
-  }
-  
-  .school-logo {
-    height: 40px;
-  }
-}
-
-@media (max-width: 480px) {
-  .logo-container {
-    top: 12px;
-    left: 15px;
-  }
-  
-  .school-logo {
-    height: 35px;
-  }
-}
 .container {
   font-size: 16px;
   position: absolute;
@@ -174,7 +140,7 @@ section {
   color: #FFFFFF;
   font-family: 'Inter', sans-serif;
   font-weight: 700;
-  font-size: 6.2vw;
+  font-size: 5.2vw;
   letter-spacing: 5px;
   margin: 0;
 }
