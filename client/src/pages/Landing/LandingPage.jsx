@@ -120,8 +120,7 @@ const LandingPage = () => {
           <div className="hero-content">
             <h1 className="landingpage-title">PanpacificU<br/> 
             Interactive <br />
-            Human <br />
-            Anatomy </h1>
+            Human Anatomy </h1>
             <hr className="divider" />
             <h3 className="subtitle">Enhance the educational experience for nursing students</h3>
           </div>
