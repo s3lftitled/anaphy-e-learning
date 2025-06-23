@@ -225,7 +225,7 @@ const LandingPage = () => {
 
             <div className="card">
               <div className="imageWrapper">
-                <img className="contact-image" src="june.jpg" alt="Frances June" />
+                <img className="contact-image" src="Frances June.jpg" alt="Frances June" />
               </div>
               <h2 className="member-name">Ortiguero, Frances June</h2>
               <h3 className="position">Designer/Frontend Developer</h3>
@@ -246,7 +246,7 @@ const LandingPage = () => {
 
             <div className="card">
               <div className="imageWrapper">
-                <img className="contact-image" src='chrystal.jpg' alt="Ma. Chrystal" />
+                <img className="contact-image" src='Ma. Chrystal.jpg' alt="Ma. Chrystal" />
               </div>
               <h2 className="member-name">Fucio, Ma. Chrystal Yvone Rabago</h2>
               <h3 className="position">Designer/Frontend Developer</h3>
