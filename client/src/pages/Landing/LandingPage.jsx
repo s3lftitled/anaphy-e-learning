@@ -266,6 +266,58 @@ const LandingPage = () => {
             </div>
           </div>
         </section>
+
+        {/* Footer Section */}
+        <footer className="landing-footer">
+          <div className="footer-content">
+            <div className="footer-main">
+              <div className="footer-brand">
+                <h2>INTERACTIVE HUMAN ANATOMY</h2>
+                <p>Enhancing nursing education through innovative technology and interactive learning experiences.</p>
+              </div>
+
+              <div className="footer-sections">
+                <div className="footer-section">
+                  <h4>Navigation</h4>
+                  <ul>
+                    <li><button onClick={() => scrollToSection(homeRef)}>Home</button></li>
+                    <li><button onClick={() => scrollToSection(aboutRef)}>About</button></li>
+                    <li><button onClick={() => scrollToSection(contactRef)}>Our Team</button></li>
+                  </ul>
+                </div>
+
+                <div className="footer-section">
+                  <h4>Contact Info</h4>
+                  <ul>
+                    <li>Panpacific University</li>
+                    <li>Philippines</li>
+                    <li>Interactive Anatomy Project</li>
+                  </ul>
+                </div>
+
+                <div className="footer-section">
+                  <h4>SDG Goals</h4>
+                  <ul>
+                    <li>Good Health & Well-Being</li>
+                    <li>Quality Education</li>
+                    <li>Innovation & Infrastructure</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="footer-divider"></div>
+
+            <div className="footer-bottom">
+              <div className="footer-copyright">
+                <p>&copy; {new Date().getFullYear()} Interactive Human Anatomy. All rights reserved Panpacific University.</p>
+              </div>
+              <div className="footer-credits">
+                <p>Developed for educational purposes at Panpacific University</p>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   )
